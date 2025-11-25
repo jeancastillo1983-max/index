@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RCA Professional System (Standalone Edition)</title>
+
+<style>
+:root {
+    --incident-bg: #c7dbff;
+    --incident-border: #3b6bbf;
+    --cf-bg: #fff3c4;
+    --cf-border: #d4a017;
+    --why-bg: #d8ffd8;
+    --why-border: #399e3b;
+    --root-bg: #ffc7c7;
+    --root-border: #d13b3b;
+    --toolbar-bg: #1d2938;
+    --btn-bg: #4fb0ff;
+    --btn-hover: #3c9ce0;
+    --grid-color: #e3e3e3;
+}
+
+body {
+    margin: 0;
+    background: #f4f4f4;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+#toolbar {
+    background: var(--toolbar-bg);
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tool-btn {
+    background: var(--btn-bg);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.tool-btn:hover {
+    background: var(--btn-hover);
+}
+
+#viewport {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    overflow: scroll;
+    background: white;
+}
+
+#rca-board {
+    width: 5000px;
+    height: 3000px;
+    background-image:
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+    background-size: 30px 30px;
+    position: relative;
+    transform-origin: 0 0;
+}
+
+.node {
+    position: absolute;
+    width: 220px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 2px solid #888;
+    background: white;
+    font-weight: bold;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.2);
+    cursor: move;
+    user-select: none;
+    transition: transform 0.1s;
+}
+.node:active { transform: scale(1.02); }
+
+.node.incident { background: var(--incident-bg); border-color: var(--incident-border); }
+.node.cf { background: var(--cf-bg); border-color: var(--cf-border); }
+.node.why { background: var(--why-bg); border-color: var(--why-border); }
+.node.root { background: var(--root-bg); border-color: var(--root-border); }
+
+#connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#standards-panel {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 380px;
+    height: calc(100vh - 60px);
+    background: #ffffff;
+    border-left: 3px solid #ddd;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+    padding: 15px;
+    overflow-y: auto;
+    display: none;
+}
+
+.standard-card {
+    background: #fafafa;
+    border: 1px solid #ccc;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="toolbar">
+    <button class="tool-btn" onclick="addNode('incident')">Add Incident</button>
+    <button class="tool-btn" onclick="addNode('cf')">Add CF</button>
+    <button class="tool-btn" onclick="addNode('why')">Add WHY</button>
+    <button class="tool-btn" onclick="addNode('root')">Add Root Cause</button>
+    <button class="tool-btn" onclick="enableConnectMode()">Connect</button>
+    <button class="tool-btn" onclick="disableConnectMode()">Stop Connect</button>
+    <button class="tool-btn" onclick="saveBoard()">Save</button>
+    <button class="tool-btn" onclick="loadBoard()">Load</button>
+    <button class="tool-btn" onclick="toggleStandards()">Standards</button>
+    <button class="tool-btn" onclick="aiGenerateCF()">AI CF</button>
+    <button class="tool-btn" onclick="aiGenerateWhys()">AI WHY</button>
+    <button class="tool-btn" onclick="aiGenerateRootCauses()">AI RC</button>
+    <button class="tool-btn" onclick="aiFullRCA()">AI Full RCA</button>
+</div>
+
+<div id="viewport">
+    <svg id="connections" width="5000" height="3000" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="rca-board"></div>
+</div>
+
+<div id="standards-panel">
+    <h3>Standards Search</h3>
+    <input id="std-search" placeholder="Search OSHA/ANSI..." style="width:100%;padding:8px;">
+    <div id="std-results" style="margin-top:12px;"></div>
+</div>
+
+<script>
+let nodes = [];
+let connections = [];
+let connectMode = false;
+let firstNode = null;
+let scale = 1;
+
+function addNode(type) {
+    createNode(type.toUpperCase(), 200, 200, type);
+    saveBoard();
+}
+
+function createNode(text, x, y, type = "cf", id = null) {
+    if (!id) id = "node_" + Date.now();
+
+    const node = document.createElement("div");
+    node.id = id;
+    node.className = `node ${type}`;
+    node.style.left = x + "px";
+    node.style.top = y + "px";
+    node.innerHTML = text;
+
+    node.addEventListener("mousedown", e => startDrag(e, node));
+    node.addEventListener("dblclick", e => {
+        let t = prompt("Edit text:", node.innerHTML);
+        if (t) node.innerHTML = t;
+        saveBoard();
+    });
+    node.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        if (confirm("Delete this node?")) deleteNode(node.id);
+    });
+    node.addEventListener("click", e => {
+        if (connectMode) handleConnectClick(node.id);
+    });
+
+    document.getElementById("rca-board").appendChild(node);
+
+    nodes.push({ id, text, x, y, type });
+    return node;
+}
+
+function startDrag(event, node) {
+    let shiftX = event.clientX - node.getBoundingClientRect().left;
+    let shiftY = event.clientY - node.getBoundingClientRect().top;
+
+    function moveNode(e) {
+        node.style.left = e.pageX - shiftX + "px";
+        node.style.top = e.pageY - shiftY + "px";
+        redrawConnections();
+    }
+
+    document.addEventListener("mousemove", moveNode);
+    document.addEventListener("mouseup", function stopMove() {
+        document.removeEventListener("mousemove", moveNode);
+        document.removeEventListener("mouseup", stopMove);
+        saveBoard();
+    });
+}
+
+function deleteNode(id) {
+    document.getElementById(id)?.remove();
+    nodes = nodes.filter(n => n.id !== id);
+    connections = connections.filter(c => c.from !== id && c.to !== id);
+    redrawConnections();
+    saveBoard();
+}
+
+function enableConnectMode() {
+    connectMode = true;
+    firstNode = null;
+    alert("Connect mode ON. Click first node, then second node.");
+}
+function disableConnectMode() {
+    connectMode = false;
+    firstNode = null;
+    alert("Connect mode OFF.");
+}
+
+function handleConnectClick(id) {
+    if (!firstNode) {
+        firstNode = id;
+        document.getElementById(id).style.outline = "3px solid orange";
+    } else {
+        if (id !== firstNode) addConnection(firstNode, id);
+        document.getElementById(firstNode).style.outline = "none";
+        firstNode = null;
+    }
+}
+
+function addConnection(from, to) {
+    connections.push({ from, to });
+    redrawConnections();
+    saveBoard();
+}
+
+function redrawConnections() {
+    const svg = document.getElementById("connections");
+    svg.innerHTML = "";
+
+    connections.forEach(c => drawConnection(c.from, c.to));
+}
+
+function drawConnection(fromId, toId) {
+    const svg = document.getElementById("connections");
+    const f = document.getElementById(fromId);
+    const t = document.getElementById(toId);
+    if (!f || !t) return;
+
+    const x1 = f.offsetLeft + f.offsetWidth / 2;
+    const y1 = f.offsetTop + f.offsetHeight / 2;
+    const x2 = t.offsetLeft + t.offsetWidth / 2;
+    const y2 = t.offsetTop + t.offsetHeight / 2;
+
+    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+    const mid = "m" + Math.random().toString().slice(2);
+    marker.id = mid;
+    marker.setAttribute("markerWidth", "8");
+    marker.setAttribute("markerHeight", "8");
+    marker.setAttribute("refX", "4");
+    marker.setAttribute("refY", "3");
+    marker.setAttribute("orient", "auto");
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arrow.setAttribute("d", "M0,0 L0,6 L6,3 z");
+    arrow.setAttribute("fill", "black");
+    marker.appendChild(arrow);
+    svg.appendChild(marker);
+
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", x1);
+    line.setAttribute("y1", y1);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y2);
+    line.setAttribute("stroke", "black");
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("marker-end", "url(#" + mid + ")");
+    svg.appendChild(line);
+}
+
+document.getElementById("viewport").addEventListener("wheel", function(e) {
+    e.preventDefault();
+    const board = document.getElementById("rca-board");
+
+    scale += (e.deltaY < 0 ? 0.1 : -0.1);
+    if (scale < 0.3) scale = 0.3;
+    if (scale > 3) scale = 3;
+
+    board.style.transform = `scale(${scale})`;
+}, { passive: false });
+
+let isPanning = false, sx = 0, sy = 0, sl = 0, st = 0;
+document.getElementById("viewport").addEventListener("mousedown", function(e) {
+    if (e.button === 2) {
+        isPanning = true;
+        sx = e.clientX; sy = e.clientY;
+        sl = this.scrollLeft; st = this.scrollTop;
+    }
+});
+document.getElementById("viewport").addEventListener("mousemove", function(e) {
+    if (!isPanning) return;
+    this.scrollLeft = sl - (e.clientX - sx);
+    this.scrollTop = st - (e.clientY - sy);
+});
+document.getElementById("viewport").addEventListener("mouseup", e => {
+    if (e.button === 2) isPanning = false;
+});
+document.getElementById("viewport").addEventListener("contextmenu", e => {
+    if (isPanning) e.preventDefault();
+});
+
+const standards = [
+    { title: "OSHA 1910.147 Lockout/Tagout", category: "OSHA 1910", desc: "Control of hazardous energy.", link: "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147" },
+    { title: "OSHA 1926.501 Fall Protection", category: "OSHA 1926", desc: "Construction fall safety requirements.", link: "https://www.osha.gov/laws-regs/regulations/standardnumber/1926/1926.501" },
+    { title: "ANSI Z359 Fall Protection", category: "ANSI", desc: "Fall arrest systems and equipment.", link: "https://www.asse.org" },
+    { title: "ASME B30 Rigging Safety", category: "ASME", desc: "Hoisting and rigging safety standards.", link: "https://www.asme.org" }
+];
+
+function toggleStandards() {
+    const p = document.getElementById("standards-panel");
+    p.style.display = (p.style.display === "none" || p.style.display === "") ? "block" : "none";
+}
+
+document.getElementById("std-search").addEventListener("keyup", function() {
+    const term = this.value.toLowerCase();
+    const out = document.getElementById("std-results");
+    out.innerHTML = "";
+
+    standards.filter(s =>
+        s.title.toLowerCase().includes(term) ||
+        s.desc.toLowerCase().includes(term) ||
+        s.category.toLowerCase().includes(term)
+    ).forEach(s => {
+        const card = document.createElement("div");
+        card.className = "standard-card";
+        card.innerHTML = `
+            <b>${s.title}</b><br>
+            <i>${s.category}</i><br>
+            <p>${s.desc}</p>
+            <button onclick="window.open('${s.link}','_blank')">Open Standard</button>
+        `;
+        out.appendChild(card);
+    });
+});
+
+const OPENAI_KEY = "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";
+
+async function askAI(promptText) {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + OPENAI_KEY
+        },
+        body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are an RCA expert with TapRooT, 5 Whys, OSHA, ANSI, ASME expertise."},
+                { role: "user", content: promptText }
+            ]
+        })
+    });
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+async function aiGenerateCF() {
+    const d = prompt("Describe the incident:");
+    if (!d) return;
+
+    const out = await askAI(`Identify causal factors:\n${d}`);
+    let y = 200;
+    out.split("\n").forEach(l => {
+        createNode(l.trim(), 200, y, "cf");
+        y += 120;
+    });
+    saveBoard();
+}
+
+async function aiGenerateWhys() {
+    const cf = prompt("Enter causal factor:");
+    if (!cf) return;
+
+    const out = await askAI(`Generate 5 Whys:\n${cf}`);
+    let y = 200, last = null;
+    out.split("\n").forEach(l => {
+        const n = createNode(l.trim(), 500, y, "why");
+        if (last) addConnection(last.id, n.id);
+        last = n;
+        y += 120;
+    });
+    saveBoard();
+}
+
+async function aiGenerateRootCauses() {
+    const d = prompt("Describe incident:");
+    if (!d) return;
+
+    const out = await askAI(`Identify root causes:\n${d}`);
+    let y = 200;
+    out.split("\n").forEach(l => {
+        createNode(l.trim(), 800, y, "root");
+        y += 120;
+    });
+    saveBoard();
+}
+
+async function aiFullRCA() {
+    const d = prompt("Full RCA description:");
+    if (!d) return;
+
+    const out = await askAI(`
+        Perform full RCA:
+        CF:
+        WHY:
+        ROOT:
+        CA:
+        INCIDENT: ${d}
+    `);
+
+    const blocks = out.split("CF:");
+    let baseY = 200;
+
+    blocks.forEach(b => {
+        if (!b.trim()) return;
+
+        let y = baseY;
+        let last = null;
+
+        b.split("\n").forEach(line => {
+            line = line.trim();
+            if (!line) return;
+
+            if (line.startsWith("WHY:")) {
+                const n = createNode(line.slice(4).trim(), 500, y, "why");
+                addConnection(last.id, n.id);
+                last = n;
+                y += 120;
+            }
+            else if (line.startsWith("ROOT:")) {
+                const n = createNode(line.slice(5).trim(), 800, y, "root");
+                addConnection(last.id, n.id);
+                last = n;
+                y += 120;
+            }
+            else if (line.startsWith("CA:")) {
+                const n = createNode(line.slice(3).trim(), 1100, y, "incident");
+                addConnection(last.id, n.id);
+                last = n;
+                y += 120;
+            }
+            else {
+                const n = createNode(line.trim(), 200, y, "cf");
+                last = n;
+                y += 120;
+            }
+        });
+
+        baseY += 500;
+    });
+
+    saveBoard();
+}
+
+function saveBoard() {
+    const saveData = {
+        nodes: nodes.map(n => ({
+            id: n.id,
+            text: document.getElementById(n.id).innerHTML,
+            x: parseInt(document.getElementById(n.id).style.left),
+            y: parseInt(document.getElementById(n.id).style.top),
+            type: n.type
+        })),
+        connections,
+        scale
+    };
+    localStorage.setItem("RCA_PRO_BOARD", JSON.stringify(saveData));
+}
+
+function loadBoard() {
+    const raw = localStorage.getItem("RCA_PRO_BOARD");
+    if (!raw) return;
+
+    const data = JSON.parse(raw);
+    nodes = [];
+    connections = data.connections || [];
+    scale = data.scale || 1;
+
+    document.getElementById("rca-board").innerHTML = "";
+    document.getElementById("rca-board").style.transform = `scale(${scale})`;
+    document.getElementById("connections").innerHTML = "";
+
+    data.nodes.forEach(n => {
+        createNode(n.text, n.x, n.y, n.type, n.id);
+    });
+
+    redrawConnections();
+}
+
+window.onload = () => {
+    loadBoard();
+    redrawConnections();
+};
+</script>
+
+</body>
+</html>
