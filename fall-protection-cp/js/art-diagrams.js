@@ -113,12 +113,12 @@
     svg.appendChild(s('text', { class: 'dg-label dg-req-label', x: edgeX + 4, y: reqY + (r.required > avail ? 16 : -6), text: 'Needed ' + fmt(r.required) + ' ft' }));
 
     // Dimension stack (starts at the D-ring's starting height)
-    var stackX = 486, segs = [
-      { k: 'FF', v: r.freeFall, c: 'ff', t: 'Free fall' + (r.freeFallOk ? '' : ' ✕') },
-      { k: 'DD', v: DD, c: 'dd', t: 'Decel' },
-      { k: 'HS', v: HS, c: 'hs', t: 'Stretch' },
-      { k: 'H', v: H, c: 'h', t: 'D-ring to feet' },
-      { k: 'SM', v: SM, c: 'sm', t: 'Margin' }
+    var stackX = 462, segs = [
+      { k: 'FF', v: r.freeFall, c: 'ff', t: 'free fall' + (r.freeFallOk ? '' : ' ✕') },
+      { k: 'DD', v: DD, c: 'dd', t: 'decel' },
+      { k: 'HS', v: HS, c: 'hs', t: 'stretch' },
+      { k: 'H', v: H, c: 'h', t: 'to feet' },
+      { k: 'SM', v: SM, c: 'sm', t: 'margin' }
     ];
     var stack = s('g', { class: 'dg-stack' });
     var yy = -H;
@@ -126,7 +126,7 @@
       var y1 = Y(yy), y2 = Y(yy + sg.v);
       if (sg.v > 0) {
         stack.appendChild(s('rect', { class: 'dg-seg dg-seg-' + sg.c, x: stackX, y: y1, width: 16, height: Math.max(1, y2 - y1) }));
-        stack.appendChild(s('text', { class: 'dg-seg-label', x: stackX + 24, y: (y1 + y2) / 2 + 4, text: sg.k + ' ' + fmt(sg.v) + ' · ' + sg.t }));
+        stack.appendChild(s('text', { class: 'dg-seg-label', x: stackX + 24, y: (y1 + y2) / 2 + 4, text: sg.k + ' ' + fmt(sg.v) + ' ' + sg.t }));
       }
       yy += sg.v;
     });

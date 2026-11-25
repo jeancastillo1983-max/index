@@ -28,6 +28,9 @@
   .designate p { font-size: 9pt; }
   .sig3 { display: grid; grid-template-columns: 1.6fr 1.2fr 0.8fr; gap: 14px; margin-top: 22px; }
   .sig3 div { border-top: 1px solid var(--ink); padding-top: 3px; font-size: 8pt; color: var(--muted); }
+  table.fv tr, .designate, .sig3, .result, .comments { break-inside: avoid; page-break-inside: avoid; }
+  table.fv thead { display: table-header-group; }
+  .signblock { break-inside: avoid; page-break-inside: avoid; }
 </style>
 </head>
 <body>
@@ -110,6 +113,7 @@
     </tbody>
   </table>
 
+  <div class="signblock">
   <h3>Comments and redo items</h3>
   <div class="comments">Item #, what needs to be repeated, and the agreed date.</div>
 
@@ -123,7 +127,9 @@
     <div>Printed name</div>
     <div>Date</div>
   </div>
+  </div>
 
+  <div class="signblock">
   <div class="box navy designate">
     <h3 style="color:#fff;margin-top:0">Employer designation</h3>
     <p>The employer designates the person named above as a <b>fall protection competent person</b> for the site(s) listed, and grants authority to take prompt corrective measures to eliminate fall hazards, including stopping work, under 29 CFR 1926.32(f).</p>
@@ -133,6 +139,7 @@
     <div>Employer representative signature</div>
     <div>Printed name and title</div>
     <div>Date</div>
+  </div>
   </div>
 
   <div class="ja-foot">

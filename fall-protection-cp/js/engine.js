@@ -126,7 +126,21 @@
     if (m && moduleDone(m)) FP.toast('Module ' + m.num + ' complete. Nice work.');
     updateChrome();
   }
-  function markKCDone(m) { if (S.k[m.id]) return; S.k[m.id] = 1; saveState(); if (moduleDone(m)) FP.toast('Module ' + m.num + ' complete.'); updateChrome(); }
+  function markKCDone(m) {
+    if (S.k[m.id]) return;
+    S.k[m.id] = 1;
+    Object.keys(S.b).forEach(function (k) { if (S.b[k] === m.id + '-kc') delete S.b[k]; });
+    saveState(); if (moduleDone(m)) FP.toast('Module ' + m.num + ' complete.'); updateChrome();
+  }
+  /* Test-out: mark lessons complete; returns the href of the first unit after them. */
+  function skipLessons(m, ids) {
+    if (!m || !ids || !ids.length) return null;
+    ids.forEach(function (id) { if (m.lessons.some(function (l) { return l.id === id; })) { S.d[id] = 1; Object.keys(S.b).forEach(function (k) { if (S.b[k] === id) delete S.b[k]; }); } });
+    saveState(); updateChrome();
+    var us = units(m), last = -1;
+    us.forEach(function (u, i) { if (ids.indexOf(u.id) > -1) last = i; });
+    return last >= 0 ? nextUnitAfter(m, us[last]) : null;
+  }
 
   /* Review-required flags (set by the exam after a failed attempt). */
   function flagReview(mods) {
@@ -376,7 +390,7 @@
     }
     try {
       var el = r(b, makeCtx(b, key, m, lesson));
-      if (el) wrap.appendChild(el);
+      if (el) wrap.appendChild(el); else { wrap.hidden = true; wrap.classList.add('is-empty'); }
     } catch (err) {
       item.missing = true;
       if (root.console) console.warn('[FP] block render failed', b.type, key, err);
@@ -645,18 +659,14 @@
     m.kc.questions.forEach(function (q, i) {
       var key = m.id + '-kc-' + i;
       var b = Object.assign({ type: 'mcq', id: key, kicker: 'Question ' + (i + 1) + ' of ' + total }, q);
-      var item = { b: b, key: key };
       var ctx = makeCtx(b, key, m, fakeLesson);
-      var origComplete = ctx.complete;
-      var r = FP.renderer('mcq');
       var sec = h('section', { class: 'blk blk--mcq blk--kc' });
-      if (r) {
-        sec.appendChild(r(b, { module: m, lesson: fakeLesson, block: b, key: key, save: ctx.save, load: ctx.load, isComplete: ctx.isComplete,
-          complete: function (res) { answered[key] = 1; S.b[key] = u.id; upd(); } }));
+      if (FP.mcqWidget) {
+        sec.appendChild(FP.mcqWidget(b, { module: m, lesson: fakeLesson, block: b, key: key, save: ctx.save, load: ctx.load, isComplete: ctx.isComplete,
+          complete: function () { answered[key] = 1; if (!kcDone(m)) { S.b[key] = u.id; saveState(); } upd(); } }));
       }
       if (S.b[key] || kcDone(m)) answered[key] = 1;
       col.appendChild(sec);
-      void item; void origComplete;
     });
     nextBtn.addEventListener('click', function (e) { if (nextBtn.classList.contains('is-disabled')) e.preventDefault(); });
     col.appendChild(h('footer', { class: 'lesson-foot' }, status, h('div', { class: 'foot-nav' },
@@ -756,7 +766,7 @@
   FP.engine = {
     state: S, save: saveState, go: function (hash) { location.hash = hash; },
     modules: built, getModule: getMod, units: units, moduleDone: moduleDone, lessonDone: lessonDone,
-    examUnlocked: examUnlocked, allModulesDone: allModulesDone, flagReview: flagReview, progress: progress,
+    examUnlocked: examUnlocked, allModulesDone: allModulesDone, flagReview: flagReview, progress: progress, skipLessons: skipLessons,
     refresh: function () { updateChrome(); }, rerender: route,
     reviewList: function () { return S.r.slice(); },
     learnerName: function () { return FP.scorm.studentName() || S.n || ''; },
