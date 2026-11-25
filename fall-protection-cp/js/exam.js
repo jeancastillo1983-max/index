@@ -179,7 +179,7 @@
         isLast ? h('button', { class: 'btn btn-primary', on: { click: function () { submitView(col2); } } }, 'Review & submit', FP.icon('flag', 16))
           : h('button', { class: 'btn btn-primary', on: { click: function () { paper.at++; renderExam(host); } } }, 'Next', FP.icon('arrow-right', 18)));
       col2.appendChild(bar); col2.appendChild(pal); col2.appendChild(qcard); col2.appendChild(nav);
-      col2.appendChild(h('p', { class: 'exam-leave muted' }, 'Leaving this page before you submit discards this attempt\'s answers but does not use up an attempt.'));
+      col2.appendChild(h('p', { class: 'exam-leave muted' }, 'Your answers stay put if you step away to look something up. An attempt only counts once you submit. Reloading the course discards unsubmitted answers.'));
     }
 
     function submitView(col2) {
@@ -273,15 +273,11 @@
       var regions = (q.regions ? sc.hazards.concat(sc.decoys || []).filter(function (r) { return q.regions.indexOf(r.id) > -1; }) : sc.hazards.concat(sc.decoys || []));
       regions = regions.slice().sort(function (a, b) { return (a.y + a.h / 2) - (b.y + b.h / 2) || (a.x - b.x); });
       var stage = h('div', { class: 'hs-stage exam-hs' }, h('img', { src: sc.src, alt: sc.title || 'Jobsite scene' }));
-      var legend = h('ol', { class: 'hs-legend' });
       regions.forEach(function (r, i) {
         var on = !!A[qi][r.id];
         var mk = h('button', { class: 'lg-marker hs-pick' + (on ? ' is-active' : ''), style: { left: (r.x + r.w / 2) + '%', top: (r.y + r.h / 2) + '%' }, 'aria-pressed': String(on), 'aria-label': 'Spot ' + (i + 1) }, String(i + 1));
-        var li = h('li', { class: on ? 'is-on' : '' }, h('b', null, (i + 1) + '.'), ' ', h('span', null, 'Area ' + (i + 1)));
-        var toggle = function () { A[qi][r.id] = !A[qi][r.id]; var v = !!A[qi][r.id]; mk.classList.toggle('is-active', v); mk.setAttribute('aria-pressed', String(v)); li.classList.toggle('is-on', v); };
-        mk.addEventListener('click', toggle);
+        mk.addEventListener('click', function () { A[qi][r.id] = !A[qi][r.id]; var v = !!A[qi][r.id]; mk.classList.toggle('is-active', v); mk.setAttribute('aria-pressed', String(v)); });
         stage.appendChild(mk);
-        void li;
       });
       box.appendChild(h('p', { class: 'hint' }, 'Select every numbered spot that matches the question. Select again to clear.'));
       box.appendChild(stage);

@@ -662,7 +662,7 @@
       var ctx = makeCtx(b, key, m, fakeLesson);
       var sec = h('section', { class: 'blk blk--mcq blk--kc' });
       if (FP.mcqWidget) {
-        sec.appendChild(FP.mcqWidget(b, { module: m, lesson: fakeLesson, block: b, key: key, save: ctx.save, load: ctx.load, isComplete: ctx.isComplete,
+        sec.appendChild(FP.mcqWidget(b, { module: m, lesson: fakeLesson, block: b, key: key, save: ctx.save, load: ctx.load, isComplete: function () { return kcDone(m) || !!S.b[key]; },
           complete: function () { answered[key] = 1; if (!kcDone(m)) { S.b[key] = u.id; saveState(); } upd(); } }));
       }
       if (S.b[key] || kcDone(m)) answered[key] = 1;
