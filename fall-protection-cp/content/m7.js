@@ -236,13 +236,13 @@ COURSE.addModule({
         sb: { visual: 'Process steps with simple icons: person, boom lift, pulley, ladder, phone.', search: 'boom lift; rescue pulley system; ladder', build: 'Rise: Process block, 5 steps + summary.' } },
 
       { type: 'labeled', src: 'assets/art/m7-rescue-options.svg',
-        alt: 'Cutaway of the Riverside building: a worker hangs below the Level 3 edge on an SRL; a boom lift approaches from the east lot; a rescue kit is rigged at an overhead beam; a crew member waits at the gate for EMS.',
+        alt: 'Cutaway of the Riverside building: a worker hangs below the Level 3 edge on an SRL; a boom lift approaches from the east lot; a rescue kit is staged on the Level 3 deck near the anchor; a crew member waits at the gate for EMS.',
         markers: [
-          { x: 31, y: 44, title: 'The fallen worker', body: `Conscious, talking, standing in relief straps. Your first job is voice contact.` },
-          { x: 47, y: 23, title: 'Overhead anchor + SRL', body: `The system that caught her. After the rescue it comes out of service. <cite>1926.502(d)(19)</cite>` },
-          { x: 58, y: 30, title: 'Rescue kit at the anchor', body: `Pre-rigged lowering system in the gang box: the backup when the lift can’t reach.` },
-          { x: 70, y: 62, title: 'Boom lift', body: `Primary plan. Checked today: charged, keys in the lockbox, operator named.` },
-          { x: 90, y: 82, title: 'Gate runner', body: `One person meets EMS at the gate and walks them in. It saves minutes every time.` }
+          { x: 47, y: 68, title: 'The fallen worker', body: `Conscious, talking, standing in relief straps. Your first job is voice contact.` },
+          { x: 41, y: 45, title: 'Overhead anchor + SRL', body: `The system that caught her. After the rescue it comes out of service. <cite>1926.502(d)(19)</cite>` },
+          { x: 35, y: 53, title: 'Rescue kit, staged on Level 3', body: `Pre-rigged lowering system in the gang box near the anchor: the backup when the lift can’t reach.` },
+          { x: 68, y: 81, title: 'Boom lift', body: `Primary plan. Checked today: charged, keys in the lockbox, operator named.` },
+          { x: 90, y: 77, title: 'Gate runner', body: `One person meets EMS at the gate and walks them in. It saves minutes every time.` }
         ],
         narration: `Tap each marker. This is what a real rescue setup looks like on Riverside. The worker, the anchor that caught her, the backup kit, the lift, and the one person most crews forget: the runner at the gate.`,
         sb: { visual: 'Custom SVG cutaway (assets/art/m7-rescue-options.svg) with 5 numbered markers.', search: 'construction site boom lift building edge', build: 'Rise: Labeled graphic block, 5 markers. Storyline alt: markers with hover layers.' } },

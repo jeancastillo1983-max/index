@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Competent vs. Qualified: Who Signs What</title>
+<link rel="stylesheet" href="jobaid.css">
+<style>
+  .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 4px; }
+  .role { border: 1.5px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 8.7pt; line-height: 1.32; }
+  .role h3 { margin: 0 0 3px; }
+  .role.cp { border-color: var(--orange); background: #FFF3EA; }
+  .role .who { font: 700 8pt/1 var(--mono); color: var(--muted); margin-bottom: 4px; display: block; }
+  .owner { font: 800 9pt/1 var(--display); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+  .owner.cp { color: #B4460A; }
+  .owner.qp { color: var(--blue); }
+  .owner.both { color: var(--navy); }
+  table.calls td { padding: 2.5px 6px; font-size: 8.4pt; line-height: 1.25; }
+  table.calls { margin-bottom: 4px; }
+  h2 { margin: 10px 0 4px; }
+  table.calls td:nth-child(2) { width: 1.9in; }
+  table.calls td:nth-child(3) { width: 1.12in; }
+  .test { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .test .box { font-size: 9pt; padding: 6px 9px; }
+  .stripe { margin-bottom: 8px; }
+  .ja-head { margin-bottom: 8px; }
+  .fill .write { min-height: 14px; }
+  .num { font: 800 20pt/1 var(--display); color: var(--orange); float: left; margin-right: 8px; }
+  .fill { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-top: 4px; font-size: 9pt; }
+  .fill span { display: block; color: var(--muted); font-size: 8pt; }
+  .fill .write { min-height: 16px; }
+  .rule { font: 700 10.5pt/1.3 var(--display); letter-spacing: .02em; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ja-head">
+    <div>
+      <div class="kicker">Job aid · Module 2 · Fall Protection Competent Person</div>
+      <h1 class="ja-title">Competent vs. qualified: who signs what</h1>
+      <p class="ja-sub">Keep it in the truck. When someone asks "is that your call or the engineer's," the answer is on this page.</p>
+    </div>
+    <div class="brand">UPCHURCH</div>
+  </div>
+  <div class="stripe"></div>
+
+  <div class="test">
+    <div class="box navy">
+      <div class="rule">THE TWO-PART TEST <span style="opacity:.75;font-weight:500">29 CFR 1926.32(f)</span></div>
+      <p style="margin:4px 0 0"><span class="num">1</span>Capable of identifying <b>existing and predictable</b> hazards.</p>
+      <p style="margin:4px 0 0;clear:both"><span class="num">2</span><b>Authorized</b> to take <b>prompt corrective measures</b> to eliminate them.</p>
+      <p style="margin:4px 0 0;clear:both;opacity:.85">Both, or you're just the person who noticed.</p>
+    </div>
+    <div class="box warn">
+      <div class="rule">THE QUICK SORT</div>
+      <p style="margin:4px 0 0">Does the call need <b>math or a stamp</b>? &rarr; <span class="owner qp">Qualified person</span></p>
+      <p style="margin:4px 0 0">Does it need <b>eyes and authority today</b>? &rarr; <span class="owner cp">You, the competent person</span></p>
+      <p style="margin:4px 0 0">Is it <b>their own gear before use</b>? &rarr; <span class="owner both">Authorized user</span>, and you check that it happens.</p>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role"><h3>Authorized person</h3><span class="who">Dee and the crew</span>Uses the system. Inspects own gear before each use. Flags and tags problems. <b>Signs:</b> nothing.</div>
+    <div class="role cp"><h3>Competent person</h3><span class="who">You</span>Identifies hazards, inspects systems, supervises, trains, removes gear from service, stops exposed work. <b>Signs:</b> inspection logs, training records, out-of-service tags.</div>
+    <div class="role"><h3>Qualified person</h3><span class="who">Engineer / PE</span>Designs and certifies anchorages and lifelines, writes fall protection plans. <b>Signs:</b> designs, calcs, written plans. <cite>1926.32(m)</cite></div>
+  </div>
+
+  <h2>Who owns the call</h2>
+  <table class="calls">
+    <thead><tr><th>The call</th><th>Owner</th><th>Receipt</th></tr></thead>
+    <tbody>
+      <tr><td>Walk the area; find existing <b>and tomorrow's</b> fall hazards</td><td><span class="owner cp">Competent</span></td><td><cite>1926.32(f)</cite></td></tr>
+      <tr><td>Stop work exposed to an uncorrected fall hazard</td><td><span class="owner cp">Competent</span></td><td><cite>1926.32(f)</cite></td></tr>
+      <tr><td>Inspect harness, lanyard, SRL before each use</td><td><span class="owner both">User</span>; you enforce and spot-check</td><td><cite>1926.502(d)(21)</cite></td></tr>
+      <tr><td>Periodic equipment inspection (at least yearly) and the log</td><td><span class="owner cp">Competent</span></td><td><cite>Z359.2</cite></td></tr>
+      <tr><td>Pull damaged or fall-arrested gear; decide if it ever returns (most manufacturers: destroy)</td><td><span class="owner cp">Competent</span></td><td><cite>1926.502(d)(19)</cite></td></tr>
+      <tr><td>Use a known, rated 5,000-lb-per-worker anchor</td><td><span class="owner cp">Competent</span> verifies</td><td><cite>1926.502(d)(15)</cite></td></tr>
+      <tr><td>Design any anchor that isn't a known 5,000-lb point (safety factor &ge; 2)</td><td><span class="owner qp">Qualified</span></td><td><cite>1926.502(d)(15)</cite></td></tr>
+      <tr><td>Design a horizontal lifeline</td><td><span class="owner qp">Qualified</span>; you inspect and supervise use</td><td><cite>1926.502(d)(8)</cite></td></tr>
+      <tr><td>Write a fall protection plan (leading edge, precast or residential only)</td><td><span class="owner qp">Qualified</span> writes; <span class="owner cp">Competent</span> runs it</td><td><cite>1926.502(k)</cite></td></tr>
+      <tr><td>Serve as safety monitor (same surface, in sight and earshot, no other duties)</td><td><span class="owner cp">Competent</span> only</td><td><cite>1926.502(h)</cite></td></tr>
+      <tr><td>Train workers exposed to fall hazards</td><td><span class="owner cp">Competent</span></td><td><cite>1926.503(a)(2)</cite></td></tr>
+      <tr><td>Sign the written training certification (name, date, signature)</td><td>Trainer or employer</td><td><cite>1926.503(b)</cite></td></tr>
+      <tr><td>Retrain: site changes, system or gear changes, or a worker shows they didn't get it</td><td><span class="owner cp">Competent</span> flags; employer retrains</td><td><cite>1926.503(c)</cite></td></tr>
+      <tr><td>Confirm the rescue plan works and the gear is on hand before work starts</td><td><span class="owner cp">Competent</span></td><td><cite>1926.502(d)(20)</cite></td></tr>
+    </tbody>
+  </table>
+
+  <h2>My authority, in writing</h2>
+  <div class="fill">
+    <div><span>What I can stop</span><div class="write"></div></div>
+    <div><span>What I can order fixed on the spot</span><div class="write"></div></div>
+    <div><span>What I can spend without calling anyone ($)</span><div class="write"></div></div>
+    <div><span>Designated by / date</span><div class="write"></div></div>
+  </div>
+
+  <div class="ja-foot">
+    <span>Fall Protection Competent Person · Upchurch (brand placeholder) · v1.0 Nov 2026</span>
+    <span>Summary only. The standards, your written program and manufacturer instructions govern.</span>
+  </div>
+</div>
+</body>
+</html>

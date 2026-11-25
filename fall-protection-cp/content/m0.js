@@ -86,11 +86,11 @@ COURSE.addModule({
       { type: 'labeled', src: 'assets/art/riverside-elevation.svg',
         alt: 'Side elevation of Riverside Medical Office under construction: tower crane, four levels, roof with skylights, elevator core.',
         markers: [
-          { x: 80, y: 47, title: 'Level 3 deck edge', body: `Perimeter cable rail, crane picks landing at the edge. Ray's "hundred times" shortcut happens here. <em>Modules 1, 3, 8</em>` },
-          { x: 58, y: 18, title: 'Roof and skylights', body: `Low-slope TPO roof, 96 ft wide. Two atrium skylights. A 24-inch parapet on the east side only. <em>Modules 3, 4, 7</em>` },
-          { x: 50, y: 52, title: 'Elevator shaft and stairs', body: `One shaft, two stair openings, MEP holes on every deck. <em>Module 3</em>` },
-          { x: 36, y: 33, title: 'Level 4 metal deck', body: `Steel above you, deck under you. Where you'll pick anchors and do the clearance math. <em>Module 5</em>` },
-          { x: 13, y: 22, title: 'Tower crane', body: `Every pick that lands at an edge pulls someone toward it.` }
+          { x: 88, y: 51, title: 'Level 3 deck edge', body: `Perimeter cable rail, crane picks landing at the edge. Ray's "hundred times" shortcut happens here. <em>Modules 1, 3, 8</em>` },
+          { x: 59, y: 19, title: 'Roof and skylights', body: `Low-slope TPO roof, 96 ft wide. Two atrium skylights. A 24-inch parapet on the east side only. <em>Modules 3, 4, 7</em>` },
+          { x: 53, y: 50, title: 'Elevator shaft and stairs', body: `One shaft, two stair openings, MEP holes on every deck. <em>Module 3</em>` },
+          { x: 36, y: 38, title: 'Level 4 metal deck', body: `Steel above you, deck under you. Where you'll pick anchors and do the clearance math. <em>Module 5</em>` },
+          { x: 22, y: 12, title: 'Tower crane', body: `Every pick that lands at an edge pulls someone toward it.` }
         ],
         caption: `Tap each marker. You'll work every one of these spots before the course is done.`,
         narration: `Tap through the job. The deck edge where the crane lands bundles. The roof with its two skylights and a parapet that only runs along one side. The elevator shaft and stair openings. The fourth-floor deck, where you'll be picking anchors. You'll work every one of these spots before we're done.`,

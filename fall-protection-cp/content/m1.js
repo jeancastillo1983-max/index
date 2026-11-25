@@ -85,6 +85,12 @@ COURSE.addModule({
         cite: '1926.502(d)(16)(iii)',
         narration: `And here's the rule behind it. A fall arrest system has to be rigged so you can't free fall more than six feet, and so you can't hit the level below. Luis's system broke both.` },
 
+      { type: 'video', media: 'vid_m1',
+        caption: `Luis is a composite. The workers in this video are not.`,
+        watchFor: `Listen for the moment each person realized the setup was wrong. It's almost always after, not before.`,
+        narration: `Luis is a composite of a lot of real stories. The people in this next video are real. Listen for when each of them realized something was wrong. It's almost always after.`,
+        sb: { visual: 'Embedded YouTube video: real fall survivor / prevention story.', search: 'n/a (web video)', build: 'Rise: Multimedia > Embed block. Storyline: Web Object.' } },
+
       { type: 'continue', label: 'Next: myths we all grew up with' }
     ] },
 
