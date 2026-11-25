@@ -6,23 +6,29 @@
 <title>Site Rescue Plan — Fall Protection Competent Person</title>
 <link rel="stylesheet" href="jobaid.css">
 <style>
-  .ids { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 4px 14px; margin: 0 0 6px; }
+  .sheet { font-size: 9pt; zoom: .9; }
+  .ids { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 2px 14px; margin: 0 0 4px; }
   .ids label, .lbl { font: 700 7.5pt/1 var(--display); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); display: block; }
-  .ids .write { margin-top: 9px; }
+  .ids .write { margin-top: 7px; }
   .fill { color: var(--blue); font-weight: 600; font-size: 9pt; display: block; min-height: 15px; border-bottom: 1px solid var(--ink); padding-top: 2px; }
-  h2 { margin-top: 9px; }
   h2 .n { display: inline-block; background: var(--orange); color: #fff; width: 18px; text-align: center; border-radius: 3px; margin-right: 6px; }
-  table { font-size: 8.8pt; }
-  td { padding: 4px 6px; }
+  table { font-size: 8.4pt; margin: 2px 0 4px; }
+  td { padding: 3px 6px; }
+  th { padding: 4px 6px; }
+  table.equip td:first-child { width: 3.1in; }
+  h2 { margin: 7px 0 4px; font-size: 12pt; }
+  .ja-head { margin-bottom: 8px; }
+  .stripe { margin-bottom: 8px; }
   td.c, th.c { width: 0.55in; text-align: center; }
-  .opts { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 9pt; margin: 2px 0 4px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 8.4pt; margin: 2px 0 2px; }
   .opts span { display: inline-flex; gap: 5px; align-items: center; }
   .tick.on { background: var(--blue); box-shadow: inset 0 0 0 2px #fff; }
-  ol.steps { margin: 2px 0 0; padding-left: 18px; font-size: 9pt; }
+  ol.steps { margin: 2px 0 0; padding-left: 18px; font-size: 8.4pt; line-height: 1.35; }
   ol.steps li { margin-bottom: 2px; }
-  .lines .write { margin-top: 12px; }
+  .lines .write { margin-top: 10px; }
+  .box { padding: 5px 8px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .example { font: 800 9pt/1 var(--display); color: #fff; background: var(--blue); padding: 3px 8px; border-radius: 3px; letter-spacing: .08em; text-transform: uppercase; }
+  .example { color: var(--blue); }
   table, .box, .two, .sig { break-inside: avoid; page-break-inside: avoid; }
 </style>
 </head>
@@ -51,8 +57,8 @@
 
   <h2><span class="n">1</span>Where could someone end up hanging?</h2>
   <div class="two lines">
-    <div><span class="lbl">Spots (edge, opening, leading edge, roof perimeter)</span><span class="write"></span><span class="write"></span></div>
-    <div><span class="lbl">Arrest system in use (SRL, lanyard, HLL) and anchor</span><span class="write"></span><span class="write"></span></div>
+    <div><span class="lbl">Spots (edge, opening, leading edge, roof perimeter)</span><span class="write"></span></div>
+    <div><span class="lbl">Arrest system in use (SRL, lanyard, HLL) and anchor</span><span class="write"></span></div>
   </div>
 
   <h2><span class="n">2</span>Rescue method</h2>
@@ -66,7 +72,7 @@
   </div>
 
   <h2><span class="n">3</span>Equipment staged and checked today</h2>
-  <table class="check">
+  <table class="equip">
     <thead><tr><th>Item</th><th>Where it is</th><th class="c">Checked</th><th>By / time</th></tr></thead>
     <tbody>
       <tr><td>Aerial lift: reaches the spot, charged or fueled, keys location</td><td></td><td class="c"><span class="tick"></span></td><td></td></tr>
@@ -111,7 +117,7 @@
   <h2><span class="n">7</span>Drill record</h2>
   <table>
     <thead><tr><th>Date</th><th>Time to voice contact</th><th>Time to safe surface</th><th>What we fixed</th><th>CP initials</th></tr></thead>
-    <tbody><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr></tbody>
+    <tbody><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr></tbody>
   </table>
 
   <div class="ja-foot">
@@ -124,7 +130,7 @@
 <div class="sheet">
   <div class="ja-head">
     <div>
-      <div class="kicker">Fall Protection Competent Person · Module 7 job aid <span class="example">Filled-in example</span></div>
+      <div class="kicker">Fall Protection Competent Person · Module 7 job aid · <span class="example">Filled-in example</span></div>
       <h1 class="ja-title">Site Rescue Plan: Riverside Roof</h1>
       <p class="ja-sub">Example only. Riverside Medical Office is a fictional project used throughout the course.</p>
     </div>
@@ -158,7 +164,7 @@
   </div>
 
   <h2><span class="n">3</span>Equipment staged and checked today</h2>
-  <table class="check">
+  <table class="equip">
     <thead><tr><th>Item</th><th>Where it is</th><th class="c">Checked</th><th>By / time</th></tr></thead>
     <tbody>
       <tr><td>Aerial lift: reaches, charged, keys</td><td><span style="color:var(--blue)">North lot; keys in lockbox on lift (code at huddle)</span></td><td class="c"><span class="tick on"></span></td><td><span style="color:var(--blue)">Ray K. 6:45</span></td></tr>
