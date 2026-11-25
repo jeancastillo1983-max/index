@@ -1,0 +1,18 @@
+{
+  "name": "fpcp-build-tools",
+  "private": true,
+  "description": "Build tools for the Fall Protection CP course (storyboard, deck, PDFs, SCORM, preview)",
+  "scripts": {
+    "validate": "node validate.js",
+    "storyboard": "node build-storyboard.js",
+    "deck": "NODE_PATH=./node_modules node build-pptx.js",
+    "pdfs": "node build-pdfs.js",
+    "scorm": "node build-scorm.js",
+    "artifact": "node build-artifact.js",
+    "all": "node validate.js && node build-pdfs.js && node render-art.js && node build-storyboard.js && node build-pptx.js && node build-scorm.js"
+  },
+  "dependencies": {
+    "docx": "9.5.1",
+    "pptxgenjs": "3.12.0"
+  }
+}
