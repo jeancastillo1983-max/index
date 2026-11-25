@@ -22,7 +22,10 @@
   function E() { return FP.engine; }
   function ES() { return E().state.e; }
   function rules() { var r = (C().exam && C().exam.rules) || {}; return { pass: r.pass || 0.8, attempts: r.attempts || 3, count: r.count || 40, critical: r.criticalRequired !== false }; }
-  function areaTitle(id) { var o = (C().outline || []).find(function (x) { return x.id === id; }); return o ? 'Module ' + o.num + ': ' + o.title : id; }
+  function areaTitle(id) {
+    var o = (C().outline || []).find(function (x) { return x.id === id; }) || (C().getModule && C().getModule(id));
+    return o ? 'Module ' + o.num + ': ' + o.title : id;
+  }
   function cite(c) { if (!c) return null; var l = Array.isArray(c) ? c : [c]; return h('p', { class: 'cite-row' }, h('span', { class: 'cite-label' }, 'Receipt'), l.map(function (x) { return h('cite', { html: x }); })); }
   function band(kicker, title, sub, media) {
     var md = FP.media(media);
@@ -193,7 +196,11 @@
 
     function grade(col2) {
       var R2 = rules();
-      var res = paper.qs.map(function (it, i) { return { it: it, a: paper.answers[i], ok: isCorrect(it.q, paper.answers[i]) }; });
+      var res = paper.qs.map(function (it, i) {
+        var a = paper.answers[i];
+        if (it.q.type === 'sequence' && a == null) a = paper.answers[i + '_o'] || it.seqOrder;
+        return { it: it, a: a, ok: isCorrect(it.q, a) };
+      });
       var nRight = res.filter(function (r) { return r.ok; }).length;
       var score = Math.round(nRight / res.length * 100);
       var crit = res.filter(function (r) { return r.it.slot.critical; });
@@ -302,12 +309,12 @@
     // area breakdown
     var areas = {};
     r.res.forEach(function (x) { var a = x.it.slot.area; areas[a] = areas[a] || { n: 0, ok: 0 }; areas[a].n++; if (x.ok) areas[a].ok++; });
-    col.appendChild(h('div', { class: 'b-table' }, h('h3', { class: 'blk-title' }, 'By area'), h('div', { class: 'table-wrap' }, h('table', null,
+    col.appendChild(h('div', { class: 'b-table' }, h('h3', { class: 'h3' }, 'By area'), h('div', { class: 'table-wrap' }, h('table', null,
       h('thead', null, h('tr', null, h('th', null, 'Area'), h('th', null, 'Correct'))),
       h('tbody', null, Object.keys(areas).sort().map(function (a) { return h('tr', null, h('th', { scope: 'row' }, areaTitle(a)), h('td', { class: areas[a].ok === areas[a].n ? 'is-good' : 'is-bad' }, areas[a].ok + ' / ' + areas[a].n)); }))))));
 
     // per-question review
-    col.appendChild(h('h3', { class: 'blk-title' }, 'Every question, with the receipt'));
+    col.appendChild(h('h3', { class: 'h3' }, 'Every question, with the receipt'));
     var list = h('ol', { class: 'review-list' });
     r.res.forEach(function (x, i) {
       var q = x.it.q;

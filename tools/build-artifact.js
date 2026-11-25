@@ -46,6 +46,7 @@ window.FP_CONFIG = {
   sequential: false,
   narration: true,
   preview: true,
+  allowPrint: false,
   brand: { name: 'UPCHURCH', tagline: 'Safety Training', logo: null }
 };
 `);

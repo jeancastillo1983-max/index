@@ -488,7 +488,7 @@
     els.main.innerHTML = '';
     els.main.appendChild(node);
     currentRoute = id;
-    renderRail(id);
+    updateChrome();
     closeRail();
     root.scrollTo(0, 0);
     els.main.focus({ preventScroll: true });

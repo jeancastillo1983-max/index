@@ -172,9 +172,9 @@
         var x = t < 0.18 ? startX + (endX - startX) * (t / 0.18) : endX;
         var drop = 0;
         if (t >= 0.18) {
-          var u = (t - 0.18) / 0.82;
+          var u = Math.min(1, (t - 0.18) / 0.82);
           if (u < pFF) drop = ff * Math.pow(u / pFF, 2);
-          else { var v = (u - pFF) / (1 - pFF); drop = ff + (finalFeet - ff) * (1 - Math.pow(1 - v, 2.2)); }
+          else { var v = Math.min(1, Math.max(0, (u - pFF) / (1 - pFF))); drop = ff + (finalFeet - ff) * (1 - Math.pow(1 - v, 2.2)); }
         }
         place(x, drop);
         if (t < 1) root.requestAnimationFrame(frame); else { finish(); if (done) done(r); }
