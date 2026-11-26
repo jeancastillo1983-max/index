@@ -31,8 +31,8 @@ const paras = b => (Array.isArray(b) ? b : String(b || '').split(/\n\n+/)).filte
 const clip = (s, n) => { s = strip(s); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; };
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 const exists = p => p && fs.existsSync(p);
-function mediaPath(id) { const m = FP.media(id); return m && m.type === 'image' && exists(path.join(CD, m.src)) ? path.join(CD, m.src) : null; }
-function artPng(src) { if (!src) return null; const p = path.join(PNG, 'art', path.basename(src).replace(/\.svg$/, '.png')); return exists(p) ? p : (/\.(png|jpe?g)$/i.test(src) && exists(path.join(CD, src)) ? path.join(CD, src) : null); }
+function mediaPath(id) { const m = FP.media(id); if (!m || m.type !== 'image') return null; if (/\.svg$/i.test(m.src)) { const j = path.join(ROOT, 'dist', 'deck', 'art-' + path.basename(m.src).replace(/\.svg$/i, '.jpg')); if (exists(j)) return j; const p = path.join(PNG, 'art', path.basename(m.src).replace(/\.svg$/i, '.png')); return exists(p) ? p : null; } return exists(path.join(CD, m.src)) ? path.join(CD, m.src) : null; }
+function artPng(src) { if (!src) return null; const bn = path.basename(src).replace(/\.svg$/, ''); const sj = path.join(ROOT, 'dist', 'deck', bn.replace(/^scene-/, '') + '.jpg'), aj = path.join(ROOT, 'dist', 'deck', 'art-' + bn + '.jpg'); if (/^scene-/.test(bn) && exists(sj)) return sj; if (/\.svg$/.test(src) && exists(aj)) return aj; const p = path.join(PNG, 'art', path.basename(src).replace(/\.svg$/, '.png')); return exists(p) ? p : (/\.(png|jpe?g)$/i.test(src) && exists(path.join(CD, src)) ? path.join(CD, src) : null); }
 function avatarPng(id) { const p = path.join(PNG, 'avatars', `${id}.png`); return exists(p) ? p : null; }
 function posterPath(id) { const m = FP.media(id); return m && m.poster && exists(path.join(CD, m.poster)) ? path.join(CD, m.poster) : null; }
 
@@ -317,7 +317,8 @@ function buildDeck(mod) {
       case 'scenario': renderScenario(b); break;
       case 'hotspot': {
         const sc = FP.scene(b.scene); if (!sc) break;
-        const plain = path.join(PNG, 'scenes', `${b.scene}.png`), rev = path.join(PNG, 'scenes', `${b.scene}-reveal.png`);
+        const DK = path.join(ROOT, 'dist', 'deck'); const pick = n => exists(path.join(DK, n + '.jpg')) ? path.join(DK, n + '.jpg') : path.join(PNG, 'scenes', n + '.png');
+        const plain = pick(b.scene), rev = pick(`${b.scene}-reveal`);
         const hz = b.hazards && b.hazards.length ? sc.hazards.filter(h => b.hazards.includes(h.id)) : sc.hazards;
         const s = add('FP_CONTENT', b.title || 'Spot the hazard', notesOf(b, `FACILITATE: give the room ${b.timeLimit ? Math.round(b.timeLimit / 10) * 10 + ' seconds' : 'a minute'} to call out every fall hazard they see. ${hz.length} to find. Then advance for the reveal.`));
         if (exists(plain)) addImg(s, plain, M, 1.4, W - 2 * M, 5.35, 'contain');

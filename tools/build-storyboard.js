@@ -9,8 +9,10 @@ const docx = require('docx');
 const { loadCourse } = require('./load-content');
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, ShadingType, BorderStyle,
-  AlignmentType, HeadingLevel, PageBreak, Header, Footer, PageNumber, TableOfContents, LevelFormat, VerticalAlign
+  AlignmentType, HeadingLevel, PageBreak, Header, Footer, PageNumber, TableOfContents, LevelFormat, VerticalAlign, ImageRun
 } = docx;
+let sizeOf = null; try { const m = require('image-size'); sizeOf = m.imageSize || m; } catch (e) { /* thumbnails without size */ }
+const THUMBS = path.join(path.resolve(__dirname, '..'), 'dist', 'thumbs');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'deliverables', 'FallProtection-CP_Storyboard.docx');
@@ -191,6 +193,25 @@ function describe(b) {
   return { on, logic };
 }
 
+
+/* ---------- thumbnails (dist/thumbs, from tools/make-thumbs.py) ---------- */
+function thumbFor(b) {
+  const t = n => { const p = path.join(THUMBS, n + '.jpg'); return fs.existsSync(p) ? p : null; };
+  const base = f => path.basename(String(f || '')).replace(/\.[a-z0-9]+$/i, '');
+  if (b.type === 'hotspot' && b.scene) return t('scene-' + b.scene + '-reveal') || t('scene-' + b.scene);
+  if (b.type === 'video') { const m = FP.media(b.media); return m && m.youtube ? t(m.youtube) : null; }
+  if (b.media) { const m = FP.media(b.media); if (m && m.src) return t(base(m.src)); }
+  if (b.src) return t(base(b.src));
+  if (b.type === 'scenario') { const n = Object.values(b.nodes).find(x => x.art || x.media); if (n) { if (n.art) return t(base(n.art)); const m = FP.media(n.media); if (m && m.src) return t(base(m.src)); } }
+  return null;
+}
+function thumbPara(file, maxW = 300) {
+  let w = 520, h = 293;
+  try { const d = sizeOf(fs.readFileSync(file)); w = d.width; h = d.height; } catch (e) { /* default */ }
+  const W2 = Math.min(maxW, w), H2 = Math.round(h * W2 / w);
+  return new Paragraph({ children: [new ImageRun({ type: 'jpg', data: fs.readFileSync(file), transformation: { width: W2, height: H2 } })], spacing: { after: 40 } });
+}
+
 function screenTable(code, b) {
   const { on, logic } = describe(b);
   const media = b.media ? FP.media(b.media) : null;
@@ -206,6 +227,8 @@ function screenTable(code, b) {
   ];
   if (logic.length) rows.push(['Interaction / branching logic', logic]);
   if (visual.length) rows.push(['Visual', visual]);
+  const th = thumbFor(b);
+  if (th) rows.push(['Thumbnail', [thumbPara(th)]]);
   if (sb.search) rows.push(['Content Library search', [sb.search]]);
   rows.push(['Build', [sb.build || BUILD[b.type] || b.type]]);
   if (sb.notes) rows.push(['Notes', [sb.notes]]);
@@ -215,7 +238,7 @@ function screenTable(code, b) {
   ] });
   const body = rows.map(([k, v]) => new TableRow({ children: [
     cell(P(k, { run: { bold: true, size: 17, color: MUTED }, after: 0 }), LABEL_W, { fill: SOFT }),
-    cell(v.map(x => P(x, { run: { size: 19 }, after: 50 })), VALUE_W)
+    cell(v.map(x => x instanceof Paragraph ? x : P(x, { run: { size: 19 }, after: 50 })), VALUE_W)
   ] }));
   return [new Table({ width: { size: CONTENT_W, type: WidthType.DXA }, columnWidths: [LABEL_W, VALUE_W], rows: [header].concat(body) }), P('', { after: 120 })];
 }

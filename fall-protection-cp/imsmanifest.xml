@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="FPCP-2026" version="1.0"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="ORG-FPCP-2026">
+    <organization identifier="ORG-FPCP-2026">
+      <title>Fall Protection Competent Person (1.0 (Nov 2026))</title>
+      <item identifier="ITEM-1" identifierref="RES-1" isvisible="true">
+        <title>Fall Protection Competent Person</title>
+        <adlcp:masteryscore>80</adlcp:masteryscore>
+        <adlcp:maxtimeallowed></adlcp:maxtimeallowed>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-1" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="assets/CREDITS.md"/>
+      <file href="assets/art/anchor-bar-joist.svg"/>
+      <file href="assets/art/anchor-beam-clamp.svg"/>
+      <file href="assets/art/anchor-beam-strap.svg"/>
+      <file href="assets/art/anchor-conduit.svg"/>
+      <file href="assets/art/anchor-embedded-deck.svg"/>
+      <file href="assets/art/anchor-guardrail.svg"/>
+      <file href="assets/art/anchor-rebar.svg"/>
+      <file href="assets/art/anchor-roof-stanchion.svg"/>
+      <file href="assets/art/anchor-sprinkler-pipe.svg"/>
+      <file href="assets/art/equip-bent-gate.svg"/>
+      <file href="assets/art/equip-burned-webbing.svg"/>
+      <file href="assets/art/equip-cut-webbing.svg"/>
+      <file href="assets/art/equip-deployed-absorber.svg"/>
+      <file href="assets/art/equip-good-harness.svg"/>
+      <file href="assets/art/equip-good-lanyard.svg"/>
+      <file href="assets/art/equip-good-srl.svg"/>
+      <file href="assets/art/equip-hll-kit.svg"/>
+      <file href="assets/art/equip-knot-lanyard.svg"/>
+      <file href="assets/art/equip-mixed-brands.svg"/>
+      <file href="assets/art/equip-srl-no-lock.svg"/>
+      <file href="assets/art/equip-uv-faded.svg"/>
+      <file href="assets/art/m1-hundred-times.svg"/>
+      <file href="assets/art/m1-luis-mezzanine.svg"/>
+      <file href="assets/art/m4-guardrail-diagram.svg"/>
+      <file href="assets/art/m5-clearance-dee.svg"/>
+      <file href="assets/art/m7-rescue-options.svg"/>
+      <file href="assets/art/m8-near-miss.svg"/>
+      <file href="assets/art/photo-guardrail.svg"/>
+      <file href="assets/art/photo-hole-cover.svg"/>
+      <file href="assets/art/photo-safety-net.svg"/>
+      <file href="assets/art/riverside-elevation.svg"/>
+      <file href="assets/art/scene-deck-tomorrow.svg"/>
+      <file href="assets/art/scene-deck.svg"/>
+      <file href="assets/art/scene-roof-tomorrow.svg"/>
+      <file href="assets/art/scene-roof.svg"/>
+      <file href="assets/art/scene-shaft.svg"/>
+      <file href="assets/fonts/barlow-condensed-500.woff2"/>
+      <file href="assets/fonts/barlow-condensed-700.woff2"/>
+      <file href="assets/fonts/barlow-condensed-800.woff2"/>
+      <file href="assets/fonts/jetbrains-mono-var.woff2"/>
+      <file href="assets/fonts/public-sans-var-italic.woff2"/>
+      <file href="assets/fonts/public-sans-var.woff2"/>
+      <file href="assets/img/aerial-lift.jpg"/>
+      <file href="assets/img/course-hero.jpg"/>
+      <file href="assets/img/crew-harness-demo.jpg"/>
+      <file href="assets/img/deck-pour.jpg"/>
+      <file href="assets/img/exam-hero.jpg"/>
+      <file href="assets/img/harness-back.jpg"/>
+      <file href="assets/img/harness.jpg"/>
+      <file href="assets/img/ironworker.jpg"/>
+      <file href="assets/img/ironworkers-local.jpg"/>
+      <file href="assets/img/ladder.jpg"/>
+      <file href="assets/img/leading-edge.jpg"/>
+      <file href="assets/img/m0-hero.jpg"/>
+      <file href="assets/img/m2-hero.jpg"/>
+      <file href="assets/img/m3-hero.jpg"/>
+      <file href="assets/img/m6-hero.jpg"/>
+      <file href="assets/img/m8-hero.jpg"/>
+      <file href="assets/img/m9-hero.jpg"/>
+      <file href="assets/img/rebar.jpg"/>
+      <file href="assets/img/roof-tieoff.jpg"/>
+      <file href="assets/img/roof-work.jpg"/>
+      <file href="assets/img/scaffold.jpg"/>
+      <file href="assets/img/skylight.jpg"/>
+      <file href="assets/img/srl.jpg"/>
+      <file href="assets/img/steel-frame-commercial.jpg"/>
+      <file href="assets/img/steel-frame.jpg"/>
+      <file href="assets/img/sunset-cranes.jpg"/>
+      <file href="assets/img/toolbox-talk.jpg"/>
+      <file href="assets/img/training-harness.jpg"/>
+      <file href="assets/video/9nymPPcX8Js.jpg"/>
+      <file href="assets/video/BDWGPKrAGr4.jpg"/>
+      <file href="assets/video/CFZJDYbDM7k.jpg"/>
+      <file href="assets/video/JXnOuLQhOnY.jpg"/>
+      <file href="assets/video/MIVW1DO7e0o.jpg"/>
+      <file href="assets/video/PAc7TxbH7Lk.jpg"/>
+      <file href="assets/video/Qpowg5Ynh0w.jpg"/>
+      <file href="assets/video/RBmYGDwzfWU.jpg"/>
+      <file href="assets/video/SB39ETkEw-s.jpg"/>
+      <file href="assets/video/SGEkyfnfPLA.jpg"/>
+      <file href="assets/video/T43u0i8bQ34.jpg"/>
+      <file href="assets/video/UYMb1XZ83zQ.jpg"/>
+      <file href="assets/video/ZXUMRbz7edQ.jpg"/>
+      <file href="assets/video/clgE98Z2ZoA.jpg"/>
+      <file href="assets/video/epVfFA4Z6Kg.jpg"/>
+      <file href="assets/video/f5AXLSR4fAw.jpg"/>
+      <file href="assets/video/gC4aoCrrG4E.jpg"/>
+      <file href="assets/video/j8r-7ZJHEYg.jpg"/>
+      <file href="assets/video/kRUywsBpWY8.jpg"/>
+      <file href="assets/video/mG1sllHQgDA.jpg"/>
+      <file href="assets/video/uLbpAtvNIJo.jpg"/>
+      <file href="assets/video/yB-MO6qSoBE.jpg"/>
+      <file href="content/course.js"/>
+      <file href="content/exam.js"/>
+      <file href="content/m0.js"/>
+      <file href="content/m1.js"/>
+      <file href="content/m2.js"/>
+      <file href="content/m3.js"/>
+      <file href="content/m4.js"/>
+      <file href="content/m5.js"/>
+      <file href="content/m6.js"/>
+      <file href="content/m7.js"/>
+      <file href="content/m8.js"/>
+      <file href="content/m9.js"/>
+      <file href="content/media.js"/>
+      <file href="content/scenes.js"/>
+      <file href="css/core.css"/>
+      <file href="css/interactions.css"/>
+      <file href="css/tokens.css"/>
+      <file href="index.html"/>
+      <file href="jobaids/competent-vs-qualified.html"/>
+      <file href="jobaids/daily-walk-checklist.html"/>
+      <file href="jobaids/field-verification-signoff.html"/>
+      <file href="jobaids/jobaid.css"/>
+      <file href="jobaids/pdf/competent-vs-qualified.pdf"/>
+      <file href="jobaids/pdf/daily-walk-checklist.pdf"/>
+      <file href="jobaids/pdf/field-verification-signoff.pdf"/>
+      <file href="jobaids/pdf/pocket-clearance-card.pdf"/>
+      <file href="jobaids/pdf/pre-use-inspection-checklist.pdf"/>
+      <file href="jobaids/pdf/rescue-plan-template.pdf"/>
+      <file href="jobaids/pdf/stop-work-scripts.pdf"/>
+      <file href="jobaids/pdf/system-selection-guide.pdf"/>
+      <file href="jobaids/pdf/toolbox-talk-template.pdf"/>
+      <file href="jobaids/pdf/training-certification-record.pdf"/>
+      <file href="jobaids/pocket-clearance-card.html"/>
+      <file href="jobaids/pre-use-inspection-checklist.html"/>
+      <file href="jobaids/rescue-plan-template.html"/>
+      <file href="jobaids/stop-work-scripts.html"/>
+      <file href="jobaids/system-selection-guide.html"/>
+      <file href="jobaids/toolbox-talk-template.html"/>
+      <file href="jobaids/training-certification-record.html"/>
+      <file href="js/art-diagrams.js"/>
+      <file href="js/art.js"/>
+      <file href="js/blocks-core.js"/>
+      <file href="js/blocks-interactions.js"/>
+      <file href="js/config.js"/>
+      <file href="js/core.js"/>
+      <file href="js/engine.js"/>
+      <file href="js/exam.js"/>
+      <file href="js/scorm.js"/>
+    </resource>
+  </resources>
+</manifest>
