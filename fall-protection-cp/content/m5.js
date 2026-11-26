@@ -279,9 +279,9 @@ COURSE.addModule({
           sb: { visual: 'Flashcards with orange "MYTH" / green "FIELD TRUTH" stamp on the back.', build: 'Rise Flashcard Grid block.' } },
 
         { type: 'tabs', items: [
-          { title: 'Shock-absorbing lanyard', body: 'Cheap, simple, 6 ft. Needs the most clearance. Best with an anchor at or above the D-ring. Not for foot-level tie-off unless rated for 12 ft free fall.', media: 'img_lanyard' },
-          { title: 'Overhead SRL', body: 'Locks within about 2 ft. Lets the worker move. Smallest clearance. Mount it overhead and close to plumb above the work.', media: 'img_srl' },
-          { title: 'SRL-LE (leading edge)', body: 'For anchors at foot level near an edge, like decking or roof work. Tested over a steel edge. Follow the setback, the clearance chart and the edge rules in the manual.', media: 'img_leading_edge' }
+          { title: 'Shock-absorbing lanyard', body: 'Cheap, simple, 6 ft. Needs the most clearance. Best with an anchor at or above the D-ring. Not for foot-level tie-off unless rated for 12 ft free fall.', media: 'img_connector_lanyard' },
+          { title: 'Overhead SRL', body: 'Locks within about 2 ft. Lets the worker move. Smallest clearance. Mount it overhead and close to plumb above the work.', media: 'img_connector_srl' },
+          { title: 'SRL-LE (leading edge)', body: 'For anchors at foot level near an edge, like decking or roof work. Tested over a steel edge. Follow the setback, the clearance chart and the edge rules in the manual.', media: 'img_connector_srl_le' }
         ],
           narration: 'Three connectors you will pick from at Riverside. The shock-absorbing lanyard. The overhead self-retracting lifeline. And the leading-edge SRL for foot-level anchors near an edge.',
           sb: { search: 'self retracting lifeline construction', build: 'Rise Tabs block with image per tab.' } },

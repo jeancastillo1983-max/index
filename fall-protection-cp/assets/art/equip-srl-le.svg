@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Leading-edge self-retracting lifeline anchored at foot level on a deck, its cable running over the steel deck edge to an inline energy absorber and locking snap hook">
+  <rect x="0" y="0" width="400" height="300" rx="16" fill="#E9EEF2"/>
+  <!-- deck slab with steel leading edge -->
+  <rect x="18" y="168" width="262" height="30" fill="#B9C0C6" stroke="#22303C" stroke-width="3"/>
+  <rect x="18" y="198" width="262" height="12" fill="#4A5B6C" stroke="#22303C" stroke-width="3"/>
+  <rect x="270" y="164" width="12" height="46" rx="2" fill="#8C959D" stroke="#22303C" stroke-width="3"/>
+  <!-- foot-level anchor plate -->
+  <rect x="38" y="156" width="40" height="14" rx="3" fill="#6E7C88" stroke="#22303C" stroke-width="3"/>
+  <circle cx="58" cy="148" r="8" fill="none" stroke="#22303C" stroke-width="4"/>
+  <!-- SRL-LE housing lying on deck, tagged LE -->
+  <g stroke="#22303C" stroke-width="3" stroke-linejoin="round">
+    <path d="M66 148 L92 140" fill="none" stroke-width="4"/>
+    <circle cx="122" cy="132" r="32" fill="#FFC629"/>
+    <circle cx="122" cy="132" r="20" fill="none" stroke="#C99A12" stroke-width="2.5"/>
+    <circle cx="122" cy="132" r="7" fill="#22303C"/>
+    <rect x="146" y="98" width="34" height="20" rx="4" fill="#F26B1D"/>
+  </g>
+  <text x="163" y="113" font-family="Arial, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF" text-anchor="middle">LE</text>
+  <!-- cable across deck and over the edge -->
+  <path d="M152 140 L276 160 Q290 163 290 176 L290 226" fill="none" stroke="#4A5B6C" stroke-width="4"/>
+  <!-- inline energy absorber + locking snap hook -->
+  <g stroke="#22303C" stroke-width="3" stroke-linejoin="round">
+    <rect x="279" y="222" width="22" height="34" rx="5" fill="#F26B1D"/>
+    <path d="M290 256 L290 264" fill="none"/>
+    <path d="M283 264 h14 v8 q0 18 -7 18 q-7 0 -7 -18 z" fill="#C9CFD5"/>
+    <rect x="295" y="266" width="6" height="6" fill="#FFC629" stroke-width="1.5"/>
+  </g>
+  <!-- edge-contact marker -->
+  <g fill="none" stroke="#0074E4" stroke-width="2.5" stroke-dasharray="5 4">
+    <circle cx="283" cy="166" r="16"/>
+  </g>
+</svg>
