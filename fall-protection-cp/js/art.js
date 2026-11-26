@@ -20,7 +20,7 @@
     tasha: { bg: '#FBD6BE', skin: '#8A5A3C', hair: '#2A1C14', hat: '#F4F6F7', shirt: '#2B3A4A', vest: '#C6E23A' },
     dee:   { bg: '#D7ECC0', skin: '#C98E62', hair: '#3A2A1E', hat: '#3DAA4F', shirt: '#F26B1D', vest: '#C6E23A' },
     marco: { bg: '#D9D5EC', skin: '#D9A27A', hair: '#3B2E25', hat: '#F4F6F7', shirt: '#A9C8E8', vest: '#C6E23A' },
-    luis:  { bg: '#EADFCB', skin: '#B07A52', hair: '#5A4A3E', hat: '#2A3E5C', shirt: '#A23F35', vest: null },
+    luis:  { bg: '#EADFCB', skin: '#B07A52', hair: '#5A4A3E', hat: '#2E4A73', shirt: '#A23F35', vest: '#C6E23A' },
     safety:{ bg: '#CFE3F5', skin: '#EAC29E', hair: '#6B4A2E', hat: '#2F6DB5', shirt: '#1F3A57', vest: '#F7893B' },
     narrator: { bg: '#DDE3E8', skin: '#C69472', hair: '#3A2A1E', hat: '#F26B1D', shirt: '#4A5B6C', vest: '#C6E23A' }
   };
@@ -37,6 +37,23 @@
       '<path d="M57 36 Q60 34 63 36 L63 54 L57 54 Z" fill="rgba(0,0,0,.08)"/>' +
       '<path d="M30 55 L90 55 Q93 60 88 60.5 L32 60.5 Q27 60 30 55 Z" fill="' + color + '" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>' +
       (extra || '');
+  }
+
+  /* Safety glasses: brow bar, two lenses, side shields wrapping to the temples.
+     tint = smoke lenses (Ray); otherwise clear lenses with a light-blue cast. */
+  function safetyGlasses(tint, heavy) {
+    var lens = tint ? '#3F5A6E' : '#CDEFFC', op = tint ? '.82' : '.6', fw = heavy ? 2.3 : 1.8;
+    var L = 'M45.5 60.8 H58.5 V65 Q58.5 69 54.6 69 H49.4 Q45.5 69 45.5 65 Z';
+    var R = 'M61.5 60.8 H74.5 V65 Q74.5 69 70.6 69 H65.4 Q61.5 69 61.5 65 Z';
+    return '<g stroke="' + INK + '" stroke-linejoin="round">' +
+      '<path d="M45.5 62 L40.5 62.8 M74.5 62 L79.5 62.8" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+      '<path d="M45.5 61 L42 61.8 L42.4 66.6 L45.5 67.4 Z M74.5 61 L78 61.8 L77.6 66.6 L74.5 67.4 Z" fill="' + lens + '" fill-opacity="' + op + '" stroke-width="1.4"/>' +
+      '<path d="' + L + '" fill="' + lens + '" fill-opacity="' + op + '" stroke-width="' + fw + '"/>' +
+      '<path d="' + R + '" fill="' + lens + '" fill-opacity="' + op + '" stroke-width="' + fw + '"/>' +
+      '<path d="M44.5 60.8 H75.5 M58.5 63 Q60 61.8 61.5 63" fill="none" stroke-width="' + (fw + 0.4) + '" stroke-linecap="round"/>' +
+      '<path d="M47.5 62.6 L50 62.6 M63.5 62.6 L66 62.6" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" opacity="' + (tint ? '.7' : '.9') + '"/>' +
+      (tint ? '' : '<circle cx="53" cy="64.2" r="2.1" fill="' + INK + '" stroke="none"/><circle cx="67" cy="64.2" r="2.1" fill="' + INK + '" stroke="none"/>') +
+      '</g>';
   }
 
   function avatarSVG(id, mood) {
@@ -93,22 +110,15 @@
     s.push('<path d="' + M.br + '" stroke="' + (id === 'ray' ? '#7E7E7E' : L.hair) + '" stroke-width="2.6" stroke-linecap="round"/>');
     s.push('<path d="M60 64 Q58 70 61 71" fill="none" stroke="' + INK + '" stroke-width="1.6" stroke-linecap="round"/>');
     s.push('<path d="' + M.mouth + '" fill="none" stroke="' + (id === 'ray' ? '#5A3E32' : INK) + '" stroke-width="2.2" stroke-linecap="round"/>');
-    if (id === 'marco') {
-      s.push('<g fill="none" stroke="' + INK + '" stroke-width="1.8"><circle cx="53" cy="63.5" r="5.2"/><circle cx="67" cy="63.5" r="5.2"/><path d="M58.2 63 L61.8 63"/></g>');
-    }
+    // safety glasses on every character (Ray: smoke-tinted; Marco: heavier prescription-style frames)
+    s.push(safetyGlasses(id === 'ray', id === 'marco'));
     if (id === 'tasha') s.push('<circle cx="41" cy="71" r="1.8" fill="#E8B84A"/><circle cx="79" cy="71" r="1.8" fill="#E8B84A"/>');
     // headwear
-    if (id === 'luis') {
-      s.push('<path d="M40 57 C40 37 80 37 80 57 Z" fill="' + L.hat + '" stroke="' + INK + '" stroke-width="2"/>' +
-        '<path d="M58 55 L94 56.5 Q97 61 90 61.5 L58 59 Z" fill="' + L.hat + '" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>' +
-        '<circle cx="60" cy="39" r="2" fill="' + INK + '"/>');
-    } else {
-      var extra = '';
-      if (id === 'tasha') extra = '<rect x="63" y="42" width="12" height="8" rx="1.5" fill="#F26B1D" stroke="' + INK + '" stroke-width="1.2"/><path d="M66 46 h6" stroke="#fff" stroke-width="1.6"/>';
-      if (id === 'ray') extra = '<rect x="44" y="45.5" width="12" height="6" rx="2.5" fill="#1D252D"/><rect x="64" y="45.5" width="12" height="6" rx="2.5" fill="#1D252D"/><path d="M56 48 h8" stroke="#1D252D" stroke-width="1.6"/>';
-      if (id === 'dee') extra = '<circle cx="70" cy="46" r="3.2" fill="#FFC629" stroke="' + INK + '" stroke-width="1"/>';
-      s.push(hardHat(L.hat, extra));
-    }
+    var extra = '';
+    if (id === 'tasha') extra = '<rect x="63" y="42" width="12" height="8" rx="1.5" fill="#F26B1D" stroke="' + INK + '" stroke-width="1.2"/><path d="M66 46 h6" stroke="#fff" stroke-width="1.6"/>';
+    if (id === 'dee') extra = '<circle cx="70" cy="46" r="3.2" fill="#FFC629" stroke="' + INK + '" stroke-width="1"/>';
+    if (id === 'luis') extra = '<path d="M42 50 Q60 44 78 50" fill="none" stroke="#FFFFFF" stroke-width="2.2" opacity=".75"/>'; // reflective band
+    s.push(hardHat(L.hat, extra));
     s.push('</g>');
     s.push('<circle cx="60" cy="60" r="59" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="2"/>');
     s.push('</svg>');

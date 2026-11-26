@@ -30,7 +30,8 @@
   function fmt(n) { n = Math.round(n * 10) / 10; return (n % 1 === 0 ? n.toFixed(0) : n.toFixed(1)); }
   var reduced = function () { try { return root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
 
-  /* ---------- Worker figure, in feet, facing right; feet at (0,0), y up is negative ---------- */
+  /* ---------- Worker figure, in feet, facing right; feet at (0,0), y up is negative ----------
+     Full PPE: hard hat, safety glasses, hi-vis vest, gloves, work boots, harness with back D-ring. */
   function worker(opts) {
     opts = opts || {};
     var H = opts.H == null ? 5 : opts.H;
@@ -41,10 +42,17 @@
       s('rect', a({ class: 'dg-boot', x: 0.06, y: -0.22, width: 0.42, height: 0.22, rx: 0.05 })),
       s('rect', a({ class: 'dg-pants', x: -0.34, y: -2.95, width: 0.3, height: 2.76, rx: 0.06 })),
       s('rect', a({ class: 'dg-pants', x: 0.06, y: -2.95, width: 0.3, height: 2.76, rx: 0.06 })),
+      // hi-vis vest with reflective bands, then the harness (shoulder straps, chest strap, waist/leg loops)
       s('rect', a({ class: 'dg-vest', x: -0.42, y: -5.05, width: 0.84, height: 2.25, rx: 0.16 })),
-      s('path', a({ class: 'dg-strap', d: 'M-0.34 -4.95 L0.3 -3.05 M0.34 -4.95 L-0.3 -3.05 M-0.38 -3.1 L0.38 -3.1', fill: 'none' })),
+      s('rect', { class: 'dg-reflect', x: -0.4, y: -4.12, width: 0.8, height: 0.13 }),
+      s('rect', { class: 'dg-reflect', x: -0.4, y: -3.72, width: 0.8, height: 0.13 }),
+      s('path', a({ class: 'dg-strap', d: 'M-0.34 -4.95 L0.3 -3.05 M0.34 -4.95 L-0.3 -3.05 M-0.38 -3.1 L0.38 -3.1 M-0.3 -3.05 L-0.22 -2.6 M0.3 -3.05 L0.22 -2.6', fill: 'none' })),
       s('rect', a({ class: 'dg-arm', x: 0.18, y: -4.85, width: 0.26, height: 1.75, rx: 0.12, transform: 'rotate(-18 0.3 -4.8)' })),
+      s('circle', a({ class: 'dg-glove', cx: 0.31, cy: -3.12, r: 0.17, transform: 'rotate(-18 0.3 -4.8)' })),
       s('circle', a({ class: 'dg-skin', cx: 0.05, cy: -5.5, r: 0.36 })),
+      // safety glasses: temple arm + clear lens just under the brim
+      s('path', a({ class: 'dg-glasses-arm', d: 'M0.12 -5.42 L-0.22 -5.46', fill: 'none' })),
+      s('rect', a({ class: 'dg-glasses', x: 0.1, y: -5.5, width: 0.36, height: 0.15, rx: 0.04 })),
       s('path', a({ class: 'dg-hat', d: 'M-0.38 -5.58 Q0.04 -6.28 0.46 -5.58 Z' })),
       s('rect', a({ class: 'dg-hat', x: -0.42, y: -5.62, width: 0.98, height: 0.1, rx: 0.04 })),
       s('circle', a({ class: 'dg-dring', cx: -0.42, cy: -H, r: 0.13 }))

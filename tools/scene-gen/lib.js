@@ -4,7 +4,8 @@ const C = {
   ink: '#22303C', concL: '#B9C0C6', concD: '#8C959D', concM: '#A3ABB2', wet: '#7E878F', steel: '#4A5B6C', steelL: '#6A7C8E',
   sky: '#DCE8F2', skyT: '#C4D8EA', orange: '#F26B1D', yellow: '#FFC629', lime: '#C6E23A', wood: '#C89B5C', woodD: '#A57A40',
   rebar: '#9C5A2E', white: '#F7F8F6', jeans: '#3D5878', dark: '#2E3A46', void: '#3B4652', green: '#7FA36B', ground: '#9DAA94',
-  tpo: '#E9EDEF', tpoD: '#D3D9DD', glass: '#9CC3E0', skinA: '#C68B5E', skinB: '#8D5A3B', skinC: '#E2B48C', skinD: '#6B4428', cmu: '#AAB1B7'
+  tpo: '#E9EDEF', tpoD: '#D3D9DD', glass: '#9CC3E0', skinA: '#C68B5E', skinB: '#8D5A3B', skinC: '#E2B48C', skinD: '#6B4428', cmu: '#AAB1B7',
+  lens: '#CDEFFC', glove: '#E9B949', gloveD: '#B8862A'
 };
 const r = n => Math.round(n * 10) / 10;
 const pts = a => a.map(p => `${r(p[0])},${r(p[1])}`).join(' ');
@@ -25,6 +26,8 @@ const lerp = (a, b, t) => a + (b - a) * t;
 /**
  * Worker figure. Feet at (x,y). s = scale (1 ≈ 150px tall). dir 1 faces right, -1 left.
  * opts: hat, shirt, pants, vest (bool or color), harness (bool), pose, skin, lean (deg), beard, sticker, tool
+ * Every figure wears full PPE: hard hat, hi-vis vest, safety glasses, gloves and work boots.
+ * (harness is opt-in: scenes leave it off where missing fall protection IS the training hazard.)
  * Returns { svg, dring:[x,y], hand:[x,y], hand2:[x,y] } in scene coordinates.
  */
 function worker(x, y, s, o = {}) {
@@ -34,19 +37,21 @@ function worker(x, y, s, o = {}) {
   let p = [];
   // local coords: feet at 0,0 ; up is negative
   let hip = [0, -72], legs;
+  // work boot: ankle shaft over the pant cuff, then the foot with a dark lug sole
+  const shaft = (bx, by, bw, bh) => `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="3" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`;
+  const foot = (fx, fy, fw, fh) => `<rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`
+    + `<path d="M${fx + 3} ${fy + fh} L${fx + fw - 3} ${fy + fh}" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`;
   if (pose === 'kneel') {
     hip = [0, -46];
     legs = limb([[-4, -46], [-12, -8], [-40, -6]], pants, 16) + limb([[4, -46], [26, -40], [28, 0]], pants, 16)
-      + `<rect x="-52" y="-12" width="18" height="11" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`
-      + `<rect x="20" y="-8" width="22" height="10" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`;
+      + shaft(-44, -16, 12, 16) + `<rect x="-52" y="-12" width="18" height="11" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`
+      + shaft(18, -18, 20, 14) + foot(20, -8, 22, 10);
   } else if (pose === 'step') {
     legs = limb([[-4, -72], [-16, -36], [-26, 0]], pants, 16) + limb([[4, -72], [14, -36], [22, 0]], pants, 16)
-      + `<rect x="-38" y="-8" width="22" height="10" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`
-      + `<rect x="14" y="-8" width="22" height="10" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`;
+      + shaft(-36, -18, 20, 14) + foot(-38, -8, 22, 10) + shaft(12, -18, 20, 14) + foot(14, -8, 22, 10);
   } else {
     legs = limb([[-6, -72], [-8, -36], [-10, 0]], pants, 16) + limb([[6, -72], [8, -36], [10, 0]], pants, 16)
-      + `<rect x="-24" y="-8" width="22" height="10" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`
-      + `<rect x="2" y="-8" width="22" height="10" rx="4" fill="${C.dark}" stroke="${C.ink}" stroke-width="2"/>`;
+      + shaft(-20, -18, 20, 14) + foot(-24, -8, 22, 10) + shaft(0, -18, 20, 14) + foot(2, -8, 22, 10);
   }
   const hy = hip[1];
   const sh = hy - 52; // shoulder y
@@ -72,8 +77,11 @@ function worker(x, y, s, o = {}) {
   // head
   const hx = 0, hyy = sh - 20;
   const beard = o.beard ? `<path d="M-11 ${hyy + 2} Q0 ${hyy + 22} 11 ${hyy + 2} Q6 ${hyy + 10} 0 ${hyy + 10} Q-6 ${hyy + 10} -11 ${hyy + 2} Z" fill="#9AA0A4" stroke="${C.ink}" stroke-width="1.5"/>` : '';
-  const head = `<circle cx="${hx}" cy="${hyy}" r="13" fill="${skin}" stroke="${C.ink}" stroke-width="2.5"/>` + beard
-    + `<circle cx="${hx + 6}" cy="${hyy - 2}" r="1.8" fill="${C.ink}"/>`;
+  // safety glasses (profile): clear lens bar with a dark frame + temple arm, just under the hat brim
+  const glasses = `<path d="M2 ${hyy} L-11 ${hyy - 2}" stroke="${C.ink}" stroke-width="2" stroke-linecap="round"/>`
+    + `<rect x="1.5" y="${hyy - 2.5}" width="13.5" height="6" rx="2.2" fill="${C.lens}" stroke="${C.ink}" stroke-width="1.8"/>`;
+  const head = `<circle cx="${hx}" cy="${hyy}" r="13" fill="${skin}" stroke="${C.ink}" stroke-width="2.5"/>` + beard + glasses
+    + `<circle cx="${hx + 6.5}" cy="${hyy + 0.5}" r="1.7" fill="${C.ink}"/>`;
   const hatSvg = hat === 'none' ? `<path d="M-13 ${hyy - 4} Q0 ${hyy - 20} 13 ${hyy - 4} Z" fill="#33404D" stroke="${C.ink}" stroke-width="2"/>` :
     `<path d="M-15 ${hyy - 5} Q-14 ${hyy - 24} 0 ${hyy - 25} Q14 ${hyy - 24} 15 ${hyy - 5} Z" fill="${hat}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`
     + `<path d="M-17 ${hyy - 5} L24 ${hyy - 5}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/><path d="M-17 ${hyy - 5} L24 ${hyy - 5}" stroke="${hat}" stroke-width="2.5" stroke-linecap="round"/>`
@@ -87,7 +95,10 @@ function worker(x, y, s, o = {}) {
   if (o.tool === 'deck') tool = `<path d="M${hand[0] - 40} ${hand[1] - 6} l90 -6 l2 10 l-90 6 z" fill="#C7CDD2" stroke="${C.ink}" stroke-width="2"/>`;
   if (o.tool === 'box') tool = `<rect x="${hand[0] - 14}" y="${hand[1] - 26}" width="34" height="28" rx="2" fill="#D9B77F" stroke="${C.ink}" stroke-width="2"/>`;
 
-  const body = `<g transform="rotate(${lean} 0 ${hy})">${armB}${torso}${vestSvg}${harn}${head}${hatSvg}${armA}${tool}</g>`;
+  // work gloves on both hands (the far hand sits behind the torso, the near hand over any tool it grips)
+  const glove = q => `<circle cx="${r(q[0])}" cy="${r(q[1])}" r="6.5" fill="${C.glove}" stroke="${C.ink}" stroke-width="2"/>`
+    + `<path d="M${r(q[0] - 3.5)} ${r(q[1] - 1)} q3.5 -3 7 0" fill="none" stroke="${C.gloveD}" stroke-width="1.4" stroke-linecap="round"/>`;
+  const body = `<g transform="rotate(${lean} 0 ${hy})">${armB}${glove(hand2)}${torso}${vestSvg}${harn}${head}${hatSvg}${armA}${tool}${glove(hand)}</g>`;
   const g = `<g transform="translate(${r(x)} ${r(y)}) scale(${r(s * dir * 100) / 100} ${r(s * 100) / 100})">${legs}${body}</g>`;
   // world coords of D-ring (back of harness between shoulders) and hands, rotated by lean
   const rot = (px, py) => { const a = lean * Math.PI / 180, dx = px, dy = py - hy; return [dx * Math.cos(a) - dy * Math.sin(a), hy + dx * Math.sin(a) + dy * Math.cos(a)]; };

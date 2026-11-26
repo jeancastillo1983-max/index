@@ -378,12 +378,17 @@
 .dg-seg-h { fill: var(--line-strong); } .dg-seg-sm { fill: var(--good); }
 .dg-tick { stroke: var(--fg); stroke-width: 2; }
 .dg-impact { fill: var(--bad); fill-opacity: .35; stroke: var(--bad); stroke-width: 3; transition: r .25s var(--ease); }
-.dg-worker .dg-boot { fill: var(--fg); }
+/* PPE colors are fixed (hi-vis lime, safety orange harness, dark boots) so they read the same in both themes */
+.dg-worker .dg-boot { fill: #2E3A46; stroke: var(--fg); stroke-width: 1; }
 .dg-worker .dg-pants { fill: var(--blueprint); }
-.dg-worker .dg-vest { fill: var(--accent); stroke: var(--fg); stroke-width: 1; }
-.dg-worker .dg-strap { stroke: var(--fg); stroke-width: 2; }
-.dg-worker .dg-arm { fill: var(--accent); stroke: var(--fg); stroke-width: 1; }
-.dg-worker .dg-skin { fill: color-mix(in srgb, var(--accent) 38%, var(--surface)); stroke: var(--fg); stroke-width: 1; }
+.dg-worker .dg-vest { fill: #C6E23A; stroke: var(--fg); stroke-width: 1; }
+.dg-worker .dg-reflect { fill: #E9EEF0; }
+.dg-worker .dg-strap { stroke: #F26B1D; stroke-width: 2.5; stroke-linecap: round; }
+.dg-worker .dg-arm { fill: #C6E23A; stroke: var(--fg); stroke-width: 1; }
+.dg-worker .dg-glove { fill: #E9B949; stroke: var(--fg); stroke-width: 1; }
+.dg-worker .dg-skin { fill: #C68B5E; stroke: var(--fg); stroke-width: 1; }
+.dg-worker .dg-glasses { fill: #CDEFFC; stroke: var(--fg); stroke-width: 1.2; }
+.dg-worker .dg-glasses-arm { stroke: var(--fg); stroke-width: 1.2; }
 .dg-worker .dg-hat { fill: var(--caution); stroke: var(--fg); stroke-width: 1; }
 .dg-worker .dg-dring { fill: var(--surface); stroke: var(--fg); stroke-width: 2; }
 .dg-worker.is-ghost { opacity: .28; }
