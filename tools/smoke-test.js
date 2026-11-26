@@ -22,7 +22,7 @@ const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/cs
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
   let p = path.join(CD, u === '/' ? 'index.html' : u);
-  if (u === '/js/config.js') { res.writeHead(200, { 'content-type': 'text/javascript' }); return res.end("window.FP_CONFIG={videoMode:'embed',reviewMode:true,sequential:false,narration:true,brand:{name:'UPCHURCH',tagline:'Safety Training',logo:null}};"); }
+  if (u === '/js/config.js') { res.writeHead(200, { 'content-type': 'text/javascript' }); return res.end("window.FP_CONFIG={videoMode:'embed',reviewMode:true,sequential:false,narration:true,brand:{name:'Upchurch',tagline:'Safety Training',logo:'assets/img/upchurch-logo.png',logoDark:'assets/img/upchurch-logo-white.png'}};"); }
   if (!p.startsWith(CD) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { res.writeHead(404); return res.end('nf'); }
   res.writeHead(200, { 'content-type': TYPES[path.extname(p)] || 'application/octet-stream' });
   fs.createReadStream(p).pipe(res);

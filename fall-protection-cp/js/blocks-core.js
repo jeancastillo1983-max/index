@@ -106,7 +106,7 @@
         h('p', { class: 'vid-title', html: md.title || '' }),
         h('p', { class: 'vid-meta' }, [md.channel, md.duration, 'YouTube'].filter(Boolean).join(' · '), ' ',
           h('a', { href: url, target: '_blank', rel: 'noopener' }, 'Open on YouTube', FP.icon('external', 12))),
-        (b.watchFor || md.why) ? h('p', { class: 'vid-watch' }, h('b', null, 'Watch for: '), h('span', { html: b.watchFor || md.why })) : null,
+        (b.watchFor || md.why) ? h('p', { class: 'vid-watch' }, h('b', null, 'Watch for: '), h('span', { html: String(b.watchFor || md.why).replace(/^\s*watch for:?\s*/i, '') })) : null,
         b.caption ? html('p', 'cap', b.caption) : null));
   });
 

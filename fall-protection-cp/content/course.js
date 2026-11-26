@@ -9,7 +9,7 @@
       id: 'FPCP-2026',
       title: 'Fall Protection Competent Person',
       subtitle: 'What you notice. What you tolerate. What you say when the schedule is pushing.',
-      org: 'Upchurch',                       // placeholder brand until logo arrives
+      org: 'Upchurch',
       version: '1.0 (Nov 2026)',
       minutes: 360,
       audience: 'Foremen and lead hands being designated as fall protection competent persons',

@@ -158,14 +158,21 @@
 
   /* ======================= Shell ======================= */
   var els = {};
+  /* Brand logo as a light/dark pair; CSS shows the one that matches the theme. */
+  FP.brandLogo = function (cls) {
+    var b = CFG.brand || {};
+    return h('span', { class: 'brand-logo ' + (cls || '') },
+      h('img', { src: b.logo, alt: b.name || 'Logo', class: 'brand-logo-light' }),
+      h('img', { src: b.logoDark || b.logo, alt: '', 'aria-hidden': 'true', class: 'brand-logo-dark' }));
+  };
   function buildShell() {
     var app = document.getElementById('fp-app') || document.body.appendChild(h('div', { id: 'fp-app', class: 'fp-app' }));
     app.innerHTML = '';
     var brand = CFG.brand || {};
     els.menuBtn = h('button', { class: 'tb-btn tb-menu', 'aria-label': 'Open course outline', 'aria-expanded': 'false', on: { click: toggleRail } }, FP.icon('menu', 22));
-    var mark = brand.logo ? h('img', { src: brand.logo, alt: brand.name || 'Logo', class: 'tb-logo' }) : h('span', { class: 'tb-mark', 'aria-hidden': 'true' });
-    els.brand = h('a', { class: 'tb-brand', href: '#home', 'aria-label': (brand.name || 'Course') + ' home' }, mark,
-      h('span', { class: 'tb-brand-text' }, h('b', null, brand.name || 'UPCHURCH'), h('small', null, brand.tagline || 'Safety Training')));
+    var mark = brand.logo ? FP.brandLogo('tb-logo') : h('span', { class: 'tb-mark', 'aria-hidden': 'true' });
+    els.brand = h('a', { class: 'tb-brand' + (brand.logo ? ' has-logo' : ''), href: '#home', 'aria-label': (brand.name || 'Course') + ' home' }, mark,
+      h('span', { class: 'tb-brand-text' }, brand.logo ? null : h('b', null, brand.name || 'UPCHURCH'), h('small', null, brand.tagline || 'Safety Training')));
     els.title = h('div', { class: 'tb-title' }, COURSE.meta.title || 'Course');
     els.progBar = h('span', { class: 'tb-prog-fill' });
     els.progPct = h('b', { class: 'tb-prog-pct' }, '0%');

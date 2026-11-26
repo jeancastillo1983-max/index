@@ -7,8 +7,9 @@
 @font-face { font-family: "JetBrains Mono"; font-weight: 400 700; src: url("../assets/fonts/jetbrains-mono-var.woff2") format("woff2"); }
 
 :root {
-  --navy: #17324D; --orange: #F26B1D; --caution: #FFC629; --ink: #14202B; --muted: #4F5D6A;
-  --line: #C9D2DA; --soft: #F1F4F6; --good: #1D7F52; --bad: #C23A2E; --blue: #1F5FAE;
+  /* Upchurch brand: black, blue (#0082FF; #0074E4 for AA text), green */
+  --navy: #10161C; --orange: #0074E4; --caution: #FFC629; --ink: #14202B; --muted: #4F5D6A;
+  --line: #C9D2DA; --soft: #F1F4F6; --good: #008200; --bad: #C23A2E; --blue: #1F5FAE;
   --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
   --body: "Public Sans", "Segoe UI", Arial, sans-serif;
   --mono: "JetBrains Mono", Menlo, Consolas, monospace;
@@ -21,8 +22,8 @@ html, body { margin: 0; background: #DDE3E8; color: var(--ink); font: 10.5pt/1.4
 
 /* Header band */
 .ja-head { display: flex; align-items: stretch; justify-content: space-between; gap: 12px; border-bottom: 3px solid var(--navy); padding-bottom: 8px; margin-bottom: 12px; }
-.ja-head .brand { font: 800 14pt/1 var(--display); letter-spacing: .08em; color: var(--navy); display: flex; align-items: center; gap: 6px; }
-.ja-head .brand::before { content: ""; width: 14px; height: 14px; background: var(--orange); display: inline-block; }
+.ja-head .brand { display: flex; align-items: center; }
+.ja-head .brand img { height: 0.34in; width: auto; display: block; }
 .ja-head .kicker { font: 700 9pt/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
 .ja-title { font: 800 22pt/1.02 var(--display); text-transform: uppercase; letter-spacing: .01em; margin: 2px 0 0; color: var(--ink); }
 .ja-sub { color: var(--muted); margin: 4px 0 0; font-size: 10pt; }
@@ -37,7 +38,7 @@ cite, .cite { font: 600 8pt/1 var(--mono); font-style: normal; color: var(--blue
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .box { border: 1.5px solid var(--line); border-radius: 6px; padding: 8px 10px; }
 .box.navy { background: var(--navy); color: #fff; border-color: var(--navy); }
-.box.warn { border-color: var(--orange); background: #FFF3EA; }
+.box.warn { border-color: #D98A00; background: #FFF6E5; }
 .box.good { border-color: var(--good); background: #E9F6EF; }
 .box.bad { border-color: var(--bad); background: #FCEDEB; }
 

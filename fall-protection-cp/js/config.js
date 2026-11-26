@@ -4,5 +4,5 @@ window.FP_CONFIG = {
   reviewMode: false,       // true = every module and the exam unlocked (stakeholder review)
   sequential: true,        // modules unlock in order; exam unlocks after Module 9
   narration: true,         // show Listen buttons (browser text-to-speech) with captions
-  brand: { name: 'UPCHURCH', tagline: 'Safety Training', logo: null }   // logo: 'assets/img/logo.svg' when supplied
+  brand: { name: 'Upchurch', tagline: 'Safety Training', logo: 'assets/img/upchurch-logo.png', logoDark: 'assets/img/upchurch-logo-white.png' }
 };

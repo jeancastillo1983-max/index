@@ -47,7 +47,7 @@ window.FP_CONFIG = {
   narration: true,
   preview: true,
   allowPrint: false,
-  brand: { name: 'UPCHURCH', tagline: 'Safety Training', logo: null }
+  brand: { name: 'Upchurch', tagline: 'Safety Training', logo: 'assets/img/upchurch-logo.png', logoDark: 'assets/img/upchurch-logo-white.png' }
 };
 `);
 fs.writeFileSync(path.join(OUT, 'files.json'), JSON.stringify(files, null, 0));

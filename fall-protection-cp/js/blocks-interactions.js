@@ -888,6 +888,10 @@
       words.forEach(function (w) { var t = line ? line + ' ' + w : w; if (c.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; });
       if (line) lines.push(line); return lines;
     }
+    // Preload the white logo for the card's black header band (same-origin, so the canvas stays exportable)
+    var cfgBrand = (root.FP_CONFIG && root.FP_CONFIG.brand) || {};
+    var logoImg = null;
+    if (cfgBrand.logoDark || cfgBrand.logo) { logoImg = new Image(); logoImg.src = cfgBrand.logoDark || cfgBrand.logo; }
     function make() {
       var text = ta.value.trim(), who = name.value.trim();
       var cv = h('canvas', { width: 1200, height: 675, class: 'ix-cm-canvas', role: 'img', 'aria-label': 'Commitment card: ' + text });
@@ -896,12 +900,18 @@
       var course = (root.COURSE && root.COURSE.meta && root.COURSE.meta.title) || 'Fall Protection Competent Person';
       // card is a self-contained image: fixed print colors
       c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, 1200, 675);
-      c.fillStyle = '#17324D'; c.fillRect(0, 0, 1200, 120);
+      c.fillStyle = '#10161C'; c.fillRect(0, 0, 1200, 120);
       for (var x = -40; x < 1240; x += 40) { c.fillStyle = '#FFC629'; c.beginPath(); c.moveTo(x, 675); c.lineTo(x + 20, 675); c.lineTo(x + 40, 651); c.lineTo(x + 20, 651); c.fill(); c.fillStyle = '#1B1B1B'; c.beginPath(); c.moveTo(x + 20, 675); c.lineTo(x + 40, 675); c.lineTo(x + 60, 651); c.lineTo(x + 40, 651); c.fill(); }
-      c.fillStyle = '#F26B1D'; c.fillRect(60, 42, 34, 34);
-      c.fillStyle = '#FFFFFF'; c.font = '800 40px "Barlow Condensed", "Arial Narrow", Arial, sans-serif'; c.textBaseline = 'middle'; c.fillText(brand, 110, 60);
+      if (logoImg && logoImg.complete && logoImg.naturalWidth) {
+        var lh = 56, lw = Math.round(lh * logoImg.naturalWidth / logoImg.naturalHeight);
+        c.drawImage(logoImg, 60, 32, lw, lh);
+      } else {
+        c.fillStyle = '#0082FF'; c.fillRect(60, 42, 34, 34);
+        c.fillStyle = '#FFFFFF'; c.font = '800 40px "Barlow Condensed", "Arial Narrow", Arial, sans-serif'; c.textBaseline = 'middle'; c.fillText(brand, 110, 60);
+      }
+      c.fillStyle = '#FFFFFF'; c.textBaseline = 'middle';
       c.font = '600 24px "Barlow Condensed", "Arial Narrow", Arial, sans-serif'; c.textAlign = 'right'; c.fillText(course.toUpperCase(), 1140, 60); c.textAlign = 'left';
-      c.fillStyle = '#B4460A'; c.font = '700 30px "Barlow Condensed", "Arial Narrow", Arial, sans-serif'; c.textBaseline = 'alphabetic'; c.fillText('MY COMMITMENT · STARTING MONDAY', 60, 200);
+      c.fillStyle = '#0066CC'; c.font = '700 30px "Barlow Condensed", "Arial Narrow", Arial, sans-serif'; c.textBaseline = 'alphabetic'; c.fillText('MY COMMITMENT · STARTING MONDAY', 60, 200);
       c.fillStyle = '#14202B'; c.font = '600 52px "Public Sans", "Segoe UI", Arial, sans-serif';
       var lines = wrapLines(c, '“' + text + '”', 1080).slice(0, 5);
       lines.forEach(function (ln, i) { c.fillText(ln, 60, 280 + i * 66); });

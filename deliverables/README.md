@@ -25,7 +25,7 @@ the working reference for how each interaction should behave. If you host it, in
 from Rise with a Multimedia › Embed block (`index.html#m5-l3` opens Module 5, Lesson 3).
 
 ## Before launch
-1. **Branding**: Upchurch logo and colors are placeholders. Set `--brand-primary` / `--brand-accent` in `fall-protection-cp/css/tokens.css` and `brand.logo` in `js/config.js`, then rebuild.
+1. **Branding**: done — Upchurch logo (light and dark-mode versions in `assets/img/`) and colors (black, blue #0082FF, green #009500) are applied across the course, certificate, commitment card, decks, storyboard and job aids. Text uses AA-contrast shades of the brand blue and green (#0066CC / #0074E4, #008200). To change them later: `fall-protection-cp/css/tokens.css`, `js/config.js`, then rebuild.
 2. **Qualified-person review** of all exam items and technical content (the storyboard lists every item with its key and citation).
 3. **Statistics**: BLS CFOI 2024 and OSHA Top 10 FY2026 (preliminary) were verified at build; recheck each year.
 4. **Videos**: YouTube links were verified at build; recheck availability before each rollout.

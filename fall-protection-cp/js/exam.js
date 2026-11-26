@@ -358,7 +358,7 @@
     var dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     col.appendChild(h('div', { class: 'cert' + (sample ? ' is-sample' : '') },
       sample ? h('p', { class: 'cert-sample', 'aria-hidden': 'true' }, 'Sample') : null,
-      h('div', { class: 'cert-top' }, h('span', { class: 'tb-mark' }), h('b', { class: 'cert-brand' }, brand.name || 'UPCHURCH'), h('span', { class: 'cert-tag' }, brand.tagline || 'Safety Training')),
+      h('div', { class: 'cert-top' }, brand.logo && FP.brandLogo ? FP.brandLogo('cert-logo') : [h('span', { class: 'tb-mark' }), h('b', { class: 'cert-brand' }, brand.name || 'UPCHURCH')], h('span', { class: 'cert-tag' }, brand.tagline || 'Safety Training')),
       h('div', { class: 'cert-stripe', 'aria-hidden': 'true' }),
       h('p', { class: 'kicker' }, 'Certificate of completion'),
       h('p', { class: 'cert-name' }, sample ? 'Learner Name' : (name || '—')),

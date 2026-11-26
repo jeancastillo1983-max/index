@@ -10,7 +10,7 @@ const strip = s => String(s || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.route('**/js/config.js', r => r.fulfill({ contentType: 'text/javascript', body: "window.FP_CONFIG={reviewMode:true,sequential:false,brand:{name:'UPCHURCH'}};" }));
+  await p.route('**/js/config.js', r => r.fulfill({ contentType: 'text/javascript', body: "window.FP_CONFIG={reviewMode:true,sequential:false,brand:{name:'Upchurch',tagline:'Safety Training',logo:'assets/img/upchurch-logo.png',logoDark:'assets/img/upchurch-logo-white.png'}};" }));
   await p.goto('http://127.0.0.1:8199/index.html#exam', { waitUntil: 'networkidle' });
   await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
   await p.reload({ waitUntil: 'networkidle' });

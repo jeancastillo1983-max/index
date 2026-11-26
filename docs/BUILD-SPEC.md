@@ -6,7 +6,7 @@ SCORM 1.2 package are all generated from that same content. Change content once;
 
 Source document: "Fall Protection Competent Person Course: Outline and Strategy" (JC, Nov 25 2026).
 Decisions: foremen & lead hands only; federal OSHA only; scaffold/ladder CP courses separate;
-SCORM 1.2; field sign-off by safety manager; Upchurch branding (placeholder until logo arrives).
+SCORM 1.2; field sign-off by safety manager; Upchurch branding (logo + black/blue/green, applied Nov 26).
 
 ---------------------------------------------------------------------------------------------------
 ## 1. File layout
@@ -326,9 +326,10 @@ official/credible channels (OSHA/DOL, NIOSH/CDC, CPWR, manufacturers), verified 
 
 Concept: field manual meets jobsite signage. Rise-style reading column with a course outline rail.
 Display: Barlow Condensed (signage). Body: Public Sans (the US government design system face).
-Data/citations: JetBrains Mono. Palette: structural-steel navy, concrete neutrals, safety orange accent,
-caution yellow for hazard marks only, semantic green/amber/red for outcomes. Light + dark themes.
-Brand placeholder: `--brand-*` tokens + "UPCHURCH" wordmark; swap when the logo arrives.
+Data/citations: JetBrains Mono. Palette: Upchurch black bands, concrete neutrals, Upchurch blue accent
+(#0082FF; #0074E4 fills / #0066CC text for AA), Upchurch green for good outcomes (#008200 text), caution
+yellow for hazard marks only, amber/red for partial/poor outcomes. Light + dark themes.
+Logo: `assets/img/upchurch-logo.png` (light grounds) and `upchurch-logo-white.png` (dark grounds), set in `js/config.js`.
 
 ---------------------------------------------------------------------------------------------------
 ## 11. Outputs

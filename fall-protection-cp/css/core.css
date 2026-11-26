@@ -78,7 +78,19 @@ textarea.field { resize: vertical; min-height: 88px; }
   padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); }
 .tb-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); flex: none; }
 .tb-mark { width: 20px; height: 20px; background: var(--accent); display: inline-block; flex: none; box-shadow: 4px 4px 0 var(--steel); }
-.tb-logo { height: 30px; width: auto; }
+/* Brand logo pair: light-ground and dark-ground versions, swapped with the theme */
+.brand-logo { display: inline-flex; align-items: center; flex: none; }
+.brand-logo img { display: block; height: 100%; width: auto; }
+.brand-logo-dark { display: none !important; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand-logo-light { display: none !important; }
+  :root:not([data-theme="light"]) .brand-logo-dark { display: block !important; }
+}
+:root[data-theme="dark"] .brand-logo-light { display: none !important; }
+:root[data-theme="dark"] .brand-logo-dark { display: block !important; }
+.tb-logo { height: 28px; }
+.tb-brand.has-logo .tb-brand-text { border-left: 1px solid var(--line); padding-left: 10px; margin-left: 2px; }
+.cert-logo { height: 40px; }
 .tb-brand-text { display: flex; flex-direction: column; line-height: 1; }
 .tb-brand-text b { font-family: var(--font-display); font-weight: 800; letter-spacing: .14em; font-size: 1.05rem; }
 .tb-brand-text small { font-family: var(--font-display); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; font-size: .66rem; color: var(--fg-muted); margin-top: 3px; }

@@ -18,10 +18,14 @@
   src: url("../assets/fonts/jetbrains-mono-var.woff2") format("woff2"); }
 
 :root {
-  /* ---- Brand (PLACEHOLDER: Upchurch logo + colors pending) ---- */
-  --brand-name: "UPCHURCH";
-  --brand-primary: #17324D;      /* structural-steel navy */
-  --brand-accent: #F26B1D;       /* safety orange */
+  /* ---- Brand: Upchurch (logo colors: black, blue #0082FF, green #009500) ----
+     Fills use the brand blue darkened just enough for white text to pass WCAG AA;
+     decorative marks use the exact brand blue (--brand-blue). */
+  --brand-name: "Upchurch";
+  --brand-primary: #10161C;      /* Upchurch black (bands, headers) */
+  --brand-accent: #0074E4;       /* Upchurch blue, AA with white text */
+  --brand-blue: #0082FF;         /* exact logo blue (non-text) */
+  --brand-green: #009500;        /* exact logo green (non-text) */
 
   /* ---- Palette ---- */
   --bg: #EEF1F3;                 /* concrete-tinted ground */
@@ -37,15 +41,15 @@
   --steel-fg: #FFFFFF;
   --accent: var(--brand-accent);
   --accent-fg: #FFFFFF;
-  --accent-soft: #FDE7DA;
-  --accent-ink: #B4460A;         /* orange readable as text on light */
+  --accent-soft: #E1EEFF;
+  --accent-ink: #0066CC;         /* brand blue readable as text on light */
   --caution: #FFC629;            /* hazard marks only */
   --caution-ink: #6B4E00;
   --blueprint: #1F5FAE;
   --blueprint-soft: #E2ECF8;
 
   /* ---- Semantic ---- */
-  --good: #1D7F52;   --good-soft: #DDF2E7;
+  --good: #008200;   --good-soft: #DFF3DF;   /* Upchurch green, AA as text */
   --ok: #A86A00;     --ok-soft: #FBEFD5;
   --bad: #C23A2E;    --bad-soft: #FBE1DE;
 
@@ -71,30 +75,30 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --brand-primary: #8DB4DC;
-    --bg: #0E141A; --surface: #161F28; --surface-2: #1B2530; --surface-sunk: #0A0F14;
+    --brand-primary: #4DA6FF;
+    --bg: #0C1015; --surface: #151B22; --surface-2: #1A222B; --surface-sunk: #080B0F;
     --fg: #E7EDF2; --fg-muted: #A9B6C2; --fg-subtle: #8796A4;
-    --line: #2A3743; --line-strong: #3C4C5B;
-    --steel: #22405F; --steel-fg: #F2F6FA;
-    --accent: #FF7A2E; --accent-fg: #1A0C03; --accent-soft: #3A2114; --accent-ink: #FF9A5C;
+    --line: #27313B; --line-strong: #394654;
+    --steel: #1A222B; --steel-fg: #F2F6FA;
+    --accent: #3399FF; --accent-fg: #04111F; --accent-soft: #0F2741; --accent-ink: #4DA6FF;
     --caution: #FFCF4A; --caution-ink: #FFE08A;
-    --blueprint: #7FB0EA; --blueprint-soft: #15273B;
-    --good: #45C489; --good-soft: #12301F; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
+    --blueprint: #8FC0F5; --blueprint-soft: #13263A;
+    --good: #33B833; --good-soft: #0F2E12; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
     --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
     --shadow-2: 0 4px 14px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --brand-primary: #8DB4DC;
-  --bg: #0E141A; --surface: #161F28; --surface-2: #1B2530; --surface-sunk: #0A0F14;
+  --brand-primary: #4DA6FF;
+  --bg: #0C1015; --surface: #151B22; --surface-2: #1A222B; --surface-sunk: #080B0F;
   --fg: #E7EDF2; --fg-muted: #A9B6C2; --fg-subtle: #8796A4;
-  --line: #2A3743; --line-strong: #3C4C5B;
-  --steel: #22405F; --steel-fg: #F2F6FA;
-  --accent: #FF7A2E; --accent-fg: #1A0C03; --accent-soft: #3A2114; --accent-ink: #FF9A5C;
+  --line: #27313B; --line-strong: #394654;
+  --steel: #1A222B; --steel-fg: #F2F6FA;
+  --accent: #3399FF; --accent-fg: #04111F; --accent-soft: #0F2741; --accent-ink: #4DA6FF;
   --caution: #FFCF4A; --caution-ink: #FFE08A;
-  --blueprint: #7FB0EA; --blueprint-soft: #15273B;
-  --good: #45C489; --good-soft: #12301F; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
+  --blueprint: #8FC0F5; --blueprint-soft: #13263A;
+  --good: #33B833; --good-soft: #0F2E12; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
   --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
   --shadow-2: 0 4px 14px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
   color-scheme: dark;

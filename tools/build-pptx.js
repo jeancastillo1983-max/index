@@ -14,6 +14,8 @@ const ROOT = path.resolve(__dirname, '..');
 const CD = path.join(ROOT, 'fall-protection-cp');
 const PNG = path.join(ROOT, 'dist', 'png');
 const OUTDIR = path.join(ROOT, 'deliverables', 'powerpoint');
+const LOGO = path.join(CD, 'assets', 'img', 'upchurch-logo.png'), LOGO_W = path.join(CD, 'assets', 'img', 'upchurch-logo-white.png');
+const LOGO_AR = 314 / 70;
 const { COURSE, FP } = loadCourse({ quiet: true });
 let applyTheme = null;
 try { applyTheme = require('/root/.claude/skills/synced/7188c531-f13d-41cb-aa3e-e251cd17c622_960771d7-669e-4856-ab27-fc22c257c366/pptx/scripts/apply_theme.js').applyTheme; } catch (e) { /* optional */ }
@@ -21,9 +23,9 @@ try { applyTheme = require('/root/.claude/skills/synced/7188c531-f13d-41cb-aa3e-
 const THEME = {
   name: 'Upchurch Fall Protection',
   headFontFace: 'Arial', bodyFontFace: 'Calibri',
-  colors: { dk1: '14202B', lt1: 'FFFFFF', dk2: '17324D', lt2: 'EEF1F3', accent1: 'F26B1D', accent2: 'FFC629', accent3: '1F5FAE', accent4: '1D7F52', accent5: 'C23A2E', accent6: 'A86A00', hlink: '1F5FAE', folHlink: '4F5D6A' }
+  colors: { dk1: '14202B', lt1: 'FFFFFF', dk2: '10161C', lt2: 'EEF1F3', accent1: '0074E4', accent2: 'FFC629', accent3: '1F5FAE', accent4: '008200', accent5: 'C23A2E', accent6: 'A86A00', hlink: '1F5FAE', folHlink: '4F5D6A' }
 };
-const HEX = { ink: '14202B', navy: '17324D', soft: 'EEF1F3', orange: 'F26B1D', caution: 'FFC629', blue: '1F5FAE', good: '1D7F52', bad: 'C23A2E', amber: 'A86A00', muted: '4F5D6A', line: 'C9D2DA', white: 'FFFFFF', blueSoft: 'E2ECF8' };
+const HEX = { ink: '14202B', navy: '10161C', soft: 'EEF1F3', orange: '0074E4', caution: 'FFC629', blue: '1F5FAE', good: '008200', bad: 'C23A2E', amber: 'A86A00', muted: '4F5D6A', line: 'C9D2DA', white: 'FFFFFF', blueSoft: 'E2ECF8' };
 const W = 13.333, H = 7.5, M = 0.55;
 
 const strip = s => FP.strip(Array.isArray(s) ? s.join(' ') : s);
@@ -57,23 +59,23 @@ function buildDeck(mod) {
   pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
   const C = pres.SchemeColor;
 
-  const footer = (dark) => ({ text: { text: 'UPCHURCH  ·  Fall Protection Competent Person', options: { x: M, y: H - 0.42, w: 8, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, charSpacing: 1, isTextBox: true, margin: 0 } } });
+  const footerLogo = dark => ({ image: { path: dark ? LOGO_W : LOGO, x: M, y: H - 0.44, w: 0.26 * LOGO_AR, h: 0.26 } });
+  const footer = (dark) => ({ text: { text: 'Fall Protection Competent Person', options: { x: M + 0.26 * LOGO_AR + 0.2, y: H - 0.42, w: 6, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, charSpacing: 1, isTextBox: true, margin: 0 } } });
   const slideNum = dark => ({ x: W - 1.0, y: H - 0.42, w: 0.6, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, align: 'right' });
 
   pres.defineSlideMaster({ title: 'FP_TITLE', background: { color: HEX.navy }, objects: [
-    { rect: { x: M, y: 0.6, w: 0.32, h: 0.32, fill: { color: HEX.orange } } },
-    { text: { text: 'UPCHURCH', options: { x: M + 0.45, y: 0.55, w: 4, h: 0.42, fontSize: 16, bold: true, color: HEX.white, charSpacing: 4, isTextBox: true, margin: 0 } } },
+    { image: { path: LOGO_W, x: M, y: 0.55, w: 0.5 * LOGO_AR, h: 0.5 } },
     { placeholder: { options: { name: 'title', type: 'title', x: M, y: 2.2, w: 8.2, h: 2.2, fontSize: 44, bold: true, color: C.background1, valign: 'bottom', align: 'left', fontFace: 'Arial' }, text: '' } },
     { placeholder: { options: { name: 'body', type: 'body', x: M, y: 4.55, w: 8.2, h: 1.6, fontSize: 18, color: 'CFDAE4', valign: 'top', align: 'left' }, text: '' } }
   ] });
   pres.defineSlideMaster({ title: 'FP_CONTENT', background: { color: HEX.white }, objects: [
-    footer(false), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 0.38, w: W - 2 * M, h: 0.9, fontSize: 30, bold: true, color: C.text2, valign: 'middle', align: 'left', fontFace: 'Arial' }, text: '' } }
+    footerLogo(false), footer(false), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 0.38, w: W - 2 * M, h: 0.9, fontSize: 30, bold: true, color: C.text2, valign: 'middle', align: 'left', fontFace: 'Arial' }, text: '' } }
   ], slideNumber: slideNum(false) });
   pres.defineSlideMaster({ title: 'FP_DARK', background: { color: HEX.navy }, objects: [
-    footer(true), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 0.38, w: W - 2 * M, h: 0.9, fontSize: 30, bold: true, color: C.background1, valign: 'middle', align: 'left', fontFace: 'Arial' }, text: '' } }
+    footerLogo(true), footer(true), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 0.38, w: W - 2 * M, h: 0.9, fontSize: 30, bold: true, color: C.background1, valign: 'middle', align: 'left', fontFace: 'Arial' }, text: '' } }
   ], slideNumber: slideNum(true) });
-  pres.defineSlideMaster({ title: 'FP_SECTION', background: { color: HEX.ink }, objects: [
-    footer(true), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 2.0, w: 8.6, h: 1.6, fontSize: 40, bold: true, color: C.background1, valign: 'bottom', align: 'left', fontFace: 'Arial' }, text: '' } },
+  pres.defineSlideMaster({ title: 'FP_SECTION', background: { color: '0B0F14' }, objects: [
+    footerLogo(true), footer(true), { placeholder: { options: { name: 'title', type: 'title', x: M, y: 2.0, w: 8.6, h: 1.6, fontSize: 40, bold: true, color: C.background1, valign: 'bottom', align: 'left', fontFace: 'Arial' }, text: '' } },
     { placeholder: { options: { name: 'body', type: 'body', x: M, y: 3.75, w: 8.6, h: 2.6, fontSize: 16, color: 'CFDAE4', valign: 'top', align: 'left' }, text: '' } }
   ], slideNumber: slideNum(true) });
 
@@ -144,7 +146,7 @@ function buildDeck(mod) {
         const estH = Math.min(4.2, Math.ceil(chars / ((w - 0.6) * 8.5)) * 0.42 + bodyP.length * 0.17 + 0.2);
         if (isCall) {
           const ch = Math.min(4.9, estH + 0.75 + (b.cite ? 0.6 : 0.25));
-          card(s, M, y, w, ch, b.variant === 'warning' ? 'FDE7DA' : b.variant === 'monday' ? 'DDF2E7' : HEX.soft);
+          card(s, M, y, w, ch, b.variant === 'warning' ? 'E1EEFF' : b.variant === 'monday' ? 'DFF3DF' : HEX.soft);
           text(s, label, { x: M + 0.3, y: y + 0.25, w: w - 0.6, h: 0.4, fontSize: 13, bold: true, color: HEX.orange, charSpacing: 2 });
           if (b.cite) citeChip(s, b.cite, M + 0.3, y + ch - 0.5);
           y += 0.75;
@@ -168,7 +170,7 @@ function buildDeck(mod) {
           lines.forEach((l, i) => {
             const y = 1.45 + i * 1.08, left = i % 2 === 0;
             avatar(s, l.speaker, left ? M : W - M - 0.8, y, 0.8);
-            card(s, left ? M + 1.0 : M + 2.2, y, W - 2 * M - 3.2, 0.9, left ? HEX.soft : 'FDE7DA');
+            card(s, left ? M + 1.0 : M + 2.2, y, W - 2 * M - 3.2, 0.9, left ? HEX.soft : 'E1EEFF');
             text(s, [{ text: FP.char(l.speaker).name + ': ', options: { bold: true, color: HEX.navy } }, { text: clip(l.text, 170) }], { x: (left ? M + 1.0 : M + 2.2) + 0.2, y, w: W - 2 * M - 3.6, h: 0.9, fontSize: 15, valign: 'middle' });
           });
         });
@@ -185,10 +187,10 @@ function buildDeck(mod) {
       }
       case 'video': {
         const m = FP.media(b.media); if (!m) break;
-        const s = add('FP_DARK', 'Watch: ' + clip(m.title, 70), notesOf(b, `Play from: ${m.url}${m.duration ? ' (' + m.duration + ')' : ''}. Watch for: ${strip(b.watchFor || m.why || '')}`));
+        const s = add('FP_DARK', 'Watch: ' + clip(m.title, 70), notesOf(b, `Play from: ${m.url}${m.duration ? ' (' + m.duration + ')' : ''}. Watch for: ${strip(b.watchFor || m.why || '').replace(/^watch for:?\s*/i, '')}`));
         const p = posterPath(b.media);
         if (p) { addImg(s, p, M, 1.45, 7.6, 4.275, 'cover', { hyperlink: { url: m.url, tooltip: 'Open on YouTube' } }); s.addShape(pres.shapes.OVAL, { x: M + 3.3, y: 3.08, w: 1.0, h: 1.0, fill: { color: HEX.orange }, line: { color: HEX.white, width: 2 } }); s.addShape(pres.shapes.RIGHT_TRIANGLE, { x: M + 3.66, y: 3.33, w: 0.4, h: 0.5, rotate: 90, fill: { color: HEX.white }, line: { color: HEX.white } }); }
-        text(s, [{ text: (m.channel || '') + (m.duration ? '  ·  ' + m.duration : ''), options: { breakLine: true, color: HEX.orange, bold: true, fontSize: 14 } }, { text: 'Watch for: ' + strip(b.watchFor || m.why || ''), options: { fontSize: 18, color: 'E3EAF0' } }], { x: 8.5, y: 1.5, w: 4.3, h: 3.6 });
+        text(s, [{ text: (m.channel || '') + (m.duration ? '  ·  ' + m.duration : ''), options: { breakLine: true, color: HEX.orange, bold: true, fontSize: 14 } }, { text: 'Watch for: ' + strip(b.watchFor || m.why || '').replace(/^watch for:?\s*/i, ''), options: { fontSize: 18, color: 'E3EAF0' } }], { x: 8.5, y: 1.5, w: 4.3, h: 3.6 });
         text(s, [{ text: 'Open on YouTube', options: { hyperlink: { url: m.url }, color: HEX.caution, fontSize: 14 } }], { x: 8.5, y: 5.3, w: 4.3, h: 0.4 });
         break;
       }
@@ -209,7 +211,7 @@ function buildDeck(mod) {
             const x = M + (j % 2) * 6.2, y = 1.5 + Math.floor(j / 2) * 2.6;
             card(q, x, y, 5.95, 2.35); text(q, `“${strip(c.front)}”`, { x: x + 0.3, y: y + 0.2, w: 5.35, h: 1.95, fontSize: 20, bold: true, color: HEX.navy, valign: 'middle' });
             const myth = c.verdict === 'myth';
-            card(a, x, y, 5.95, 2.35, c.verdict ? (myth ? 'FBE1DE' : 'DDF2E7') : HEX.soft);
+            card(a, x, y, 5.95, 2.35, c.verdict ? (myth ? 'FBE1DE' : 'DFF3DF') : HEX.soft);
             text(a, [{ text: (c.verdict ? c.verdict.toUpperCase() : 'ANSWER') + '  ', options: { bold: true, color: myth ? HEX.bad : HEX.good, fontSize: 14 } }, { text: clip(c.front, 70), options: { bold: true, fontSize: 14, color: HEX.navy, breakLine: true } }, { text: clip(c.back, 210), options: { fontSize: 14 } }], { x: x + 0.3, y: y + 0.15, w: 5.35, h: 2.05 });
           });
         }
@@ -285,7 +287,7 @@ function buildDeck(mod) {
           const s = add('FP_CONTENT', `${FP.char(b.speaker).name}'s story — ${i + 1}. ${FP.strip(c.title)}`, notesOf({ narration: c.text }, c.choice ? 'FACILITATE: ' + strip(c.choice.question) + '\n' + c.choice.options.map(o => `${o.best ? '[BEST] ' : ''}${strip(o.text)} — ${strip(o.fb || '')}`).join('\n') : ''));
           avatar(s, b.speaker, M, 1.55, 1.6);
           text(s, paras(c.text).map((p, k, a) => ({ text: p, options: { breakLine: k < a.length - 1, paraSpaceAfter: 10 } })), { x: 2.6, y: 1.5, w: c.choice ? 5.4 : 10, h: 5, fontSize: 17 });
-          if (c.choice) { card(s, 8.3, 1.5, 4.5, 5.0, 'FDE7DA'); text(s, [{ text: strip(c.choice.question), options: { bold: true, color: HEX.navy, breakLine: true, paraSpaceAfter: 8 } }].concat(c.choice.options.map((o, k, a) => ({ text: `${String.fromCharCode(65 + k)}. ${clip(o.text, 90)}`, options: { breakLine: k < a.length - 1, paraSpaceAfter: 6 } }))), { x: 8.55, y: 1.7, w: 4.0, h: 4.6, fontSize: 14 }); }
+          if (c.choice) { card(s, 8.3, 1.5, 4.5, 5.0, 'E1EEFF'); text(s, [{ text: strip(c.choice.question), options: { bold: true, color: HEX.navy, breakLine: true, paraSpaceAfter: 8 } }].concat(c.choice.options.map((o, k, a) => ({ text: `${String.fromCharCode(65 + k)}. ${clip(o.text, 90)}`, options: { breakLine: k < a.length - 1, paraSpaceAfter: 6 } }))), { x: 8.55, y: 1.7, w: 4.0, h: 4.6, fontSize: 14 }); }
         });
         break;
       }
@@ -336,7 +338,7 @@ function buildDeck(mod) {
           items.forEach((it, i) => { const x = M + (i % cols) * (cw + 0.2), y = 1.45 + Math.floor(i / cols) * (ch + 0.45); addImg(q, artPng(it.art), x, y, cw, ch, 'contain'); text(q, `${i + 1}. ${clip(it.text, 50)}`, { x, y: y + ch, w: cw, h: 0.4, fontSize: 11 }); });
         } else {
           text(q, items.map((it, i, a) => ({ text: `${i + 1}. ${clip(it.text, 110)}`, options: { breakLine: i < a.length - 1, paraSpaceAfter: 5 } })), { x: M, y: 1.45, w: 7.4, h: 5.2, fontSize: items.length > 8 ? 13 : 16 });
-          b.buckets.forEach((bk, i) => { card(q, 8.3, 1.45 + i * (5.2 / b.buckets.length), 4.5, 5.2 / b.buckets.length - 0.2, i % 2 ? 'FDE7DA' : HEX.soft); text(q, FP.strip(bk.label), { x: 8.5, y: 1.45 + i * (5.2 / b.buckets.length), w: 4.1, h: 5.2 / b.buckets.length - 0.2, fontSize: 18, bold: true, color: HEX.navy, valign: 'middle', align: 'center' }); });
+          b.buckets.forEach((bk, i) => { card(q, 8.3, 1.45 + i * (5.2 / b.buckets.length), 4.5, 5.2 / b.buckets.length - 0.2, i % 2 ? 'E1EEFF' : HEX.soft); text(q, FP.strip(bk.label), { x: 8.5, y: 1.45 + i * (5.2 / b.buckets.length), w: 4.1, h: 5.2 / b.buckets.length - 0.2, fontSize: 18, bold: true, color: HEX.navy, valign: 'middle', align: 'center' }); });
         }
         const a = add('FP_CONTENT', (b.title || 'Sort it') + ': answers', items.map((it, i) => `${i + 1}. ${strip(it.text)} → ${(b.buckets.find(x => x.id === it.bucket) || {}).label}: ${strip(it.fb || '')}`).join('\n'));
         const n = b.buckets.length, gw = (W - 2 * M - (n - 1) * 0.3) / n;
@@ -372,7 +374,7 @@ function buildDeck(mod) {
           : [['Lanyard (L)', `${st.L} ft`], ['Anchor height (A)', `${st.A} ft`], ['Free fall = L + H − A', `${r.freeFall} ft ${r.freeFallOk ? '✔' : '✘ over 6 ft'}`], ['Deceleration (DD)', `${st.DD == null ? 3.5 : st.DD} ft`], ['Harness stretch (HS)', `${st.HS == null ? 1 : st.HS} ft`], ['D-ring to feet (H)', `${st.H == null ? 5 : st.H} ft`], ['Safety margin (SM)', `${st.SM == null ? 2 : st.SM} ft`]];
         rows.push(['Required clearance', `${r.required} ft`], ['Available', `${r.available} ft`]);
         s.addTable(rows.map((rw, i) => rw.map((c, j) => ({ text: c, options: { bold: i >= rows.length - 2, fill: { color: i >= rows.length - 2 ? HEX.soft : HEX.white }, align: j ? 'right' : 'left' } }))), { x: M, y: 3.2, w: 6.2, colW: [4.2, 2.0], fontSize: 14, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.06 });
-        card(s, 7.2, 1.45, W - 7.2 - M, 1.6, r.hits ? 'FBE1DE' : 'DDF2E7');
+        card(s, 7.2, 1.45, W - 7.2 - M, 1.6, r.hits ? 'FBE1DE' : 'DFF3DF');
         text(s, r.hits ? `HITS — needs ${r.required} ft, has ${r.available} ft` : `CLEARS — needs ${r.required} ft, has ${r.available} ft`, { x: 7.45, y: 1.45, w: W - 7.7 - M, h: 1.6, fontSize: 24, bold: true, color: r.hits ? HEX.bad : HEX.good, valign: 'middle', fontFace: 'Arial' });
         (b.fixes || []).forEach((f, i) => { const fr = FP.clearance(Object.assign({}, st, f.set)); card(s, 7.2, 3.3 + i * 1.3, W - 7.2 - M, 1.15); text(s, [{ text: `FIX ${i + 1}: ${FP.strip(f.label).replace(/^fix\s*\d+\s*[:.\-–]\s*/i, '')}  →  ${fr.required} ft ${fr.hits ? '(still hits)' : '(clears)'}`, options: { bold: true, color: fr.hits ? HEX.bad : HEX.good, breakLine: true } }, { text: clip(f.text || '', 140), options: { fontSize: 12 } }], { x: 7.4, y: 3.35 + i * 1.3, w: W - 7.6 - M, h: 1.05, fontSize: 14 }); });
         break;
@@ -414,7 +416,7 @@ function buildDeck(mod) {
     text(s, strip(q.question || q.stem) + (q.multi ? '  (select all that apply)' : ''), { x: M, y: 1.45, w: W - 2 * M, h: 1.5, fontSize: 22, bold: true, color: HEX.navy });
     const drawOpts = (sl, reveal) => opts.forEach((o, i) => {
       const y = 3.05 + i * (3.55 / opts.length);
-      const fill = reveal ? (o.correct ? 'DDF2E7' : HEX.soft) : HEX.soft;
+      const fill = reveal ? (o.correct ? 'DFF3DF' : HEX.soft) : HEX.soft;
       card(sl, M, y, W - 2 * M, 3.55 / opts.length - 0.12, fill);
       circleIcon(sl, M + 0.15, y + (3.55 / opts.length - 0.12 - 0.5) / 2, 0.5, String.fromCharCode(65 + i), reveal && o.correct ? HEX.good : HEX.navy);
       text(sl, clip(o.text, 150), { x: M + 0.85, y, w: W - 2 * M - 1.0, h: 3.55 / opts.length - 0.12, fontSize: opts.length > 4 ? 14 : 16, valign: 'middle', bold: !!(reveal && o.correct) });
@@ -437,7 +439,7 @@ function buildDeck(mod) {
       if (n.end) {
         const col = n.outcome === 'good' ? HEX.good : n.outcome === 'ok' ? HEX.amber : HEX.bad;
         const s = add('FP_CONTENT', `${letter[k]}. ${n.title || ({ good: 'Good outcome', ok: 'Partial outcome', bad: 'Bad outcome' })[n.outcome]}`, `END (${n.outcome.toUpperCase()}). ${strip(n.text)}${n.cite ? ' CITE: ' + n.cite : ''}\n\nFACILITATE: ask what decision changed the outcome.`);
-        card(s, M, 1.45, W - 2 * M, 4.9, n.outcome === 'good' ? 'DDF2E7' : n.outcome === 'ok' ? 'FBEFD5' : 'FBE1DE');
+        card(s, M, 1.45, W - 2 * M, 4.9, n.outcome === 'good' ? 'DFF3DF' : n.outcome === 'ok' ? 'FBEFD5' : 'FBE1DE');
         text(s, ({ good: 'GOOD OUTCOME', ok: 'PARTIAL OUTCOME', bad: 'BAD OUTCOME' })[n.outcome], { x: M + 0.35, y: 1.65, w: 6, h: 0.5, fontSize: 15, bold: true, color: col, charSpacing: 2 });
         text(s, paras(n.text).map((p, i, a) => ({ text: p, options: { breakLine: i < a.length - 1, paraSpaceAfter: 10 } })), { x: M + 0.35, y: 2.25, w: W - 2 * M - 0.7, h: 3.6, fontSize: 19 });
         if (n.cite) citeChip(s, n.cite, M + 0.35, 5.85);

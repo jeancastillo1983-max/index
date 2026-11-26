@@ -13,7 +13,7 @@ const [out, ...routes] = process.argv.slice(2);
     const phone = mode === 'phone';
     const ctx = await b.newContext({ viewport: phone ? { width: 390, height: 844 } : { width: 1280, height: 860 }, colorScheme: mode === 'dark' || phone ? 'dark' : 'light' });
     const p = await ctx.newPage();
-    await p.route('**/js/config.js', r => r.fulfill({ contentType: 'text/javascript', body: "window.FP_CONFIG={videoMode:'embed',reviewMode:true,sequential:false,narration:true,brand:{name:'UPCHURCH',tagline:'Safety Training',logo:null}};" }));
+    await p.route('**/js/config.js', r => r.fulfill({ contentType: 'text/javascript', body: "window.FP_CONFIG={videoMode:'embed',reviewMode:true,sequential:false,narration:true,brand:{name:'Upchurch',tagline:'Safety Training',logo:'assets/img/upchurch-logo.png',logoDark:'assets/img/upchurch-logo-white.png'}};" }));
     await p.goto('http://127.0.0.1:8199/index.html#' + route, { waitUntil: 'networkidle' });
     await p.waitForTimeout(500);
     if (type) await p.evaluate(t => { const el = document.querySelector('.blk--' + t); if (el) el.scrollIntoView({ block: 'start' }); window.scrollBy(0, -70); }, type);

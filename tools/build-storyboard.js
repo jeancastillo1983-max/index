@@ -19,7 +19,7 @@ const OUT = path.join(ROOT, 'deliverables', 'FallProtection-CP_Storyboard.docx')
 const { COURSE, FP } = loadCourse({ quiet: true });
 
 /* ---------- palette / type ---------- */
-const NAVY = '17324D', ORANGE = 'F26B1D', INK = '14202B', MUTED = '4F5D6A', SOFT = 'F1F4F6', LINE = 'C9D2DA', BLUE = '1F5FAE', GOOD = '1D7F52', BAD = 'C23A2E', AMBER = 'A86A00';
+const NAVY = '10161C', ORANGE = '0074E4', INK = '14202B', MUTED = '4F5D6A', SOFT = 'F1F4F6', LINE = 'C9D2DA', BLUE = '1F5FAE', GOOD = '008200', BAD = 'C23A2E', AMBER = 'A86A00';
 const FONT = 'Arial', MONO = 'Consolas';
 const PAGE_W = 12240, MARGIN = 1080, CONTENT_W = PAGE_W - 2 * MARGIN; // 10080
 const LABEL_W = 1900, VALUE_W = CONTENT_W - LABEL_W;
@@ -116,7 +116,7 @@ function describe(b) {
     case 'quote': on.push(`<b>${FP.char(b.speaker).name}:</b> “${b.text}”`); break;
     case 'dialogue': if (b.title) on.push(`<b>${b.title}</b>`); b.lines.forEach(l => on.push(`<b>${FP.char(l.speaker).name}:</b> ${l.text}`)); logic.push('Lines reveal one at a time on Next. Block completes on the last line.'); break;
     case 'image': case 'art': if (b.caption) on.push(b.caption); break;
-    case 'video': { const m = FP.media(b.media); if (m) on.push(`<b>${m.title}</b> — ${m.channel || ''} ${m.duration ? '(' + m.duration + ')' : ''}`, m.url || ''); if (b.caption) on.push(b.caption); if (b.watchFor || (m && m.why)) on.push(`<b>Watch for:</b> ${b.watchFor || m.why}`); break; }
+    case 'video': { const m = FP.media(b.media); if (m) on.push(`<b>${m.title}</b> — ${m.channel || ''} ${m.duration ? '(' + m.duration + ')' : ''}`, m.url || ''); if (b.caption) on.push(b.caption); if (b.watchFor || (m && m.why)) on.push(`<b>Watch for:</b> ${String(b.watchFor || m.why).replace(/^watch for:?\s*/i, '')}`); break; }
     case 'callout': on.push(`<b>[${b.variant.toUpperCase()}]${b.title ? ' ' + b.title : ''}</b>`); add(on, b.body); if (b.cite) on.push(`<cite>${b.cite}</cite>`); if (b.input) logic.push('Private text box (stored on this device only, not reported).'); break;
     case 'stats': b.items.forEach(i => on.push(`<b>${i.value}</b> — ${i.label}${i.source ? ` <em>(${i.source})</em>` : ''}`)); if (b.note) on.push(b.note); break;
     case 'cards': if (b.title) on.push(`<b>${b.title}</b>`); b.cards.forEach((c, i) => on.push(`<b>Card ${i + 1} front:</b> ${c.front}  ·  <b>Back${c.verdict ? ' (' + c.verdict.toUpperCase() + ')' : ''}:</b> ${c.back}${c.cite ? ' <cite>' + c.cite + '</cite>' : ''}`)); logic.push('Tap to flip. Completes when every card has been flipped.'); break;
@@ -248,7 +248,10 @@ const children = [];
 const meta = COURSE.meta;
 
 // Title page
-children.push(new Paragraph({ spacing: { before: 2200, after: 120 }, children: [new TextRun({ text: 'UPCHURCH', font: FONT, bold: true, size: 28, color: ORANGE, characterSpacing: 60 })] }));
+const LOGO = path.join(ROOT, 'fall-protection-cp', 'assets', 'img', 'upchurch-logo.png');
+children.push(new Paragraph({ spacing: { before: 2000, after: 240 }, children: [fs.existsSync(LOGO)
+  ? new ImageRun({ type: 'png', data: fs.readFileSync(LOGO), transformation: { width: 236, height: 53 } })
+  : new TextRun({ text: 'Upchurch', font: FONT, bold: true, size: 28, color: ORANGE })] }));
 children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text: meta.title, font: FONT, bold: true, size: 64, color: NAVY })] }));
 children.push(new Paragraph({ spacing: { after: 360 }, children: [new TextRun({ text: 'Master Storyboard', font: FONT, size: 40, color: INK })] }));
 children.push(P(meta.subtitle, { run: { italics: true, size: 24, color: MUTED }, after: 360 }));
