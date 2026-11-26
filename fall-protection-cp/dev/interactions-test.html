@@ -8,10 +8,11 @@
 <link rel="stylesheet" href="../css/interactions.css">
 <style>
   body { margin: 0; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px; }
-  .wrap { max-width: 900px; margin: 0 auto; display: grid; gap: 40px; }
+  .wrap { max-width: 900px; margin: 0 auto; display: grid; gap: 40px; min-width: 0; }
+  .wrap > * { min-width: 0; }
   .bar { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
   .bar h1 { font: 800 28px/1 var(--font-display); margin: 0; }
-  .log { font: 12px/1.4 var(--font-mono); color: var(--fg-muted); }
+  .log { font: 12px/1.4 var(--font-mono); color: var(--fg-muted); white-space: pre-wrap; word-break: break-all; }
 </style>
 </head>
 <body>

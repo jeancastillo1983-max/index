@@ -105,7 +105,7 @@
     }
     if (srl) svg.appendChild(s('rect', { class: 'dg-srl', x: ax - 11, y: ay - 2, width: 22, height: 26, rx: 7 }));
     svg.appendChild(s('circle', { class: 'dg-anchor', cx: ax, cy: ay, r: 6 }));
-    svg.appendChild(s('text', { class: 'dg-label dg-label-strong', x: ax + 12, y: ay - 8, text: (srl ? 'SRL · ' : 'Anchor · ') + (anchorH === 0 ? 'foot level' : fmt(anchorH) + ' ft up') }));
+    svg.appendChild(s('text', { class: 'dg-label dg-label-strong', x: anchorH === 0 && !srl ? ax + 26 : ax + 12, y: anchorH === 0 && !srl ? ay + 18 : ay - 8, text: (srl ? 'SRL · ' : 'Anchor · ') + (anchorH === 0 ? 'foot level' : fmt(anchorH) + ' ft up') }));
 
     // Required clearance line
     var reqY = Y(r.required);
@@ -206,7 +206,7 @@
     svg.appendChild(s('rect', { class: 'dg-deck', x: 0, y: Yf(deckY), width: W, height: 0.8 * sc }));
     var col = s('rect', { class: 'dg-column', x: 0, y: Yf(deckY) + 0.8 * sc, width: 0.9 * sc, height: HPX });
     svg.appendChild(col);
-    svg.appendChild(s('text', { class: 'dg-label', x: 10, y: Yf(deckY) - 8, text: 'Roof / deck edge' }));
+    svg.appendChild(s('text', { class: 'dg-label', x: W - 10, y: Yf(deckY) - 8, 'text-anchor': 'end', text: 'Roof / deck edge' }));
     // anchor post
     svg.appendChild(s('rect', { class: 'dg-column', x: X(-0.25), y: Yf(-0.6), width: 0.5 * sc, height: Yf(deckY) - Yf(-0.6) }));
     svg.appendChild(s('rect', { class: 'dg-srl', x: X(0) - 11, y: Yf(0) - 4, width: 22, height: 24, rx: 7 }));
@@ -214,12 +214,11 @@
     svg.appendChild(s('text', { class: 'dg-label dg-label-strong', x: X(0) + 14, y: Yf(0) - 8, text: 'Anchor + SRL' }));
     var arc = s('path', { class: 'dg-arc' });
     var line = s('line', { class: 'dg-line is-srl' });
-    var straight = s('line', { class: 'dg-req' });
     var dropLabel = s('text', { class: 'dg-label dg-label-strong', x: 0, y: 0 });
     var impact = s('circle', { class: 'dg-impact', r: 0 });
     var ghost = worker({ H: H, ghost: true });
     var man = worker({ H: H });
-    svg.appendChild(arc); svg.appendChild(straight); svg.appendChild(line); svg.appendChild(ghost); svg.appendChild(man); svg.appendChild(impact); svg.appendChild(dropLabel);
+    svg.appendChild(arc); svg.appendChild(line); svg.appendChild(ghost); svg.appendChild(man); svg.appendChild(impact); svg.appendChild(dropLabel);
 
     var d = opts.d == null ? 6 : +opts.d, colFt = 0;
     function geom() {
@@ -240,8 +239,6 @@
       col.setAttribute('class', 'dg-column' + (d > 1.5 ? ' is-struck' : ''));
       var a0 = g.theta, p0 = posAt(a0, g.R), p1 = posAt(0, g.R);
       arc.setAttribute('d', 'M' + X(p0.x) + ' ' + Yf(p0.y) + ' A' + (g.R * sc) + ' ' + (g.R * sc) + ' 0 0 1 ' + X(p1.x) + ' ' + Yf(p1.y));
-      straight.setAttribute('x1', X(p1.x) - 30); straight.setAttribute('x2', X(p1.x) + 30);
-      straight.setAttribute('y1', Yf(v)); straight.setAttribute('y2', Yf(v));
       ghost.setAttribute('transform', 'translate(' + (X(d) + 0.42 * sc) + ' ' + Yf(deckY) + ') scale(' + sc + ')');
       dropLabel.setAttribute('x', X(p1.x) + 36); dropLabel.setAttribute('y', Yf((v + g.R) / 2) + 4);
       dropLabel.textContent = '+' + fmt(g.drop) + ' ft swing drop';

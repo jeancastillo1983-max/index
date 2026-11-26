@@ -93,9 +93,18 @@ function buildDeck(mod) {
   const avatar = (s, id, x, y, d) => { const p = avatarPng(id); if (p) s.addImage({ path: p, x, y, w: d, h: d, rounding: true }); else circleIcon(s, x, y, d, (FP.char(id).name || '?')[0], HEX.navy); };
   const bulletsRuns = (list, size = 16, color = HEX.ink) => list.map((t, i) => ({ text: t, options: { bullet: true, breakLine: i < list.length - 1, paraSpaceAfter: 6, fontSize: size, color } }));
   const notesOf = (b, extra) => [b.narration ? 'NARRATION: ' + strip(b.narration) : '', extra || ''].filter(Boolean).join('\n\n');
-  const right = (s, b) => { // right-hand visual for statement slides
-    const img = mediaPath(b.media) || artPng(b.src);
-    if (img) { addImg(s, img, 7.7, 1.45, W - 7.7 - M, 5.2, b.src ? 'contain' : 'cover', b.src ? {} : { rounding: false }); return true; }
+  // Photo pool for text-only slides: this module's photos first, then course-wide ones (rotated, no repeats back to back)
+  const pool = [];
+  const pushPool = id => { const p = mediaPath(id); if (p && !pool.includes(p)) pool.push(p); };
+  pushPool(mod.hero);
+  mod.lessons.forEach(l => l.blocks.forEach(b => { if (b.media) pushPool(b.media); }));
+  const own = pool.length;
+  Object.keys(COURSE.media || {}).filter(k => /^img_/.test(k) && !/hero$/.test(k)).forEach(pushPool);
+  let poolI = 0;
+  const nextPhoto = () => pool.length ? pool[(poolI++) % Math.max(1, Math.min(pool.length, own + 6))] : null;
+  const right = (s, b, allowPool) => { // right-hand visual for statement slides
+    const img = mediaPath(b.media) || artPng(b.src) || (allowPool ? nextPhoto() : null);
+    if (img) { addImg(s, img, 7.7, 1.45, W - 7.7 - M, 5.2, b.src ? 'contain' : 'cover'); return true; }
     return false;
   };
 
@@ -128,12 +137,20 @@ function buildDeck(mod) {
         const isCall = b.type === 'callout';
         const label = isCall ? ({ 'field-check': 'FIELD CHECK — ASK THE ROOM', receipt: 'THE RECEIPT', warning: 'WATCH OUT', tip: 'FIELD TIP', skip: 'YOU PROBABLY KNOW THIS', note: 'NOTE', monday: 'USE IT MONDAY' }[b.variant] || 'NOTE') : null;
         const s = add('FP_CONTENT', b.heading || b.title || (isCall ? label : ''), notesOf(b, isCall && b.variant === 'field-check' ? 'FACILITATE: take two or three answers from the room before moving on.' : ''));
-        const hasImg = right(s, b);
+        const hasImg = right(s, b, true);
         const w = hasImg ? 6.6 : W - 2 * M;
         let y = 1.5;
-        if (isCall) { card(s, M, y, w, 4.9, b.variant === 'warning' ? 'FDE7DA' : b.variant === 'monday' ? 'DDF2E7' : HEX.soft); text(s, label, { x: M + 0.3, y: y + 0.25, w: w - 0.6, h: 0.4, fontSize: 13, bold: true, color: HEX.orange, charSpacing: 2 }); y += 0.75; }
-        text(s, paras(b.body).map((p, i, a) => ({ text: p, options: { breakLine: i < a.length - 1, paraSpaceAfter: 12 } })), { x: M + (isCall ? 0.3 : 0), y, w: w - (isCall ? 0.6 : 0), h: 4.2, fontSize: 20 });
-        if (b.cite) citeChip(s, b.cite, M + (isCall ? 0.3 : 0), 6.15);
+        const bodyP = paras(b.body), chars = bodyP.join(' ').length;
+        const estH = Math.min(4.2, Math.ceil(chars / ((w - 0.6) * 8.5)) * 0.42 + bodyP.length * 0.17 + 0.2);
+        if (isCall) {
+          const ch = Math.min(4.9, estH + 0.75 + (b.cite ? 0.6 : 0.25));
+          card(s, M, y, w, ch, b.variant === 'warning' ? 'FDE7DA' : b.variant === 'monday' ? 'DDF2E7' : HEX.soft);
+          text(s, label, { x: M + 0.3, y: y + 0.25, w: w - 0.6, h: 0.4, fontSize: 13, bold: true, color: HEX.orange, charSpacing: 2 });
+          if (b.cite) citeChip(s, b.cite, M + 0.3, y + ch - 0.5);
+          y += 0.75;
+        }
+        text(s, bodyP.map((p, i, a) => ({ text: p, options: { breakLine: i < a.length - 1, paraSpaceAfter: 12 } })), { x: M + (isCall ? 0.3 : 0), y, w: w - (isCall ? 0.6 : 0), h: isCall ? estH : 4.2, fontSize: 20 });
+        if (b.cite && !isCall) citeChip(s, b.cite, M, 6.15);
         break;
       }
       case 'quote': {
@@ -210,8 +227,9 @@ function buildDeck(mod) {
             card(s, x, 1.55, gw, 5.0);
             circleIcon(s, x + 0.25, 1.8, 0.6, b.type === 'timeline' ? '•' : String(i + j + 1), b.type === 'tabs' || b.type === 'accordion' ? HEX.navy : HEX.orange);
             if (it.label) text(s, FP.strip(it.label).toUpperCase(), { x: x + 1.0, y: 1.85, w: gw - 1.2, h: 0.5, fontSize: 12, bold: true, color: HEX.orange });
-            text(s, FP.strip(it.title), { x: x + 0.25, y: 2.55, w: gw - 0.5, h: 0.9, fontSize: 18, bold: true, color: HEX.navy, fontFace: 'Arial' });
-            text(s, clip(it.body, n >= 4 ? 200 : 330), { x: x + 0.25, y: 3.45, w: gw - 0.5, h: 3.0, fontSize: n >= 4 ? 14 : 15 });
+            const tl = FP.strip(it.title).length, tlong = tl > gw * 9;
+            text(s, FP.strip(it.title), { x: x + 0.25, y: 2.55, w: gw - 0.5, h: tlong ? 1.2 : 0.9, fontSize: tlong ? 15 : 18, bold: true, color: HEX.navy, fontFace: 'Arial' });
+            text(s, clip(it.body, n >= 4 ? (tlong ? 170 : 200) : 330), { x: x + 0.25, y: tlong ? 3.8 : 3.45, w: gw - 0.5, h: tlong ? 2.65 : 3.0, fontSize: n >= 4 ? 14 : 15 });
           });
         }
         break;
@@ -355,7 +373,7 @@ function buildDeck(mod) {
         s.addTable(rows.map((rw, i) => rw.map((c, j) => ({ text: c, options: { bold: i >= rows.length - 2, fill: { color: i >= rows.length - 2 ? HEX.soft : HEX.white }, align: j ? 'right' : 'left' } }))), { x: M, y: 3.2, w: 6.2, colW: [4.2, 2.0], fontSize: 14, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.06 });
         card(s, 7.2, 1.45, W - 7.2 - M, 1.6, r.hits ? 'FBE1DE' : 'DDF2E7');
         text(s, r.hits ? `HITS — needs ${r.required} ft, has ${r.available} ft` : `CLEARS — needs ${r.required} ft, has ${r.available} ft`, { x: 7.45, y: 1.45, w: W - 7.7 - M, h: 1.6, fontSize: 24, bold: true, color: r.hits ? HEX.bad : HEX.good, valign: 'middle', fontFace: 'Arial' });
-        (b.fixes || []).forEach((f, i) => { const fr = FP.clearance(Object.assign({}, st, f.set)); card(s, 7.2, 3.3 + i * 1.3, W - 7.2 - M, 1.15); text(s, [{ text: `FIX ${i + 1}: ${FP.strip(f.label)}  →  ${fr.required} ft ${fr.hits ? '(still hits)' : '(clears)'}`, options: { bold: true, color: fr.hits ? HEX.bad : HEX.good, breakLine: true } }, { text: clip(f.text || '', 140), options: { fontSize: 12 } }], { x: 7.4, y: 3.35 + i * 1.3, w: W - 7.6 - M, h: 1.05, fontSize: 14 }); });
+        (b.fixes || []).forEach((f, i) => { const fr = FP.clearance(Object.assign({}, st, f.set)); card(s, 7.2, 3.3 + i * 1.3, W - 7.2 - M, 1.15); text(s, [{ text: `FIX ${i + 1}: ${FP.strip(f.label).replace(/^fix\s*\d+\s*[:.\-–]\s*/i, '')}  →  ${fr.required} ft ${fr.hits ? '(still hits)' : '(clears)'}`, options: { bold: true, color: fr.hits ? HEX.bad : HEX.good, breakLine: true } }, { text: clip(f.text || '', 140), options: { fontSize: 12 } }], { x: 7.4, y: 3.35 + i * 1.3, w: W - 7.6 - M, h: 1.05, fontSize: 14 }); });
         break;
       }
       case 'swing': {

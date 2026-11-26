@@ -7,6 +7,9 @@
   padding: var(--s-5); box-shadow: var(--shadow-1); display: grid; gap: var(--s-4); min-width: 0; position: relative; }
 .ix * { box-sizing: border-box; }
 .ix-body { display: grid; gap: var(--s-4); min-width: 0; }
+/* grid children default to min-width:auto; keep wide tables/diagrams scrolling inside their own wrappers */
+.ix-body > *, .ix-scn-end > *, .ix-scn-main > *, .ix-debrief > *, .ix-clear-side > *, .ix-clear-panel > *, .ix-hs-after > *, .ix-rank > *, .ix-tb-out > *, .ix-cm-out > *, .ix-step > * { min-width: 0; }
+.ix [hidden] { display: none !important; } /* component display rules must not override the hidden attribute */
 .ix-sr { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 @media (max-width: 560px) { .ix { padding: var(--s-4); border-radius: var(--radius); } }
 
@@ -98,7 +101,7 @@
 .ix-slider label { font-size: var(--step--1); color: var(--fg-muted); }
 .ix-slider label b { color: var(--fg); font-family: var(--font-mono); }
 .ix-formula { margin: 0; font: 500 12px/1.4 var(--font-mono); color: var(--fg-muted); }
-.ix-table-wrap { overflow-x: auto; max-width: 100%; }
+.ix-table-wrap { overflow-x: auto; max-width: 100%; min-width: 0; contain: inline-size; } /* wide tables never widen the page */
 .ix-table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
 .ix-table th { text-align: left; font: 700 12px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .08em; color: var(--fg-muted);
   border-bottom: 2px solid var(--line-strong); padding: 8px 10px; }
@@ -393,3 +396,9 @@
 @media (prefers-reduced-motion: reduce) {
   .ix-hs-mark, .ix-fb, .ix-scn-node, .ix-scn-end, .ix-hs-detail, .is-shake { animation: none !important; }
 }
+
+/* Clearance: decide first — the dimension stack and the answer stay hidden until the fall runs */
+.ix-clear-fig.is-predicting .dg-stack,
+.ix-clear-fig.is-predicting .dg-req,
+.ix-clear-fig.is-predicting .dg-req-label,
+.ix-clear-fig.is-predicting .dg-overlap { visibility: hidden; }

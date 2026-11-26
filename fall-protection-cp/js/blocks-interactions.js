@@ -401,7 +401,7 @@
     var S = shell(b, ctx, type);
     var st;
     var tray = h('div', { class: 'ix-tray', role: 'list', 'aria-label': 'Items to sort' });
-    var bucketsWrap = h('div', { class: 'ix-buckets', style: { '--cols': Math.min(b.buckets.length, 3) } });
+    var bucketsWrap = h('div', { class: 'ix-buckets', style: '--cols: ' + Math.min(b.buckets.length, 3) });
     var fbWrap = h('div', { class: 'ix-sort-fb', 'aria-live': 'polite' });
     var after = h('div');
     var help = h('p', { class: 'ix-help', text: 'Tap an item, then tap where it belongs. You can also drag.' });
@@ -645,6 +645,7 @@
     function startPredict() {
       cur = Object.assign({}, base);
       drawChips(cur); drawDiagram(cur, false); readout.innerHTML = ''; out.innerHTML = '';
+      figure.classList.add('is-predicting');   // decide first: hide the numbers until the fall runs
       var pick = null;
       var num = h('input', { type: 'number', inputmode: 'decimal', step: '0.5', min: '0', max: '60', id: FP.uid('ix-rc'), class: 'ix-input', placeholder: 'ft' });
       var runBtn = btn('Run the fall', 'is-primary', run, { disabled: true });
@@ -661,6 +662,7 @@
       panel.appendChild(h('div', { class: 'ix-actions' }, runBtn));
       function run() {
         runBtn.disabled = true;
+        figure.classList.remove('is-predicting');
         var r = FP.clearance(cur);
         var guess = parseFloat(num.value);
         diag.play(function () {
@@ -725,9 +727,12 @@
   FP.register('swing', function (b, ctx) {
     var S = shell(b, ctx, 'swing');
     if (!FP.diagram) return S.root;
-    var range = b.offsets || [0, 12];
-    var d0 = b.start == null ? 6 : b.start;
-    var sw = FP.diagram.swing({ v: b.v == null ? 4 : b.v, max: range[1], d: d0 });
+    var offs = (b.offsets && b.offsets.length) ? b.offsets : [0, 12];
+    var range = [Math.min.apply(null, offs), Math.max.apply(null, offs)];
+    var d0 = b.start != null ? b.start : (offs.length > 2 ? offs[Math.floor(offs.length / 2)] : 6);
+    // v = anchor height above the D-ring; content may give the line length R instead (R² = v² + d²)
+    var vv = b.v != null ? b.v : (b.R ? Math.sqrt(Math.max(1, b.R * b.R - d0 * d0)) : 4);
+    var sw = FP.diagram.swing({ v: vv, max: range[1], d: d0 });
     var id = FP.uid('ix-sw');
     var val = h('b', { text: fmt(d0) + ' ft' });
     var stats = h('div', { class: 'ix-swing-stats', 'aria-live': 'polite' });
