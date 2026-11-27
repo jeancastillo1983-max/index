@@ -19,6 +19,9 @@
   ];
 
   function C() { return root.COURSE || {}; }
+  function fieldItems() { var m = C().meta || {}; return m.fieldItems || FIELD_ITEMS; }
+  function lastModuleLabel() { var o = (C().order || []); var m = C().getModule && C().getModule(o[o.length - 1]); return m ? 'Module ' + m.num : 'the last module'; }
+  function certPrefix() { return (C().meta && C().meta.certPrefix) || 'FPCP'; }
   function E() { return FP.engine; }
   function ES() { return E().state.e; }
   function rules() { var r = (C().exam && C().exam.rules) || {}; return { pass: r.pass || 0.8, attempts: r.attempts || 3, count: r.count || 40, critical: r.criticalRequired !== false }; }
@@ -129,7 +132,7 @@
     }
     if (!eng.examUnlocked()) {
       var left = eng.modules().filter(function (m) { return !eng.moduleDone(m); });
-      col.appendChild(card('lock', 'Finish the modules first.', h('div', null, h('p', null, 'The final assessment opens after Module 9. Still to go:'),
+      col.appendChild(card('lock', 'Finish the modules first.', h('div', null, h('p', null, 'The final assessment opens after ' + lastModuleLabel() + '. Still to go:'),
         h('ul', { class: 'plain-list' }, left.map(function (m) { return h('li', null, h('a', { href: '#' + m.id }, 'Module ' + m.num + ': ' + m.title)); })))));
       return;
     }
@@ -213,7 +216,7 @@
       res.forEach(function (r) { if (!r.ok) { var a = r.it.q.module || r.it.slot.area; if (a && missedAreas.indexOf(a) < 0) missedAreas.push(a); } });
       if (passed) {
         s.p = 1; s.t = new Date().toISOString().slice(0, 10);
-        s.id = 'FPCP-' + s.t.replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+        s.id = certPrefix() + '-' + s.t.replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
         FP.scorm.setScore(score); FP.scorm.setStatus('passed');
       } else {
         FP.scorm.setScore(score);
@@ -367,8 +370,8 @@
       h('div', { class: 'cert-meta' },
         h('div', null, h('span', null, 'Date'), h('b', null, dateStr)),
         h('div', null, h('span', null, 'Score'), h('b', null, sample ? '—' : st.s + '%')),
-        h('div', null, h('span', null, 'Certificate ID'), h('b', { class: 'mono' }, sample ? 'FPCP-SAMPLE' : st.id)),
-        h('div', null, h('span', null, 'Standards'), h('b', null, '29 CFR 1926.32(f) · Subpart M · ANSI/ASSP Z359.2')))));
+        h('div', null, h('span', null, 'Certificate ID'), h('b', { class: 'mono' }, sample ? certPrefix() + '-SAMPLE' : st.id)),
+        h('div', null, h('span', null, 'Standards'), h('b', null, meta.certStandards || '29 CFR 1926.32(f) · Subpart M · ANSI/ASSP Z359.2')))));
     var acts = [h('a', { class: 'btn btn-primary', href: '#verification' }, FP.icon('shield', 18), 'Next: field verification')];
     if (CFG.allowPrint !== false && typeof root.print === 'function') acts.push(h('button', { class: 'btn btn-quiet', on: { click: function () { root.print(); } } }, FP.icon('file', 16), 'Print certificate'));
     col.appendChild(h('div', { class: 'exam-actions' }, acts));
@@ -377,14 +380,14 @@
   /* ---------------- field verification ---------------- */
   function renderVerification(host) {
     host.innerHTML = '';
-    host.appendChild(band('Designation', 'Field verification sign-off', 'Completed by your safety manager on a live site', 'img_m9_hero'));
+    host.appendChild(band('Designation', 'Field verification sign-off', 'Completed by your safety manager on a live site', (C().meta && C().meta.verificationHero) || 'img_m9_hero'));
     var col = h('div', { class: 'col' });
     host.appendChild(col);
     var st = FP.store.get('fieldprep', {}) || {};
-    col.appendChild(h('p', { class: 'lead' }, 'The online course is the knowledge half. Your safety manager watches you do these eight things on a real site and marks each one observed, pass, or redo, with the date and a signature. You are designated only after this is signed and your employer gives you the authority to take prompt corrective measures.'));
+    col.appendChild(h('p', { class: 'lead' }, 'The online course is the knowledge half. Your safety manager watches you do these ' + ['zero','one','two','three','four','five','six','seven','eight','nine','ten'][fieldItems().length] + ' things on a real site and marks each one observed, pass, or redo, with the date and a signature. You are designated only after this is signed and your employer gives you the authority to take prompt corrective measures.'));
     var tbl = h('table', { class: 'fv-table' },
       h('thead', null, h('tr', null, h('th', { scope: 'col' }, '#'), h('th', { scope: 'col' }, 'Task observed on site'), h('th', { scope: 'col' }, 'Practiced in'), h('th', { scope: 'col' }, 'I\'m ready'))),
-      h('tbody', null, FIELD_ITEMS.map(function (it, i) {
+      h('tbody', null, fieldItems().map(function (it, i) {
         var id = 'fv-' + i;
         var cb = h('input', { type: 'checkbox', id: id });
         cb.checked = !!st[i];

@@ -586,7 +586,7 @@
     var wrap = h('div', { class: 'view view-home' });
     wrap.appendChild(band({ media: 'img_course_hero', kicker: (meta.org || 'Upchurch') + ' · Competent person program', title: meta.title, sub: meta.subtitle, extra: cta }));
     var col = h('div', { class: 'col' });
-    var facts = [['6 hours', 'self-paced, 11 parts'], ['15–45 min', 'per module, bookmarked'], ['80% + 100%', 'overall + critical items'], ['Field sign-off', 'before designation']];
+    var facts = (meta && meta.homeFacts) || [['6 hours', 'self-paced, 11 parts'], ['15–45 min', 'per module, bookmarked'], ['80% + 100%', 'overall + critical items'], ['Field sign-off', 'before designation']];
     col.appendChild(h('div', { class: 'factrow' }, facts.map(function (f) { return h('div', { class: 'fact' }, h('b', null, f[0]), h('span', null, f[1])); })));
 
     col.appendChild(h('section', { class: 'home-sec' },

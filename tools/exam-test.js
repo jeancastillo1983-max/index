@@ -16,7 +16,8 @@ const strip = s => String(s || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').
   await p.reload({ waitUntil: 'networkidle' });
   await p.click('.exam-actions .btn-primary');
   const stats = { mc: 0, multi: 0, numeric: 0, sequence: 0, hotspot: 0, unmatched: 0 };
-  for (let i = 0; i < 40; i++) {
+  const N = await p.evaluate(() => (COURSE.exam.rules && COURSE.exam.rules.count) || 40);
+  for (let i = 0; i < N; i++) {
     const stem = strip(await p.locator('.exam-stem').innerText());
     const shown = (await p.locator('.exam-answer .opt-text').allInnerTexts()).map(strip);
     const info = await p.evaluate(([stem, shown]) => {

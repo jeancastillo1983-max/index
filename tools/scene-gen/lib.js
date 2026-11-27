@@ -80,8 +80,14 @@ function worker(x, y, s, o = {}) {
   // safety glasses (profile): clear lens bar with a dark frame + temple arm, just under the hat brim
   const glasses = `<path d="M2 ${hyy} L-11 ${hyy - 2}" stroke="${C.ink}" stroke-width="2" stroke-linecap="round"/>`
     + `<rect x="1.5" y="${hyy - 2.5}" width="13.5" height="6" rx="2.2" fill="${C.lens}" stroke="${C.ink}" stroke-width="1.8"/>`;
+  // respirator (silica course): 'half' = elastomeric half mask with pink P100 cartridges, 'n95' = white filtering facepiece
+  const resp = o.resp === 'half'
+    ? `<path d="M${hx - 9} ${hyy - 8} L${hx - 2} ${hyy + 4}" stroke="${C.ink}" stroke-width="2"/><path d="M${hx + 3} ${hyy - 1} Q${hx + 16} ${hyy - 1} ${hx + 16} ${hyy + 6} Q${hx + 14} ${hyy + 13} ${hx + 5} ${hyy + 12} Q${hx + 1} ${hyy + 6} ${hx + 3} ${hyy - 1} Z" fill="#4A535C" stroke="${C.ink}" stroke-width="2"/><circle cx="${hx + 13}" cy="${hyy + 8}" r="4.2" fill="#E58FB0" stroke="${C.ink}" stroke-width="1.6"/>`
+    : o.resp === 'n95'
+    ? `<path d="M${hx - 10} ${hyy - 3} L${hx + 3} ${hyy + 1}" stroke="#E6E6E6" stroke-width="1.6"/><path d="M${hx + 3} ${hyy} Q${hx + 17} ${hyy + 1} ${hx + 15} ${hyy + 8} Q${hx + 12} ${hyy + 14} ${hx + 4} ${hyy + 12} Q${hx + 1} ${hyy + 6} ${hx + 3} ${hyy} Z" fill="#F4F4F1" stroke="${C.ink}" stroke-width="1.8"/>`
+    : '';
   const head = `<circle cx="${hx}" cy="${hyy}" r="13" fill="${skin}" stroke="${C.ink}" stroke-width="2.5"/>` + beard + glasses
-    + `<circle cx="${hx + 6.5}" cy="${hyy + 0.5}" r="1.7" fill="${C.ink}"/>`;
+    + `<circle cx="${hx + 6.5}" cy="${hyy + 0.5}" r="1.7" fill="${C.ink}"/>` + resp;
   const hatSvg = hat === 'none' ? `<path d="M-13 ${hyy - 4} Q0 ${hyy - 20} 13 ${hyy - 4} Z" fill="#33404D" stroke="${C.ink}" stroke-width="2"/>` :
     `<path d="M-15 ${hyy - 5} Q-14 ${hyy - 24} 0 ${hyy - 25} Q14 ${hyy - 24} 15 ${hyy - 5} Z" fill="${hat}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`
     + `<path d="M-17 ${hyy - 5} L24 ${hyy - 5}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/><path d="M-17 ${hyy - 5} L24 ${hyy - 5}" stroke="${hat}" stroke-width="2.5" stroke-linecap="round"/>`

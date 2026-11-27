@@ -930,7 +930,7 @@
           try {
             cv.toBlob(function (blob) {
               if (!blob) { msg.textContent = 'Saving is blocked here. Long-press or right-click the card to save it.'; return; }
-              var a = h('a', { href: URL.createObjectURL(blob), download: 'my-fall-protection-commitment.png' });
+              var a = h('a', { href: URL.createObjectURL(blob), download: ((root.COURSE && root.COURSE.meta && root.COURSE.meta.commitmentFile) || 'my-fall-protection-commitment.png') });
               document.body.appendChild(a); a.click(); a.remove();
               msg.textContent = 'If nothing downloaded, long-press or right-click the card to save it.';
             });

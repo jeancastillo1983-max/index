@@ -8,8 +8,9 @@ const { execSync } = require('child_process');
 const { loadCourse } = require('./load-content');
 
 const ROOT = path.resolve(__dirname, '..');
-const COURSE_DIR = path.join(ROOT, 'fall-protection-cp');
-const OUT = path.join(ROOT, 'deliverables', 'FallProtection-CP_SCORM12.zip');
+const PF = require('./profile');
+const COURSE_DIR = PF.COURSE_DIR;
+const OUT = path.join(PF.DELIV, `${PF.PREFIX}_SCORM12.zip`);
 const { COURSE } = loadCourse({ quiet: true });
 
 function walk(dir, base = '') {

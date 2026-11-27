@@ -12,10 +12,11 @@ const {
   AlignmentType, HeadingLevel, PageBreak, Header, Footer, PageNumber, TableOfContents, LevelFormat, VerticalAlign, ImageRun
 } = docx;
 let sizeOf = null; try { const m = require('image-size'); sizeOf = m.imageSize || m; } catch (e) { /* thumbnails without size */ }
-const THUMBS = path.join(path.resolve(__dirname, '..'), 'dist', 'thumbs');
+const PF = require('./profile');
+const THUMBS = path.join(PF.DIST, 'thumbs');
 
 const ROOT = path.resolve(__dirname, '..');
-const OUT = path.join(ROOT, 'deliverables', 'FallProtection-CP_Storyboard.docx');
+const OUT = path.join(PF.DELIV, `${PF.PREFIX}_Storyboard.docx`);
 const { COURSE, FP } = loadCourse({ quiet: true });
 
 /* ---------- palette / type ---------- */
@@ -88,7 +89,7 @@ const BUILD = {
   sort: `${SL}: freeform drag-and-drop (drop targets = buckets), per-item feedback layers`, anchorjudge: `${SL}: freeform drag-and-drop (Approve / Reject / Ask a qualified person)`,
   sequence: `${SL}: sequence drag-drop question`, match: `${SL}: drag-and-drop tags onto diagram drop targets`,
   clearance: `${SL}: number variables + calculation triggers + motion-path fall animation`, swing: `${SL}: slider interaction (variable d) driving swing animation`,
-  checkreview: `${SL}: hotspot rows on a filled-in form; counter variable for errors found`, toolbox: `${SL}: three choice sets → script assembled with %variable% references`,
+  checkreview: `${SL}: hotspot rows on a filled-in form; counter variable for errors found`, table1: `${SL}: one slide per task; two button sets (control, respirator) with T/F variables; summary table layer`, shift: `${SL}: prediction question, then toggles that add hours to M4_ShiftHours; condition > 4 swaps every respirator label`, toolbox: `${SL}: three choice sets → script assembled with %variable% references`,
   commitment: `${SL}: text entry → commitment card slide; Print/Email; Rise text-entry not available`
 };
 const LABEL = { hero: 'Lesson banner', text: 'Text', quote: 'Character quote', dialogue: 'Dialogue', image: 'Photo', art: 'Illustration', video: 'Video',
@@ -96,7 +97,7 @@ const LABEL = { hero: 'Lesson banner', text: 'Text', quote: 'Character quote', d
   table: 'Table', pyramid: 'Hierarchy', poll: 'Self-check poll', reflect: 'Gut check', mcq: 'Practice question', testout: 'Test-out', story: 'Story chapters',
   charintro: 'Characters', coursemap: 'Course map', checklist: 'Checklist', download: 'Job aid', continue: 'Continue gate', scenario: 'Branching scenario',
   hotspot: 'Spot the hazard', sort: 'Drag & drop sort', anchorjudge: 'Anchor or not', sequence: 'Sequence', match: 'Drag tags to diagram', clearance: 'Clearance math',
-  swing: 'Swing fall', checkreview: 'Find the errors', toolbox: 'Toolbox talk builder', commitment: 'Commitment card' };
+  swing: 'Swing fall', checkreview: 'Find the errors', table1: 'Table 1 stepper', shift: 'Shift builder', toolbox: 'Toolbox talk builder', commitment: 'Commitment card' };
 const toneTxt = t => ({ good: 'BEST', ok: 'PARTIAL', bad: 'POOR' }[t] || '');
 
 function mcqLines(q) {
@@ -187,6 +188,13 @@ function describe(b) {
       logic.push(`Learner flags rows; target ${b.findCount || b.rows.filter(r => r.error).length} errors; Check reveals all.`);
       break;
     case 'toolbox': ['stories', 'hazards', 'commitments'].forEach(k => { on.push(`<b>${k[0].toUpperCase() + k.slice(1)}:</b>`); b[k].forEach(x => on.push(`○ ${x.label} — ${FP.strip(x.text)}`)); }); logic.push('One pick from each set → 5-minute talk script assembled (open, story, hazard, fix, commitment, close).'); break;
+    case 'table1': if (b.title) on.push(`<b>${b.title}</b>`); if (b.intro) add(on, b.intro);
+      on.push('<b>Control choices:</b> ' + b.controls.map(c => c.label).join(' · '));
+      b.tasks.forEach((t, i) => { const c = b.controls.find(x => x.id === t.control) || {}; logic.push(`Task ${i + 1}: ${FP.strip(t.task)} (${t.hours} h, ${t.indoor ? 'indoors' : 'outdoors'}) → control: ${c.label || t.control}; respirator: ${String(t.resp).toUpperCase()}${t.fb ? ' — <em>' + FP.strip(t.fb) + '</em>' : ''}${t.cite ? ' <cite>' + t.cite + '</cite>' : ''}`); });
+      if (b.summary) logic.push(`Summary: ${FP.strip(b.summary)}`); logic.push('Both choices must be right to score the task; feedback after each; summary table at the end.'); break;
+    case 'shift': if (b.title) on.push(`<b>${b.title}</b>`); if (b.question) on.push(`<b>Predict first:</b> ${b.question}`);
+      b.tasks.forEach(t => logic.push(`Toggle: ${FP.strip(t.label)} (${t.hours} h) → ≤4 h: ${String(t.resp.le4).toUpperCase()}, >4 h total: ${String(t.resp.gt4).toUpperCase()}`));
+      if (b.explain) logic.push(`Explain: ${FP.strip(b.explain)}`); logic.push('Shift bar shows a 4-hour marker; once total hours pass 4, every task flips to its > 4 h respirator.'); break;
     case 'commitment': on.push(`<b>${b.title || 'Commitment card'}</b>`); on.push(b.prompt); (b.examples || []).forEach(e => on.push(`e.g. ${e}`)); logic.push('Text entry → card with name, date, course; downloadable image.'); break;
     default: on.push(`[${b.type}]`);
   }
@@ -259,7 +267,7 @@ const children = [];
 const meta = COURSE.meta;
 
 // Title page
-const LOGO = path.join(ROOT, 'fall-protection-cp', 'assets', 'img', 'upchurch-logo.png');
+const LOGO = path.join(PF.COURSE_DIR, 'assets', 'img', 'upchurch-logo.png');
 children.push(new Paragraph({ spacing: { before: 2000, after: 240 }, children: [fs.existsSync(LOGO)
   ? new ImageRun({ type: 'png', data: fs.readFileSync(LOGO), transformation: { width: 236, height: 53 } })
   : new TextRun({ text: 'Upchurch', font: FONT, bold: true, size: 28, color: ORANGE })] }));
@@ -267,10 +275,10 @@ children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ 
 children.push(new Paragraph({ spacing: { after: 360 }, children: [new TextRun({ text: 'Master Storyboard', font: FONT, size: 40, color: INK })] }));
 children.push(P(meta.subtitle, { run: { italics: true, size: 24, color: MUTED }, after: 360 }));
 children.push(grid(['Item', 'Plan'], [
-  ['Version', meta.version], ['Audience', meta.audience], ['Total time', `${meta.minutes} minutes (orientation, 9 modules, final exam), self-paced, bookmarked`],
+  ['Version', meta.version], ['Audience', meta.audience], ['Total time', (meta.storyboard && meta.storyboard.totalTime) ? meta.storyboard.totalTime : `${meta.minutes} minutes (orientation, 9 modules, final exam), self-paced, bookmarked`],
   ['Delivery', 'Rise 360 narrative modules + Storyline 360 blocks for branching and calculations; SCORM 1.2; PowerPoint facilitator version; HTML5 reference build'],
   ['Standards basis', meta.standards.join('; ')], ['Pass rule', meta.passRule + '; field verification sign-off by the safety manager before designation'],
-  ['Source of truth', 'fall-protection-cp/content/*.js — this storyboard, the deck, the job aids and the SCORM build are generated from it']
+  ['Source of truth', `${PF.DIR}/content/*.js — this storyboard, the deck, the job aids and the SCORM build are generated from it`]
 ], [2400, CONTENT_W - 2400]));
 children.push(P(meta.disclaimer, { run: { italics: true, size: 18, color: MUTED }, before: 240 }));
 children.push(pageBreak());
@@ -300,12 +308,12 @@ children.push(grid(['Storyboard element', 'Build as'], Object.keys(BUILD).map(k 
 children.push(H2('Storyline conventions'));
 bullets([
   'Slide size 16:9 (1280 × 720) for blocks embedded in Rise; player: no sidebar, no seekbar on decision slides, captions on, Modern player, accent #F26B1D.',
-  'One Storyline file per module (e.g. FPCP_M5_Interactions.story); each interaction is its own scene so it can be published as a separate Storyline block.',
-  'Variables are named by activity: M3_HazardsFound, M3_Misses, M5_L, M5_A, M5_DD, M5_HS, M5_H, M5_SM, M5_Avail, M5_RC, M7_Clock, M9_Score. Completion: a "Complete" trigger at the end slide (Rise: "Complete block above" Continue).',
+  (meta.storyboard && meta.storyboard.storyline) || 'One Storyline file per module (e.g. FPCP_M5_Interactions.story); each interaction is its own scene so it can be published as a separate Storyline block.',
+  (meta.storyboard && meta.storyboard.variables) || 'Variables are named by activity: M3_HazardsFound, M3_Misses, M5_L, M5_A, M5_DD, M5_HS, M5_H, M5_SM, M5_Avail, M5_RC, M7_Clock, M9_Score. Completion: a "Complete" trigger at the end slide (Rise: "Complete block above" Continue).',
   'Branching: a slide per decision node, feedback on a layer, Next jumps per the node map in the Interaction row. End slides colored by outcome: good #1D7F52, partial #A86A00, poor #C23A2E.',
-  'Clearance math: adjust variable triggers set the inputs; a JavaScript-free calculation uses "Adjust variable" steps: RC = L + DD + HS + H − A + SM. Motion path for the fall uses the same numbers scaled 20 px per foot.',
+  meta.storyboard ? 'Calculators (Table 1 shift builder): adjust-variable triggers add each task\'s hours to M4_ShiftHours; a condition on > 4 swaps the respirator column on every task card.' : 'Clearance math: adjust variable triggers set the inputs; a JavaScript-free calculation uses "Adjust variable" steps: RC = L + DD + HS + H − A + SM. Motion path for the fall uses the same numbers scaled 20 px per foot.',
   'Accessibility: alt text on every image; focus order set; keyboard-operable drag-drop alternatives (click-to-place); no information by color alone; narration captions (closed captions from the Narration row).',
-  'Exam: Storyline quiz with question banks (one bank per exam slot, draw 1 of 3), results slide at 80%, plus a critical-items variable (all 8 must be correct) checked before "Pass" is reported. SCORM 1.2 reports one score and passed/failed.',
+  (meta.storyboard && meta.storyboard.exam) || 'Exam: Storyline quiz with question banks (one bank per exam slot, draw 1 of 3), results slide at 80%, plus a critical-items variable (all 8 must be correct) checked before "Pass" is reported. SCORM 1.2 reports one score and passed/failed.',
 ].concat([]), {}).forEach(p => children.push(p));
 children.push(H2('Rise 360 conventions'));
 bullets([
@@ -391,7 +399,7 @@ if (media.length) {
 
 /* ---------- document ---------- */
 const doc = new Document({
-  creator: 'Upchurch Training', title: `${meta.title} — Master Storyboard`, description: 'Generated from fall-protection-cp/content',
+  creator: 'Upchurch Training', title: `${meta.title} — Master Storyboard`, description: `Generated from ${PF.DIR}/content`,
   features: { updateFields: true },
   styles: {
     default: { document: { run: { font: FONT, size: 20, color: INK } } },

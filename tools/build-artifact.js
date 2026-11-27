@@ -9,8 +9,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const SRC = path.join(ROOT, 'fall-protection-cp');
-const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'dist', 'artifact'));
+const PF = require('./profile');
+const SRC = PF.COURSE_DIR;
+const OUT = path.resolve(process.argv[2] || path.join(PF.DIST, 'artifact'));
 
 function copyDir(src, dst, rel = '') {
   const list = [];
@@ -39,6 +40,8 @@ const t = frag.match(/<title>[\s\S]*?<\/title>/i);
 if (t) frag = t[0] + '\n' + frag.replace(t[0], '');
 fs.writeFileSync(path.join(OUT, 'index.html'), frag);
 
+const srcCfg = fs.readFileSync(path.join(SRC, 'js', 'config.js'), 'utf8');
+const sp = (srcCfg.match(/storagePrefix:\s*'([^']*)'/) || [])[1];
 fs.writeFileSync(path.join(OUT, 'js', 'config.js'), `/* Preview (artifact) build: review mode, videos open on YouTube. */
 window.FP_CONFIG = {
   videoMode: 'link',
@@ -46,7 +49,7 @@ window.FP_CONFIG = {
   sequential: false,
   narration: true,
   preview: true,
-  allowPrint: false,
+  allowPrint: false,${sp ? `\n  storagePrefix: '${sp}',` : ''}
   brand: { name: 'Upchurch', tagline: 'Safety Training', logo: 'assets/img/upchurch-logo.png', logoDark: 'assets/img/upchurch-logo-white.png' }
 };
 `);

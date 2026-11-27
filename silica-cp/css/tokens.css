@@ -1,0 +1,109 @@
+/* ==========================================================================
+   Fall Protection CP — design tokens (single definition; light + dark)
+   Layout concept: field manual meets jobsite signage. Rise-style reading
+   column (max 760px) beside a course-outline rail; full-bleed lesson bands.
+   ========================================================================== */
+
+@font-face { font-family: "Barlow Condensed"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/barlow-condensed-500.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/barlow-condensed-700.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/barlow-condensed-800.woff2") format("woff2"); }
+@font-face { font-family: "Public Sans"; font-weight: 100 900; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/public-sans-var.woff2") format("woff2"); }
+@font-face { font-family: "Public Sans"; font-weight: 100 900; font-style: italic; font-display: swap;
+  src: url("../assets/fonts/public-sans-var-italic.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400 700; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/jetbrains-mono-var.woff2") format("woff2"); }
+
+:root {
+  /* ---- Brand: Upchurch (logo colors: black, blue #0082FF, green #009500) ----
+     Fills use the brand blue darkened just enough for white text to pass WCAG AA;
+     decorative marks use the exact brand blue (--brand-blue). */
+  --brand-name: "Upchurch";
+  --brand-primary: #10161C;      /* Upchurch black (bands, headers) */
+  --brand-accent: #0074E4;       /* Upchurch blue, AA with white text */
+  --brand-blue: #0082FF;         /* exact logo blue (non-text) */
+  --brand-green: #009500;        /* exact logo green (non-text) */
+
+  /* ---- Palette ---- */
+  --bg: #EEF1F3;                 /* concrete-tinted ground */
+  --surface: #FFFFFF;
+  --surface-2: #F6F8F9;
+  --surface-sunk: #E3E8EC;
+  --fg: #14202B;                 /* ink */
+  --fg-muted: #4F5D6A;
+  --fg-subtle: #6E7C88;
+  --line: #D3DAE0;
+  --line-strong: #AEB9C3;
+  --steel: var(--brand-primary);
+  --steel-fg: #FFFFFF;
+  --accent: var(--brand-accent);
+  --accent-fg: #FFFFFF;
+  --accent-soft: #E1EEFF;
+  --accent-ink: #0066CC;         /* brand blue readable as text on light */
+  --caution: #FFC629;            /* hazard marks only */
+  --caution-ink: #6B4E00;
+  --blueprint: #1F5FAE;
+  --blueprint-soft: #E2ECF8;
+
+  /* ---- Semantic ---- */
+  --good: #008200;   --good-soft: #DFF3DF;   /* Upchurch green, AA as text */
+  --ok: #A86A00;     --ok-soft: #FBEFD5;
+  --bad: #C23A2E;    --bad-soft: #FBE1DE;
+
+  /* ---- Type ---- */
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--1: 0.875rem;  --step-0: 1.0625rem;  --step-1: 1.25rem;  --step-2: 1.5rem;
+  --step-3: 1.95rem;    --step-4: 2.6rem;     --step-5: 3.4rem;
+  --lh-body: 1.6;  --lh-tight: 1.1;
+
+  /* ---- Space / shape ---- */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 72px;
+  --radius-s: 4px; --radius: 8px; --radius-l: 14px;
+  --col: 760px;          /* reading column */
+  --rail: 320px;         /* outline rail */
+  --shadow-1: 0 1px 2px rgba(20, 32, 43, .08), 0 2px 8px rgba(20, 32, 43, .06);
+  --shadow-2: 0 4px 14px rgba(20, 32, 43, .12), 0 12px 32px rgba(20, 32, 43, .10);
+  --hazard-stripe: repeating-linear-gradient(-45deg, var(--caution) 0 14px, #1B1B1B 14px 28px);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand-primary: #4DA6FF;
+    --bg: #0C1015; --surface: #151B22; --surface-2: #1A222B; --surface-sunk: #080B0F;
+    --fg: #E7EDF2; --fg-muted: #A9B6C2; --fg-subtle: #8796A4;
+    --line: #27313B; --line-strong: #394654;
+    --steel: #1A222B; --steel-fg: #F2F6FA;
+    --accent: #3399FF; --accent-fg: #04111F; --accent-soft: #0F2741; --accent-ink: #4DA6FF;
+    --caution: #FFCF4A; --caution-ink: #FFE08A;
+    --blueprint: #8FC0F5; --blueprint-soft: #13263A;
+    --good: #33B833; --good-soft: #0F2E12; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
+    --shadow-2: 0 4px 14px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --brand-primary: #4DA6FF;
+  --bg: #0C1015; --surface: #151B22; --surface-2: #1A222B; --surface-sunk: #080B0F;
+  --fg: #E7EDF2; --fg-muted: #A9B6C2; --fg-subtle: #8796A4;
+  --line: #27313B; --line-strong: #394654;
+  --steel: #1A222B; --steel-fg: #F2F6FA;
+  --accent: #3399FF; --accent-fg: #04111F; --accent-soft: #0F2741; --accent-ink: #4DA6FF;
+  --caution: #FFCF4A; --caution-ink: #FFE08A;
+  --blueprint: #8FC0F5; --blueprint-soft: #13263A;
+  --good: #33B833; --good-soft: #0F2E12; --ok: #F0B54A; --ok-soft: #352812; --bad: #FF7A6E; --bad-soft: #3A1714;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
+  --shadow-2: 0 4px 14px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: var(--step-0); line-height: var(--lh-body); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
