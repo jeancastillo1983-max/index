@@ -321,21 +321,32 @@
     var label = speakerLabel(seg.who);
     var parts = sentences(seg.text);
     if (clip && typeof root.Audio === 'function') {
-      var a = new root.Audio(clip[0]);
+      // "file.mp3#t=start,end" = a time range inside a combined (sprite) file
+      var guard = null, src = clip[0], t0 = 0, t1 = null, mt = /#t=([\d.]+),([\d.]+)$/.exec(src);
+      if (mt) { t0 = parseFloat(mt[1]); t1 = parseFloat(mt[2]); src = src.slice(0, mt.index); }
+      var a = new root.Audio(src);
       curAudio = a;
       var dur = clip[1] || Math.max(2, seg.text.length / 14);
+      if (mt) {
+        a.preload = 'auto';
+        a.addEventListener('loadedmetadata', function () { try { a.currentTime = t0; } catch (e) { /* seek later */ } });
+        a.addEventListener('timeupdate', function () { if (token === speakToken && t1 != null && a.currentTime >= t1) { t1 = null; a.pause(); clearTimeout(guard); next(); } });
+      }
       var total = parts.reduce(function (n, p) { return n + p.length; }, 0) || 1;
       var marks = [], acc = 0;
       parts.forEach(function (p) { marks.push(acc / total * dur); acc += p.length; });
       capText.textContent = label + parts[0];
       a.addEventListener('timeupdate', function () {
         if (token !== speakToken) return;
-        for (var k = marks.length - 1; k >= 0; k--) if (a.currentTime >= marks[k]) { capText.textContent = label + parts[k]; break; }
+        var ct = a.currentTime - t0;
+        for (var k = marks.length - 1; k >= 0; k--) if (ct >= marks[k]) { capText.textContent = label + parts[k]; break; }
       });
-      var guard = setTimeout(function () { if (token === speakToken) next(); }, (dur + 4) * 1000);
+      guard = setTimeout(function () { if (token === speakToken) next(); }, (dur + 4) * 1000);
       a.addEventListener('ended', function () { clearTimeout(guard); if (token === speakToken) next(); });
       a.addEventListener('error', function () { clearTimeout(guard); if (token === speakToken) ttsSeg(seg, token, capText, next); });
-      var pr = a.play(); if (pr && pr.catch) pr.catch(function () { clearTimeout(guard); if (token === speakToken) ttsSeg(seg, token, capText, next); });
+      var startPlay = function () { var pr = a.play(); if (pr && pr.catch) pr.catch(function () { clearTimeout(guard); if (token === speakToken) ttsSeg(seg, token, capText, next); }); };
+      if (mt) { var started = false; a.addEventListener('seeked', function () { if (!started && token === speakToken) { started = true; startPlay(); } }); a.load(); }
+      else startPlay();
       return;
     }
     ttsSeg(seg, token, capText, next);
