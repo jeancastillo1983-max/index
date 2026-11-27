@@ -94,7 +94,43 @@
       var rc = feet + SM;
       return { freeFall: ff, freeFallOk: ff <= 6, feet: feet, required: rc, available: avail, hits: rc > avail, contact: feet >= avail, margin: avail - rc };
     },
-    swingDrop: function (R, d) { R = +R; d = Math.min(+d, R); return R - Math.sqrt(R * R - d * d); }
+    swingDrop: function (R, d) { R = +R; d = Math.min(+d, R); return R - Math.sqrt(R * R - d * d); },
+
+    /* ---- Voices: which character says which text, and the key of its recorded clip ----
+       Shared by the player (engine.js) and the audio build (tools/list-clips.js) so both agree. */
+    NARRATOR: 'tasha',
+    speechText: function (text) { return strip(Array.isArray(text) ? text.join(' ') : text).replace(/\s+/g, ' ').trim(); },
+    clipKey: function (who, text) {
+      var s = (who || 'tasha') + '|' + FP.speechText(text), h = 0x811c9dc5;
+      for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+      return ('0000000' + h.toString(16)).slice(-8);
+    },
+    /* Mixed narration + speech (scenario cards): words inside quotation marks go to the speaker,
+       everything else to the narrator. No quotation marks → all narrator. */
+    splitSpeech: function (speaker, text) {
+      var t = FP.speechText(text), out = [], re = /[“"]([^”"]+)[”"]/g, last = 0, m;
+      if (!speaker || speaker === FP.NARRATOR) return t ? [{ who: FP.NARRATOR, text: t }] : [];
+      while ((m = re.exec(t))) {
+        var before = t.slice(last, m.index).replace(/^[\s,.:;—-]+|[\s,:;—-]+$/g, '').trim();
+        if (before) out.push({ who: FP.NARRATOR, text: before });
+        if (m[1].trim()) out.push({ who: speaker, text: m[1].trim() });
+        last = re.lastIndex;
+      }
+      var rest = t.slice(last).replace(/^[\s,.:;—-]+/, '').trim();
+      if (rest) out.push({ who: FP.NARRATOR, text: rest });
+      return out;
+    },
+    /* What a block's Listen button plays, in order. */
+    blockScript: function (b) {
+      var segs = [], N = FP.NARRATOR;
+      if (!b) return segs;
+      if (b.type === 'quote' && b.text) segs.push({ who: b.speaker || N, text: FP.speechText(b.text) });
+      if (b.narration) segs.push({ who: N, text: FP.speechText(b.narration) });
+      if (b.type === 'dialogue' && b.lines) b.lines.forEach(function (l) { segs.push({ who: l.speaker || N, text: FP.speechText(l.text) }); });
+      return segs.filter(function (x) { return x.text; });
+    },
+    chapterScript: function (b, ch) { return [{ who: b.speaker || FP.NARRATOR, text: FP.speechText(ch.text) }].filter(function (x) { return x.text; }); },
+    nodeScript: function (n) { return n ? FP.splitSpeech(n.end ? (n.speaker || null) : n.speaker, n.text) : []; }
   };
 
   root.FP = FP;

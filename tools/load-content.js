@@ -15,7 +15,7 @@ function loadCourse(opts) {
   vm.createContext(sandbox);
   const files = ['js/core.js', 'content/course.js', 'content/media.js', 'content/scenes.js']
     .concat(['m0', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9'].map(m => `content/${m}.js`))
-    .concat(['content/exam.js']);
+    .concat(['content/exam.js', 'content/audio.js']);
   const loaded = [], missing = [], errors = [];
   for (const f of files) {
     const p = path.join(ROOT, f);

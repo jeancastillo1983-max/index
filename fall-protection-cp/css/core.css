@@ -769,3 +769,10 @@ a.cm-row:hover { background: var(--surface-2); }
   .col { max-width: none; padding: 0; }
   .cert { box-shadow: none; }
 }
+
+/* Voice buttons on story chapters and scenario cards (play the card's lines in character voices) */
+.voice-btn { display: inline-flex; align-items: center; gap: 6px; margin: var(--s-2) 0 var(--s-3); padding: 5px 12px 5px 9px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--fg-muted); font: 600 .8rem/1 var(--font-body); cursor: pointer; }
+.voice-btn:hover, .voice-btn.is-on { border-color: var(--accent); color: var(--accent-ink); }
+.voice-btn.is-on { background: var(--accent-soft); }
+.voice-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }

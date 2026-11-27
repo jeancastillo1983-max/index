@@ -521,6 +521,7 @@
       stage.appendChild(h('p', { class: 'st-num' }, 'Chapter ' + (i + 1) + ' of ' + ch.length));
       stage.appendChild(h('h3', { class: 'st-title', html: chap.title }));
       stage.appendChild(html('div', 'prose st-text', P(chap.text)));
+      if (FP.voiceButton) { var vb = FP.voiceButton(function () { return FP.chapterScript(b, chap); }, 'Hear ' + c.name); if (vb) stage.appendChild(vb); }
       var hasChoice = chap.choice && chap.choice.options && chap.choice.options.length;
       if (hasChoice) {
         var q = h('div', { class: 'st-choice' }, h('p', { class: 'st-q', html: chap.choice.question || 'Where would you have stopped this?' }));

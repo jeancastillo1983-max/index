@@ -127,7 +127,7 @@
       var heading = h('div', { class: 'ix-scn-text', html: FP.paras(n.text) });
       var card = h('div', { class: 'ix-scn-node' + (n.media || n.art ? ' has-media' : '') },
         n.media ? mediaImg(n.media, 'ix-scn-media') : (n.art ? artImg(n.art, n.alt, 'ix-scn-media') : null),
-        h('div', { class: 'ix-scn-main' }, speaker(n.speaker), heading, choicesWrap, fbWrap));
+        h('div', { class: 'ix-scn-main' }, speaker(n.speaker), heading, FP.voiceButton ? FP.voiceButton(function () { return FP.nodeScript(n); }, 'Hear it') : null, choicesWrap, fbWrap));
       (n.choices || []).forEach(function (c, i) {
         var bt = h('button', { type: 'button', class: 'ix-choice', on: { click: function () { choose(n, key, c, bt, choicesWrap, fbWrap); } } },
           h('span', { class: 'ix-choice-key', 'aria-hidden': 'true', text: String.fromCharCode(65 + i) }), h('span', { class: 'ix-choice-text', html: c.text }));
@@ -163,7 +163,7 @@
         h('h4', { class: 'ix-outcome-title', html: n.title || '' }));
       var box = h('div', { class: 'ix-scn-end' }, head,
         n.speaker ? speaker(n.speaker) : null,
-        h('div', { class: 'ix-scn-text', html: FP.paras(n.text) }), cite(n.cite));
+        h('div', { class: 'ix-scn-text', html: FP.paras(n.text) }), FP.voiceButton ? FP.voiceButton(function () { return FP.nodeScript(n); }, 'Hear it') : null, cite(n.cite));
       if (b.clock) box.appendChild(h('p', { class: 'ix-clock-summary' }, (b.clock.label || 'Time') + ': ', h('b', { text: fmt(st.time) + ' ' + (b.clock.unit || 'min') }),
         st.time > (b.clock.limit || 15) ? ' — past the ' + b.clock.limit + ' ' + (b.clock.unit || 'min') + ' limit.' : ' — inside the ' + (b.clock.limit || 15) + ' ' + (b.clock.unit || 'min') + ' limit.'));
       if (b.scored || st.path.some(function (p) { return p.cite || p.area; })) {

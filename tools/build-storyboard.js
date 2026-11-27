@@ -212,6 +212,15 @@ function thumbPara(file, maxW = 300) {
   return new Paragraph({ children: [new ImageRun({ type: 'jpg', data: fs.readFileSync(file), transformation: { width: W2, height: H2 } })], spacing: { after: 40 } });
 }
 
+/* Audio clips per screen (tools/build-audio.py); named as in the narration MP3 package */
+let CAST = {}; try { CAST = JSON.parse(fs.readFileSync(path.join(__dirname, 'voices.json'), 'utf8')); } catch (e) { /* no casting */ }
+function voiceLines(segs, code) {
+  return segs.map((s, i) => {
+    const clip = (COURSE.audio || {})[FP.clipKey(s.who, s.text)];
+    const c = FP.char(s.who), v = (CAST[s.who] || CAST.tasha || {}).voice || '';
+    return `${i + 1}. <b>${c.name}</b>${v ? ' (' + v + ')' : ''}${clip ? ' — ' + code + '_' + (i + 1) + '_' + s.who + '.mp3, ' + clip[1] + ' s' : ' — not generated'}`;
+  });
+}
 function screenTable(code, b) {
   const { on, logic } = describe(b);
   const media = b.media ? FP.media(b.media) : null;
@@ -225,6 +234,8 @@ function screenTable(code, b) {
     ['On-screen text', on.length ? on : ['—']],
     ['Narration (VO)', b.narration ? paras(b.narration) : ['— (no narration)']],
   ];
+  const voiced = voiceLines(FP.blockScript(b), code);
+  if (voiced.length) rows.push(['Voice / audio', voiced]);
   if (logic.length) rows.push(['Interaction / branching logic', logic]);
   if (visual.length) rows.push(['Visual', visual]);
   const th = thumbFor(b);

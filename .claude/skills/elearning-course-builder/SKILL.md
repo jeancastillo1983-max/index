@@ -30,9 +30,20 @@ node tools/build-pdfs.js         # job aids → PDF
 node tools/render-art.js         # SVG art, avatars, scene reveals → dist/png (needed by deck + storyboard)
 NODE_PATH=tools/node_modules node tools/build-storyboard.js
 NODE_PATH=tools/node_modules node tools/build-pptx.js [m3 m5 …]
+~/.cache/fpcp-tts/venv/bin/python tools/build-audio.py   # narration MP3s in character voices (see Voices)
+node tools/package-audio.js      # MP3 package named by storyboard screen code
 node tools/build-scorm.js
-node tools/build-artifact.js     # then publish dist/artifact/index.html with root=dist/artifact and files from files.json
+node tools/build-artifact.js     # then publish dist/artifact/index.html with root=dist/artifact and files from files.json (≤255 files per publish: split into several)
 ```
+
+## Voices (free, offline neural TTS)
+- Engine: Kokoro-82M (Apache-2.0) via `kokoro-onnx`. One-time setup:
+  `python3 -m venv ~/.cache/fpcp-tts/venv && ~/.cache/fpcp-tts/venv/bin/pip install kokoro-onnx==0.4.9 soundfile`, then download
+  `kokoro-v1.0.onnx` and `voices-v1.0.bin` from github.com/thewh1teagle/kokoro-onnx/releases (model-files-v1.0) into `~/.cache/fpcp-tts/`.
+- Casting lives in `tools/voices.json` (voice + speed per character). Change it and rerun `build-audio.py`: only that character's clips regenerate (clips are cached by character + text + voice + speed; stale files are deleted).
+- What gets voiced is defined once in `js/core.js` (`FP.blockScript`, `FP.chapterScript`, `FP.nodeScript`, `FP.clipKey`): block narration in the narrator's voice, quote and dialogue lines in the speaker's voice, story chapters in the storyteller's voice, scenario cards split so quoted speech goes to the speaker and the rest to the narrator.
+- Pronunciation fixes (units, acronyms such as SRL, PFAS) are in `SPOKEN` / `_unit` in `tools/build-audio.py`; they change only the audio, never the captions.
+- The player plays `content/audio.js` clips and falls back to the browser voice for any line without a clip.
 
 ## Change content
 1. Edit `fall-protection-cp/content/mN.js` (blocks per BUILD-SPEC §4; interactive blocks need a unique `id`; put `narration` on most blocks and `sb: {visual, search, build}` on interactive/visual ones).

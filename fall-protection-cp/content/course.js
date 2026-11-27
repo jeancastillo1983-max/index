@@ -85,6 +85,8 @@
     },
     addMedia: function (map) { Object.assign(this.media, map); },
     addScene: function (id, scene) { scene.id = id; this.scenes[id] = scene; },
+    audio: {},          // clipKey → [src, seconds]  (generated: content/audio.js)
+    addAudio: function (map) { Object.assign(this.audio, map); },
     setExam: function (exam) { this.exam = exam; },
     getModule: function (id) { return this.modules.find(function (m) { return m.id === id; }) || null; }
   };

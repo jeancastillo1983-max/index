@@ -8,8 +8,9 @@
     "deck": "NODE_PATH=./node_modules node build-pptx.js",
     "pdfs": "node build-pdfs.js",
     "scorm": "node build-scorm.js",
+    "audio": "~/.cache/fpcp-tts/venv/bin/python build-audio.py && node package-audio.js",
     "artifact": "node build-artifact.js",
-    "all": "node validate.js && node build-pdfs.js && node render-art.js && python3 make-thumbs.py && NODE_PATH=./node_modules node build-storyboard.js && NODE_PATH=./node_modules node build-pptx.js && node build-scorm.js"
+    "all": "node validate.js && node build-pdfs.js && node render-art.js && python3 make-thumbs.py && NODE_PATH=./node_modules node build-storyboard.js && NODE_PATH=./node_modules node build-pptx.js && node package-audio.js && node build-scorm.js"
   },
   "dependencies": {
     "docx": "9.5.1",

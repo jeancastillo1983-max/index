@@ -308,42 +308,97 @@
     var t = FP.strip(text);
     return (t.match(/[^.!?]+[.!?]+["”’)]*|[^.!?]+$/g) || [t]).map(function (s) { return s.trim(); }).filter(Boolean);
   }
-  FP.speak = function (text, opts) {
-    opts = opts || {};
-    FP.stopSpeaking(true);
-    var token = ++speakToken;
-    var list = sentences(text);
-    var i = 0;
-    els.caption.hidden = false;
-    DOC.classList.add('is-speaking');
-    var capText = els.caption.querySelector('.cb-text');
-    function done() { if (token !== speakToken) return; els.caption.hidden = true; DOC.classList.remove('is-speaking'); if (opts.onend) opts.onend(); }
-    function next() {
+  /* Voices: recorded clips (content/audio.js, built by tools/build-audio.py) play in each
+     character's voice; anything without a clip falls back to the browser's voice. Captions
+     follow the clip, sentence by sentence, timed by length. */
+  var curAudio = null;
+  function speakerLabel(who) {
+    if (!who || who === FP.NARRATOR) return '';
+    var c = FP.char(who); return (c && c.name ? c.name : who) + ': ';
+  }
+  function playClip(seg, token, capText, next) {
+    var clip = (COURSE.audio || {})[FP.clipKey(seg.who, seg.text)];
+    var label = speakerLabel(seg.who);
+    var parts = sentences(seg.text);
+    if (clip && typeof root.Audio === 'function') {
+      var a = new root.Audio(clip[0]);
+      curAudio = a;
+      var dur = clip[1] || Math.max(2, seg.text.length / 14);
+      var total = parts.reduce(function (n, p) { return n + p.length; }, 0) || 1;
+      var marks = [], acc = 0;
+      parts.forEach(function (p) { marks.push(acc / total * dur); acc += p.length; });
+      capText.textContent = label + parts[0];
+      a.addEventListener('timeupdate', function () {
+        if (token !== speakToken) return;
+        for (var k = marks.length - 1; k >= 0; k--) if (a.currentTime >= marks[k]) { capText.textContent = label + parts[k]; break; }
+      });
+      var guard = setTimeout(function () { if (token === speakToken) next(); }, (dur + 4) * 1000);
+      a.addEventListener('ended', function () { clearTimeout(guard); if (token === speakToken) next(); });
+      a.addEventListener('error', function () { clearTimeout(guard); if (token === speakToken) ttsSeg(seg, token, capText, next); });
+      var pr = a.play(); if (pr && pr.catch) pr.catch(function () { clearTimeout(guard); if (token === speakToken) ttsSeg(seg, token, capText, next); });
+      return;
+    }
+    ttsSeg(seg, token, capText, next);
+  }
+  function ttsSeg(seg, token, capText, next) {
+    var list = sentences(seg.text), i = 0, label = speakerLabel(seg.who);
+    (function step() {
       if (token !== speakToken) return;
-      if (i >= list.length) return done();
+      if (i >= list.length) return next();
       var s = list[i++];
-      capText.textContent = s;
+      capText.textContent = label + s;
       if (synth && typeof root.SpeechSynthesisUtterance === 'function') {
         var u = new root.SpeechSynthesisUtterance(s);
         var v = pickVoice(); if (v) u.voice = v;
         u.rate = 1.02; u.pitch = 1;
-        var guard = setTimeout(next, Math.max(2500, s.length * 95)); // some engines never fire onend
-        u.onend = function () { clearTimeout(guard); next(); };
-        u.onerror = function () { clearTimeout(guard); next(); };
+        var guard = setTimeout(step, Math.max(2500, s.length * 95)); // some engines never fire onend
+        u.onend = function () { clearTimeout(guard); step(); };
+        u.onerror = function () { clearTimeout(guard); step(); };
         synth.speak(u);
       } else {
-        captionTimer = setTimeout(next, Math.max(1800, s.length * 62));
+        captionTimer = setTimeout(step, Math.max(1800, s.length * 62));
       }
+    })();
+  }
+  /* Play a list of {who, text} segments in order (one voice per segment). */
+  FP.speakSegments = function (segs, opts) {
+    opts = opts || {};
+    FP.stopSpeaking(true);
+    var token = ++speakToken;
+    var list = (segs || []).filter(function (x) { return x && x.text; });
+    var i = 0;
+    els.caption.hidden = false;
+    DOC.classList.add('is-speaking');
+    var capText = els.caption.querySelector('.cb-text');
+    function done() { if (token !== speakToken) return; els.caption.hidden = true; DOC.classList.remove('is-speaking'); curAudio = null; if (opts.onend) opts.onend(); }
+    function next() {
+      if (token !== speakToken) return;
+      if (i >= list.length) return done();
+      playClip(list[i++], token, capText, next);
     }
     next();
   };
+  FP.speak = function (text, opts) { FP.speakSegments([{ who: FP.NARRATOR, text: FP.speechText(text) }], opts); };
+  /* Small play button for a card (story chapter, scenario node): plays its lines in character voices. */
+  FP.voiceButton = function (getSegs, label) {
+    if (CFG.narration === false) return null;
+    var btn = h('button', { type: 'button', class: 'voice-btn', 'aria-label': label || 'Hear it' }, FP.icon('volume', 14), h('span', null, label || 'Hear it'));
+    btn.addEventListener('click', function () {
+      if (btn.classList.contains('is-on')) { FP.stopSpeaking(); return; }
+      document.querySelectorAll('.voice-btn.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+      FP.speakSegments(typeof getSegs === 'function' ? getSegs() : getSegs, { onend: function () { btn.classList.remove('is-on'); } });
+      btn.classList.add('is-on');
+    });
+    return btn;
+  };
   FP.stopSpeaking = function (silent) {
     speakToken++;
+    if (curAudio) { try { curAudio.pause(); } catch (e) { /* ignore */ } curAudio = null; }
     if (synth) { try { synth.cancel(); } catch (e) { /* ignore */ } }
     clearTimeout(captionTimer);
     if (els.caption) els.caption.hidden = true;
     DOC.classList.remove('is-speaking');
-    document.querySelectorAll('.is-narrating').forEach(function (n) { n.classList.remove('is-narrating'); });
+    document.querySelectorAll('.voice-btn.is-on').forEach(function (x) { x.classList.remove('is-on'); });
     if (!silent) lessonListening = false;
     if (els.listenBtn) els.listenBtn.classList.remove('is-on');
   };
@@ -360,7 +415,7 @@
       document.querySelectorAll('.is-narrating').forEach(function (n) { n.classList.remove('is-narrating'); });
       b.classList.add('is-narrating');
       b.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
-      FP.speak(b.getAttribute('data-narration'), { onend: function () { b.classList.remove('is-narrating'); if (lessonListening) els.listenBtn.classList.add('is-on'); playNext(); } });
+      FP.speakSegments(b._fpScript || [{ who: FP.NARRATOR, text: b.getAttribute('data-narration') }], { onend: function () { b.classList.remove('is-narrating'); if (lessonListening) els.listenBtn.classList.add('is-on'); playNext(); } });
       els.listenBtn.classList.add('is-on');
     })();
   }
@@ -403,13 +458,15 @@
       if (root.console) console.warn('[FP] block render failed', b.type, key, err);
       wrap.appendChild(h('div', { class: 'blk-missing' }, FP.icon('alert', 18), h('span', null, 'This activity could not load.')));
     }
-    if (b.narration && CFG.narration !== false) {
-      wrap.setAttribute('data-narration', FP.strip(b.narration));
+    var script = FP.blockScript(b);
+    if (script.length && CFG.narration !== false) {
+      wrap._fpScript = script;
+      wrap.setAttribute('data-narration', script.map(function (x) { return x.text; }).join(' '));
       wrap.insertBefore(h('button', { class: 'blk-listen', 'aria-label': 'Listen to narration', on: { click: function () {
         if (wrap.classList.contains('is-narrating')) { FP.stopSpeaking(); return; }
         document.querySelectorAll('.is-narrating').forEach(function (n) { n.classList.remove('is-narrating'); });
         wrap.classList.add('is-narrating');
-        FP.speak(b.narration, { onend: function () { wrap.classList.remove('is-narrating'); } });
+        FP.speakSegments(script, { onend: function () { wrap.classList.remove('is-narrating'); } });
       } } }, FP.icon('volume', 15), h('span', null, 'Listen')), wrap.firstChild);
     }
     return wrap;
