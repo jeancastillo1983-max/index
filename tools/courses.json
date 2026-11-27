@@ -1,0 +1,11 @@
+{
+  "_about": "Course profiles. Every build tool reads the course named by the COURSE_ID environment variable (default fall-protection-cp). Example: COURSE_ID=silica-cp node tools/build-scorm.js",
+  "fall-protection-cp": {
+    "dir": "fall-protection-cp", "prefix": "FallProtection-CP", "deck": "FPCP", "short": "Fall Protection",
+    "deliverables": "deliverables", "dist": "dist", "voices": "tools/voices.json", "lsPrefix": "fpcp:"
+  },
+  "silica-cp": {
+    "dir": "silica-cp", "prefix": "Silica-CP", "deck": "SCP", "short": "Silica",
+    "deliverables": "deliverables/silica-cp", "dist": "dist/silica-cp", "voices": "tools/voices-silica.json", "lsPrefix": "scp:"
+  }
+}

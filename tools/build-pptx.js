@@ -11,9 +11,10 @@ const sizeOf = require('image-size').imageSize || require('image-size');
 const { loadCourse } = require('./load-content');
 
 const ROOT = path.resolve(__dirname, '..');
-const CD = path.join(ROOT, 'fall-protection-cp');
-const PNG = path.join(ROOT, 'dist', 'png');
-const OUTDIR = path.join(ROOT, 'deliverables', 'powerpoint');
+const PF = require('./profile');
+const CD = PF.COURSE_DIR;
+const PNG = path.join(PF.DIST, 'png');
+const OUTDIR = path.join(PF.DELIV, 'powerpoint');
 const LOGO = path.join(CD, 'assets', 'img', 'upchurch-logo.png'), LOGO_W = path.join(CD, 'assets', 'img', 'upchurch-logo-white.png');
 const LOGO_AR = 314 / 70;
 const { COURSE, FP } = loadCourse({ quiet: true });
@@ -21,7 +22,7 @@ let applyTheme = null;
 try { applyTheme = require('/root/.claude/skills/synced/7188c531-f13d-41cb-aa3e-e251cd17c622_960771d7-669e-4856-ab27-fc22c257c366/pptx/scripts/apply_theme.js').applyTheme; } catch (e) { /* optional */ }
 
 const THEME = {
-  name: 'Upchurch Fall Protection',
+  name: `Upchurch ${PF.SHORT}`,
   headFontFace: 'Arial', bodyFontFace: 'Calibri',
   colors: { dk1: '14202B', lt1: 'FFFFFF', dk2: '10161C', lt2: 'EEF1F3', accent1: '0074E4', accent2: 'FFC629', accent3: '1F5FAE', accent4: '008200', accent5: 'C23A2E', accent6: 'A86A00', hlink: '1F5FAE', folHlink: '4F5D6A' }
 };
@@ -33,8 +34,8 @@ const paras = b => (Array.isArray(b) ? b : String(b || '').split(/\n\n+/)).filte
 const clip = (s, n) => { s = strip(s); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; };
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 const exists = p => p && fs.existsSync(p);
-function mediaPath(id) { const m = FP.media(id); if (!m || m.type !== 'image') return null; if (/\.svg$/i.test(m.src)) { const j = path.join(ROOT, 'dist', 'deck', 'art-' + path.basename(m.src).replace(/\.svg$/i, '.jpg')); if (exists(j)) return j; const p = path.join(PNG, 'art', path.basename(m.src).replace(/\.svg$/i, '.png')); return exists(p) ? p : null; } return exists(path.join(CD, m.src)) ? path.join(CD, m.src) : null; }
-function artPng(src) { if (!src) return null; const bn = path.basename(src).replace(/\.svg$/, ''); const sj = path.join(ROOT, 'dist', 'deck', bn.replace(/^scene-/, '') + '.jpg'), aj = path.join(ROOT, 'dist', 'deck', 'art-' + bn + '.jpg'); if (/^scene-/.test(bn) && exists(sj)) return sj; if (/\.svg$/.test(src) && exists(aj)) return aj; const p = path.join(PNG, 'art', path.basename(src).replace(/\.svg$/, '.png')); return exists(p) ? p : (/\.(png|jpe?g)$/i.test(src) && exists(path.join(CD, src)) ? path.join(CD, src) : null); }
+function mediaPath(id) { const m = FP.media(id); if (!m || m.type !== 'image') return null; if (/\.svg$/i.test(m.src)) { const j = path.join(PF.DIST, 'deck', 'art-' + path.basename(m.src).replace(/\.svg$/i, '.jpg')); if (exists(j)) return j; const p = path.join(PNG, 'art', path.basename(m.src).replace(/\.svg$/i, '.png')); return exists(p) ? p : null; } return exists(path.join(CD, m.src)) ? path.join(CD, m.src) : null; }
+function artPng(src) { if (!src) return null; const bn = path.basename(src).replace(/\.svg$/, ''); const sj = path.join(PF.DIST, 'deck', bn.replace(/^scene-/, '') + '.jpg'), aj = path.join(PF.DIST, 'deck', 'art-' + bn + '.jpg'); if (/^scene-/.test(bn) && exists(sj)) return sj; if (/\.svg$/.test(src) && exists(aj)) return aj; const p = path.join(PNG, 'art', path.basename(src).replace(/\.svg$/, '.png')); return exists(p) ? p : (/\.(png|jpe?g)$/i.test(src) && exists(path.join(CD, src)) ? path.join(CD, src) : null); }
 function avatarPng(id) { const p = path.join(PNG, 'avatars', `${id}.png`); return exists(p) ? p : null; }
 function posterPath(id) { const m = FP.media(id); return m && m.poster && exists(path.join(CD, m.poster)) ? path.join(CD, m.poster) : null; }
 
@@ -60,7 +61,7 @@ function buildDeck(mod) {
   const C = pres.SchemeColor;
 
   const footerLogo = dark => ({ image: { path: dark ? LOGO_W : LOGO, x: M, y: H - 0.44, w: 0.26 * LOGO_AR, h: 0.26 } });
-  const footer = (dark) => ({ text: { text: 'Fall Protection Competent Person', options: { x: M + 0.26 * LOGO_AR + 0.2, y: H - 0.42, w: 6, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, charSpacing: 1, isTextBox: true, margin: 0 } } });
+  const footer = (dark) => ({ text: { text: COURSE.meta.title, options: { x: M + 0.26 * LOGO_AR + 0.2, y: H - 0.42, w: 6, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, charSpacing: 1, isTextBox: true, margin: 0 } } });
   const slideNum = dark => ({ x: W - 1.0, y: H - 0.42, w: 0.6, h: 0.3, fontSize: 10, color: dark ? 'B8C4CF' : HEX.muted, align: 'right' });
 
   pres.defineSlideMaster({ title: 'FP_TITLE', background: { color: HEX.navy }, objects: [
@@ -319,10 +320,10 @@ function buildDeck(mod) {
       case 'scenario': renderScenario(b); break;
       case 'hotspot': {
         const sc = FP.scene(b.scene); if (!sc) break;
-        const DK = path.join(ROOT, 'dist', 'deck'); const pick = n => exists(path.join(DK, n + '.jpg')) ? path.join(DK, n + '.jpg') : path.join(PNG, 'scenes', n + '.png');
+        const DK = path.join(PF.DIST, 'deck'); const pick = n => exists(path.join(DK, n + '.jpg')) ? path.join(DK, n + '.jpg') : path.join(PNG, 'scenes', n + '.png');
         const plain = pick(b.scene), rev = pick(`${b.scene}-reveal`);
         const hz = b.hazards && b.hazards.length ? sc.hazards.filter(h => b.hazards.includes(h.id)) : sc.hazards;
-        const s = add('FP_CONTENT', b.title || 'Spot the hazard', notesOf(b, `FACILITATE: give the room ${b.timeLimit ? Math.round(b.timeLimit / 10) * 10 + ' seconds' : 'a minute'} to call out every fall hazard they see. ${hz.length} to find. Then advance for the reveal.`));
+        const s = add('FP_CONTENT', b.title || 'Spot the hazard', notesOf(b, `FACILITATE: give the room ${b.timeLimit ? Math.round(b.timeLimit / 10) * 10 + ' seconds' : 'a minute'} to call out every ${PF.SHORT === 'Silica' ? 'silica' : 'fall'} hazard they see. ${hz.length} to find. Then advance for the reveal.`));
         if (exists(plain)) addImg(s, plain, M, 1.4, W - 2 * M, 5.35, 'contain');
         const r = add('FP_CONTENT', (b.title || 'Spot the hazard') + ': the reveal', 'HAZARDS (numbered as on the slide):\n' + sc.hazards.map((h, i) => `${i + 1}. ${h.label} [severity ${h.severity}] — ${h.why} FIX: ${h.fix} (${h.cite})`).join('\n') + ((sc.decoys || []).length ? '\n\nNOT HAZARDS: ' + sc.decoys.map(d => `${d.label}: ${d.why}`).join(' | ') : ''));
         if (exists(rev)) addImg(r, rev, M, 1.4, 8.6, 5.35, 'contain');
@@ -395,6 +396,29 @@ function buildDeck(mod) {
           s.addTable(rows, { x: M, y: 1.45, w: W - 2 * M, colW: cols.map(() => (W - 2 * M) / cols.length), fontSize: b.rows.length > 8 ? 10 : 12, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.05 });
         };
         mk(false); mk(true);
+        break;
+      }
+      case 'table1': {
+        const RL = { none: 'None', apf10: 'APF 10', apf25: 'APF 25' };
+        const ctl = id => FP.strip((b.controls.find(c => c.id === id) || {}).label || id);
+        const q = add('FP_CONTENT', b.title || 'Table 1 in the field', 'FACILITATE: take each task in turn. Ask the room for the control first, then the respirator for the hours and location. Then advance for the answers.\n' + strip(b.intro || ''));
+        const hdr = ['#', 'Task', 'Hours', 'Where'].map(c => ({ text: c, options: { bold: true, color: HEX.white, fill: { color: HEX.navy } } }));
+        q.addTable([hdr].concat(b.tasks.map((t, i) => [String(i + 1), clip(FP.strip(t.task), 90), String(t.hours), t.indoor ? 'Indoors' : 'Outdoors'].map(c => ({ text: c, options: { fill: { color: i % 2 ? HEX.soft : HEX.white } } })))), { x: M, y: 1.45, w: W - 2 * M, colW: [0.5, 8.6, 1.2, W - 2 * M - 10.3], fontSize: b.tasks.length > 8 ? 11 : 13, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.05 });
+        const a = add('FP_CONTENT', (b.title || 'Table 1') + ': answers', b.tasks.map((t, i) => `${i + 1}. ${strip(t.task)} → ${ctl(t.control)}; respirator ${RL[t.resp] || t.resp}. ${strip(t.fb || '')} (${t.cite || ''})`).join('\n'));
+        const hdr2 = ['#', 'Task', 'Control', 'Respirator'].map(c => ({ text: c, options: { bold: true, color: HEX.white, fill: { color: HEX.navy } } }));
+        a.addTable([hdr2].concat(b.tasks.map((t, i) => [String(i + 1), clip(FP.strip(t.task), 60), clip(ctl(t.control), 60), RL[t.resp] || t.resp].map((c, j) => ({ text: c, options: { bold: j === 3, color: j === 3 ? (t.resp === 'none' ? HEX.good : HEX.navy) : HEX.ink, fill: { color: i % 2 ? HEX.soft : HEX.white } } })))), { x: M, y: 1.45, w: W - 2 * M, colW: [0.5, 5.6, 4.6, W - 2 * M - 10.7], fontSize: b.tasks.length > 8 ? 11 : 13, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.05 });
+        break;
+      }
+      case 'shift': {
+        const RL = { none: 'None', apf10: 'APF 10', apf25: 'APF 25' };
+        const total = b.tasks.filter(t => !b.preset || b.preset.includes(t.id)).reduce((s, t) => s + (+t.hours || 0), 0);
+        const q = add('FP_CONTENT', b.title || 'Build the shift', 'FACILITATE: ask the prediction question and take a show of hands. Then add the tasks one at a time and watch the total cross 4 hours.\n' + strip(b.question || ''));
+        text(q, strip(b.question || ''), { x: M, y: 1.45, w: W - 2 * M, h: 1.1, fontSize: 22, bold: true, color: HEX.navy });
+        const hdr = ['Task', 'Hours', 'Alone (≤ 4 h)', 'In a > 4 h shift'].map(c => ({ text: c, options: { bold: true, color: HEX.white, fill: { color: HEX.navy } } }));
+        q.addTable([hdr].concat(b.tasks.map((t, i) => [clip(FP.strip(t.label), 70), String(t.hours), RL[t.resp.le4] || t.resp.le4, RL[t.resp.gt4] || t.resp.gt4].map(c => ({ text: c, options: { fill: { color: i % 2 ? HEX.soft : HEX.white } } })))), { x: M, y: 2.7, w: W - 2 * M, colW: [6.2, 1.2, 2.3, W - 2 * M - 9.7], fontSize: 14, fontFace: 'Calibri', color: HEX.ink, border: { type: 'solid', color: HEX.line, pt: 0.5 }, margin: 0.06 });
+        const a = add('FP_CONTENT', (b.title || 'Build the shift') + ': the answer', strip(b.explain || '') + (b.cite ? '\nCITE: ' + b.cite : ''));
+        text(a, `All tasks together: ${total} hours. Over 4 hours in total means the > 4 h respirator column applies to every task.`, { x: M, y: 1.45, w: W - 2 * M, h: 1.2, fontSize: 22, bold: true, color: HEX.navy });
+        text(a, strip(b.explain || ''), { x: M, y: 2.8, w: W - 2 * M, h: 3.6, fontSize: 18 });
         break;
       }
       case 'toolbox': {
@@ -488,7 +512,7 @@ function buildDeck(mod) {
   for (const mod of COURSE.modules) {
     if (only.length && !only.includes(mod.id)) continue;
     const pres = buildDeck(mod);
-    const file = path.join(OUTDIR, `FPCP_M${mod.num}_${slug(mod.title)}.pptx`);
+    const file = path.join(OUTDIR, `${PF.DECK}_M${mod.num}_${slug(mod.title)}.pptx`);
     await pres.writeFile({ fileName: file });
     if (applyTheme) { try { await applyTheme(file, THEME); } catch (e) { console.error('theme:', e.message); } }
     console.log(`${path.relative(ROOT, file)}  (${pres.slides.length} slides)`);

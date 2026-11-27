@@ -10,8 +10,9 @@ const { chromium } = require('playwright');
 const { loadCourse } = require('./load-content');
 
 const ROOT = path.resolve(__dirname, '..');
-const COURSE_DIR = path.join(ROOT, 'fall-protection-cp');
-const OUT = path.join(ROOT, 'dist', 'png');
+const PF = require('./profile');
+const COURSE_DIR = PF.COURSE_DIR;
+const OUT = path.join(PF.DIST, 'png');
 const { COURSE } = loadCourse({ quiet: true });
 
 (async () => {

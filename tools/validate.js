@@ -22,8 +22,10 @@ const SPEC = {
   charintro: ['characters'], coursemap: [], checklist: ['id', 'items'], download: ['title', 'file'], continue: [],
   scenario: ['id', 'start', 'nodes'], hotspot: ['id'], sort: ['id', 'buckets', 'items'], anchorjudge: ['id', 'buckets', 'items'],
   sequence: ['id', 'items'], match: ['id', 'src', 'targets', 'tags'], clearance: ['id', 'setup'], swing: ['id'],
-  checkreview: ['id', 'rows'], toolbox: ['id', 'stories', 'hazards', 'commitments'], commitment: ['id', 'prompt']
+  checkreview: ['id', 'rows'], table1: ['id', 'tasks', 'controls'], shift: ['id', 'tasks'], toolbox: ['id', 'stories', 'hazards', 'commitments'], commitment: ['id', 'prompt']
 };
+// Exam blueprint: COURSE.meta.blueprint overrides the fall protection defaults.
+const BP = Object.assign({ slots: 40, critical: 8, kcMax: 8, areas: { m2: 4, m3: 6, m4: 7, m5: 7, m6: 6, m7: 4, m8: 6 } }, COURSE.meta.blueprint || {});
 const CALLOUTS = ['field-check', 'receipt', 'warning', 'tip', 'skip', 'note', 'monday'];
 const CHARS = Object.keys(COURSE.characters);
 const ids = new Map();
@@ -97,8 +99,8 @@ COURSE.modules.forEach(m => {
     if (!l.blocks || !l.blocks.length) E(lw, 'lesson has no blocks');
     (l.blocks || []).forEach((b, bi) => checkBlock(b, `${lw}#${bi}(${b && b.type})`, m));
   });
-  if (m.num >= 1 && m.num <= 8) {
-    if (!m.kc || !m.kc.questions || m.kc.questions.length < 3) E(w, 'modules 1–8 need kc with 3–5 questions');
+  if (m.num >= 1 && m.num <= BP.kcMax) {
+    if (!m.kc || !m.kc.questions || m.kc.questions.length < 3) E(w, `modules 1–${BP.kcMax} need kc with 3–5 questions`);
     else m.kc.questions.forEach((q, i) => checkMcq(q, `${w}/kc q${i}`));
   }
   (m.jobAids || []).forEach(j => { if (!fileExists(j.file)) W(w, `job aid file not found ${j.file}`); });
@@ -120,11 +122,11 @@ Object.entries(COURSE.media || {}).forEach(([k, m]) => {
 
 if (COURSE.exam && (!only.length || only.includes('exam'))) {
   const ex = COURSE.exam; const slots = ex.slots || [];
-  if (slots.length !== 40) E('exam', `expected 40 slots, got ${slots.length}`);
+  if (slots.length !== BP.slots) E('exam', `expected ${BP.slots} slots, got ${slots.length}`);
   const crit = slots.filter(s => s.critical).length;
-  if (crit !== 8) E('exam', `expected 8 critical slots, got ${crit}`);
+  if (crit !== BP.critical) E('exam', `expected ${BP.critical} critical slots, got ${crit}`);
   const per = {}; slots.forEach(s => { per[s.area] = (per[s.area] || 0) + 1; });
-  const want = { m2: 4, m3: 6, m4: 7, m5: 7, m6: 6, m7: 4, m8: 6 };
+  const want = BP.areas;
   Object.entries(want).forEach(([a, n]) => { if (per[a] !== n) E('exam', `area ${a} has ${per[a] || 0} slots, blueprint says ${n}`); });
   slots.forEach(s => {
     if (!s.pool || s.pool.length < 3) E(`exam ${s.id}`, 'pool needs 3 questions');
@@ -140,7 +142,7 @@ if (COURSE.exam && (!only.length || only.includes('exam'))) {
   });
 }
 
-const total = COURSE.modules.reduce((s, m) => s + (m.minutes || 0), 0) + 25;
+const total = COURSE.modules.reduce((s, m) => s + (m.minutes || 0), 0) + ((COURSE.exam && COURSE.exam.minutes) || 25);
 console.log(`modules: ${COURSE.modules.map(m => m.id).join(' ')} | minutes incl. exam: ${total} | media: ${Object.keys(COURSE.media).length} | scenes: ${Object.keys(COURSE.scenes).length} | exam slots: ${COURSE.exam ? COURSE.exam.slots.length : 0}`);
 if (warns.length) console.log(`\n${warns.length} warning(s):\n  ` + warns.join('\n  '));
 if (errs.length) { console.log(`\n${errs.length} ERROR(S):\n  ` + errs.join('\n  ')); process.exit(1); }

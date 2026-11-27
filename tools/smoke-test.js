@@ -11,8 +11,9 @@ const { chromium } = require('playwright');
 const { loadCourse } = require('./load-content');
 
 const ROOT = path.resolve(__dirname, '..');
-const CD = path.join(ROOT, 'fall-protection-cp');
-const SHOTS = path.join(ROOT, 'dist', 'smoke');
+const PF = require('./profile');
+const CD = PF.COURSE_DIR;
+const SHOTS = path.join(PF.DIST, 'smoke');
 const args = process.argv.slice(2);
 const wantShots = args.includes('--shots');
 const only = args.filter(a => !a.startsWith('--'));

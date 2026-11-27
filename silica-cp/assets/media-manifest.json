@@ -1,0 +1,36 @@
+{
+  "_note": "No image files could be downloaded in the sourcing session (binary fetches from upload.wikimedia.org, images.pexels.com, images.unsplash.com, wwwn.cdc.gov and i.ytimg.com all failed). 'images' is empty; 'imageCandidates' are unverified leads (license per source site, not yet viewed). Video metadata was verified via YouTube oEmbed; poster files are NOT present (poster: null). Durations marked approx come from silica-safe.org's video list.",
+  "images": [],
+  "imageCandidates": [
+    {"subject": "hero_cutting", "source": "https://www.pexels.com/photo/concrete-cutting-saw-21366138/", "image": "https://images.pexels.com/photos/21366138/pexels-photo-21366138.jpeg", "license": "Pexels License"},
+    {"subject": "hero_cutting", "source": "https://www.pexels.com/photo/man-in-a-winter-hat-cutting-reinforced-concrete-pillars-with-an-electric-saw-11815393/", "image": "https://images.pexels.com/photos/11815393/pexels-photo-11815393.jpeg", "license": "Pexels License"},
+    {"subject": "dust_cloud", "source": "https://www.pexels.com/photo/construction-worker-cutting-stone-tiles-outdoors-33497138/", "image": "https://images.pexels.com/photos/33497138/pexels-photo-33497138.jpeg", "license": "Pexels License"},
+    {"subject": "dust_cloud", "source": "https://www.pexels.com/photo/craftsmen-cutting-stone-14225905/", "image": "https://images.pexels.com/photos/14225905/pexels-photo-14225905.jpeg", "license": "Pexels License"},
+    {"subject": "jackhammer", "source": "https://www.pexels.com/photo/road-construction-workers-operating-jackhammer-29274508/", "image": "https://images.pexels.com/photos/29274508/pexels-photo-29274508.jpeg", "license": "Pexels License"},
+    {"subject": "jackhammer", "source": "https://www.pexels.com/photo/a-man-wearing-orange-helmet-drilling-the-road-10133578/", "image": "https://images.pexels.com/photos/10133578/pexels-photo-10133578.jpeg", "license": "Pexels License"},
+    {"subject": "jackhammer", "source": "https://unsplash.com/photos/building-demolition-with-wheelbarrow-and-jackhammer-hQYGBi01P74", "image": "https://images.unsplash.com/photo-1785484267484-00a577099744", "license": "Unsplash License"},
+    {"subject": "grinder", "source": "https://www.pexels.com/photo/industrial-worker-using-angle-grinder-outdoors-39020545/", "image": "https://images.pexels.com/photos/39020545/pexels-photo-39020545.jpeg", "license": "Pexels License"},
+    {"subject": "masonry", "source": "https://www.pexels.com/photo/bricklayers-at-work-on-construction-site-30081237/", "image": "https://images.pexels.com/photos/30081237/pexels-photo-30081237.jpeg", "license": "Pexels License"},
+    {"subject": "masonry", "source": "https://www.pexels.com/photo/a-man-constructing-a-hallow-blacks-wall-12276522/", "image": "https://images.pexels.com/photos/12276522/pexels-photo-12276522.jpeg", "license": "Pexels License"},
+    {"subject": "masonry", "source": "https://www.pexels.com/photo/crop-faceless-construction-workman-laying-bricks-4509092/", "image": "https://images.pexels.com/photos/4509092/pexels-photo-4509092.jpeg", "license": "Pexels License"},
+    {"subject": "excavator_cab", "source": "https://unsplash.com/photos/mini-excavator-digging-trench-at-construction-site-5tipz2TM6XA", "image": "https://images.unsplash.com/photo-1785484267832-55ca462c2ecd", "license": "Unsplash License"}
+  ],
+  "videos": [
+    {"id": "Eu0s4-ZLw9I", "title": "Controlling Respirable Crystalline Silica in Construction: Stationary Masonry Saws", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "pfYI31pF4Ng", "title": "Controlling Respirable Crystalline Silica in Construction: Handheld Power Saws (Any Blade Diameter)", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "Yzo-sZ_PSic", "title": "Controlling Respirable Crystalline Silica: Handheld and Stand-Mounted Drills", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "e2uRD2dJ8vs", "title": "Controlling Respirable Crystalline Silica: Jackhammers and Handheld Powered Chipping Tools", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "D8Khz9vTdAk", "title": "Controlling Respirable Crystalline Silica: Handheld Grinders for Mortar Removal (Tuckpointing)", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "X520VC-M3BI", "title": "Controlling Respirable Crystalline Silica: Handheld Grinders for Uses Other Than Mortar Removal", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "-kQmLYqIR2A", "title": "Protecting Workers from Silica Hazards in the Workplace Video", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 5 min", "poster": null},
+    {"id": "HAByIIzQSuU", "title": "\"Stop Silicosis\" (2016)", "channel": "USDepartmentofLabor", "verified": true, "duration": "approx 3 min", "poster": null},
+    {"id": "RgCO9SLhOjM", "title": "Understanding & Implementing the New Construction Silica Standard 20160519", "channel": "CPWR – The Center for Construction Research and Training", "verified": true, "duration": "approx 45 min", "poster": null},
+    {"id": "tbvVaXl30Iw", "title": "Protecting Workers in Enclosed Cabs from Silica Exposure", "channel": "CPWR – The Center for Construction Research and Training", "verified": true, "duration": "approx 60 min", "poster": null},
+    {"id": "f5Ec4TrzN4Y", "title": "Silica Control in Construction.wmv", "channel": "Jenny Houlroyd", "verified": true, "duration": "approx 3-4 min", "poster": null},
+    {"id": "kYeyd-ysMG4", "title": "Drywall Dust Engineering Controls", "channel": "CPWR – The Center for Construction Research and Training", "verified": true, "duration": "approx 7 min", "poster": null},
+    {"id": "I7REBDD1kPA", "title": "New Silica in Construction Training from the California State Building Trades 7 26 17", "channel": "CPWR – The Center for Construction Research and Training", "verified": true, "duration": "approx 45 min", "poster": null},
+    {"id": "aFy0jVstO1Y", "title": "Don't Let Silica Dust You!", "channel": "nsacrame", "verified": true, "duration": "approx 10 min", "poster": null},
+    {"id": "D38BjgUdL5U", "title": "Respirator Fit Testing", "channel": "USDepartmentofLabor", "verified": true, "duration": "11:59", "poster": null},
+    {"id": "ye0gLaIg10k", "title": "Silicosis in Engineered Stone Fabrication", "channel": "Safety, Health, and Environmental Services EI2", "verified": true, "duration": "approx 90 min", "poster": null}
+  ]
+}

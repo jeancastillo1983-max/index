@@ -7,9 +7,10 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
-const SRC = path.join(ROOT, 'fall-protection-cp', 'jobaids');
+const PF = require('./profile');
+const SRC = path.join(PF.COURSE_DIR, 'jobaids');
 const OUT = path.join(SRC, 'pdf');
-const DELIV = path.join(ROOT, 'deliverables', 'job-aids');
+const DELIV = path.join(PF.DELIV, 'job-aids');
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });

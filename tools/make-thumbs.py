@@ -4,13 +4,15 @@ scene reveals. Run after tools/render-art.js. Output: dist/thumbs/<name>.jpg"""
 import os, glob
 from PIL import Image
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-OUT = os.path.join(ROOT, 'dist', 'thumbs')
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import profile as PF
+ROOT = PF.ROOT
+OUT = os.path.join(PF.DIST, 'thumbs')
 os.makedirs(OUT, exist_ok=True)
-srcs = (glob.glob(os.path.join(ROOT, 'fall-protection-cp/assets/img/*.jpg'))
-        + glob.glob(os.path.join(ROOT, 'fall-protection-cp/assets/video/*.jpg'))
-        + glob.glob(os.path.join(ROOT, 'dist/png/art/*.png'))
-        + glob.glob(os.path.join(ROOT, 'dist/png/scenes/*.png')))
+srcs = (glob.glob(os.path.join(PF.COURSE_DIR, 'assets/img/*.jpg'))
+        + glob.glob(os.path.join(PF.COURSE_DIR, 'assets/video/*.jpg'))
+        + glob.glob(os.path.join(PF.DIST, 'png/art/*.png'))
+        + glob.glob(os.path.join(PF.DIST, 'png/scenes/*.png')))
 n = 0
 for s in srcs:
     name = os.path.splitext(os.path.basename(s))[0]
@@ -29,9 +31,9 @@ for s in srcs:
 print(f'{n} thumbnails → dist/thumbs')
 
 # Deck-size scene images (JPEG, 1920 px) — PowerPoint embeds each use, so keep them light.
-DECK = os.path.join(ROOT, 'dist', 'deck')
+DECK = os.path.join(PF.DIST, 'deck')
 os.makedirs(DECK, exist_ok=True)
-for s in glob.glob(os.path.join(ROOT, 'dist/png/scenes/*.png')):
+for s in glob.glob(os.path.join(PF.DIST, 'png/scenes/*.png')):
     im = Image.open(s).convert('RGB')
     if im.width > 1920:
         im = im.resize((1920, round(im.height * 1920 / im.width)), Image.LANCZOS)

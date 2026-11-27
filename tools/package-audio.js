@@ -9,9 +9,10 @@ const { execSync } = require('child_process');
 const { loadCourse } = require('./load-content');
 
 const ROOT = path.resolve(__dirname, '..');
-const CD = path.join(ROOT, 'fall-protection-cp');
-const OUT = path.join(ROOT, 'deliverables', 'FallProtection-CP_Narration-MP3.zip');
-const STAGE = path.join(ROOT, 'dist', 'narration-mp3');
+const PF = require('./profile');
+const CD = PF.COURSE_DIR;
+const OUT = path.join(PF.DELIV, `${PF.PREFIX}_Narration-MP3.zip`);
+const STAGE = path.join(PF.DIST, 'narration-mp3');
 const { COURSE, FP } = loadCourse({ quiet: true });
 const cast = JSON.parse(fs.readFileSync(path.join(__dirname, 'voices.json'), 'utf8'));
 

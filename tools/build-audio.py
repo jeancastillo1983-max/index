@@ -14,8 +14,10 @@ Writes fall-protection-cp/assets/audio/*.mp3 and fall-protection-cp/content/audi
 """
 import hashlib, json, os, re, subprocess, sys, tempfile, time
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-COURSE = os.path.join(ROOT, 'fall-protection-cp')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import profile as PF
+ROOT = PF.ROOT
+COURSE = PF.COURSE_DIR
 AUDIO_DIR = os.path.join(COURSE, 'assets', 'audio')
 MANIFEST = os.path.join(COURSE, 'content', 'audio.js')
 CACHE = os.path.expanduser('~/.cache/fpcp-tts')
@@ -42,6 +44,13 @@ SPOKEN = [
     (r'(\d)\s?×\s?(\d)', r'\1 by \2'), (r'(\d)\s?%', r'\1 percent'), (r'±', ' plus or minus '), (r'&', ' and '),
     (r'\bmph\b', 'miles an hour'), (r'\be\.g\.', 'for example'), (r'\bi\.e\.', 'that is'), (r'\bvs\.?\b', 'versus'),
     (r'(\d)\s?:\s?12\b', r'\1 in 12'),
+    # silica course terms
+    (r'µg/m³', ' micrograms per cubic meter'), (r'\bmg/m³', ' milligrams per cubic meter'), (r'µm\b', ' microns'),
+    (r'\bAPF\b', 'A P F'), (r'\bTWA\b', 'time-weighted average'), (r'\bPEL\b', 'P E L'), (r'\bHEPA\b', 'hepa'),
+    (r'\bPAPRs?\b', 'papper'), (r'\bSDS\b', 'S D S'), (r'\bcfm\b', 'C F M'), (r'\bCMU\b', 'C M U'),
+    (r'\bPLHCP\b', 'licensed health care professional'), (r'\bNIOSH\b', 'nye-osh'), (r'\bCOPD\b', 'C O P D'),
+    (r'\bTB\b', 'T B'), (r'\bN95s?\b', 'N ninety-five'), (r'\bP100\b', 'P one hundred'), (r'\bCPWR\b', 'C P W R'),
+    (r'\bOSHA\b', 'OSHA'), (r'\bTable 1\b', 'Table one'),
 ]
 def spoken(text):
     # an abbreviation period is dropped only mid-sentence ("42 in. high"); a sentence-ending period stays
@@ -59,7 +68,7 @@ def main():
     force = '--force' in args
     only = set(args[args.index('--only') + 1].split(',')) if '--only' in args else None
     clips = json.loads(subprocess.check_output(['node', os.path.join(ROOT, 'tools', 'list-clips.js')], cwd=ROOT))
-    cast = {k: v for k, v in json.load(open(os.path.join(ROOT, 'tools', 'voices.json'))).items() if not k.startswith('_')}
+    cast = {k: v for k, v in json.load(open(PF.VOICES)).items() if not k.startswith('_')}
     os.makedirs(AUDIO_DIR, exist_ok=True)
 
     # existing manifest (durations) so unchanged clips need no re-probe

@@ -51,7 +51,7 @@
   }
 
   /* ---- Local (per-viewer) storage, always guarded ---- */
-  var LS_PREFIX = 'fpcp:';
+  var LS_PREFIX = (root.FP_CONFIG && root.FP_CONFIG.storagePrefix) || 'fpcp:';
   var store = {
     get: function (k, d) { try { var v = root.localStorage.getItem(LS_PREFIX + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set: function (k, v) { try { root.localStorage.setItem(LS_PREFIX + k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } },
