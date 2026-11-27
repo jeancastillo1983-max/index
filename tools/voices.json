@@ -1,0 +1,38 @@
+{
+  "_about": "Voice casting for course narration. Engine: Kokoro-82M (Apache-2.0), run offline by tools/build-audio.py. Change a voice or speed here and rerun the build; only that character's clips regenerate. Kokoro American voices: af_heart af_bella af_nicole af_aoede af_kore af_sarah af_nova af_sky af_alloy af_jessica af_river am_fenrir am_michael am_puck am_echo am_eric am_liam am_onyx am_adam am_santa Speeds target about 160-175 words per minute, the usual pace for training narration.",
+  "tasha": {
+    "voice": "af_heart",
+    "speed": 0.9,
+    "note": "Narrator and lead hand. Warm, confident, natural pace."
+  },
+  "ray": {
+    "voice": "am_fenrir",
+    "speed": 0.78,
+    "note": "Foreman, 28 years in. Lower, slower, weathered."
+  },
+  "marco": {
+    "voice": "am_michael",
+    "speed": 0.92,
+    "note": "Superintendent. Measured, businesslike."
+  },
+  "dee": {
+    "voice": "af_bella",
+    "speed": 0.86,
+    "note": "Second-year apprentice. Younger, a touch quicker."
+  },
+  "luis": {
+    "voice": "am_puck",
+    "speed": 0.76,
+    "note": "Fall survivor. Quiet, slower, reflective."
+  },
+  "safety": {
+    "voice": "am_eric",
+    "speed": 0.92,
+    "note": "Safety manager (no spoken lines yet)."
+  },
+  "narrator": {
+    "voice": "am_liam",
+    "speed": 0.92,
+    "note": "Generic crew voice, e.g. the sub's foreman."
+  }
+}

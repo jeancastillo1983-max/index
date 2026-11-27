@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Clearance Card</title>
+<link rel="stylesheet" href="jobaid.css">
+<style>
+  .card { display: flex; flex-direction: column; gap: 3px; }
+  .card .k { font: 700 6.5pt/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+  .card .f { font: 700 9pt/1.2 var(--mono); background: #F1F4F6; border-left: 3px solid var(--orange); padding: 3px 5px; }
+  .card table { font-size: 7pt; margin: 0; }
+  .card th { font-size: 7pt; padding: 2px 4px; }
+  .card td { padding: 2px 4px; }
+  .card ul { margin: 0; padding-left: 12px; }
+  .card li { margin: 0 0 1px; }
+  .hit { color: var(--bad); font-weight: 800; }
+  .ok { color: var(--good); font-weight: 800; }
+  .row { display: flex; justify-content: space-between; gap: 6px; }
+  .cards { gap: 0.1in 0.2in; }
+  .ja-head { margin-bottom: 8px; }
+  .cut-note { text-align: center; font-size: 8pt; color: var(--muted); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ja-head">
+    <div>
+      <div class="kicker">Module 5 · Job aid · Fall Protection Competent Person</div>
+      <h1 class="ja-title">Pocket clearance card</h1>
+      <p class="ja-sub">Cut on the dashed lines. Keep one in your wallet and one in the gang box.</p>
+    </div>
+    <div class="brand"><img src="../assets/img/upchurch-logo.png" alt="Upchurch"></div>
+  </div>
+  <div class="stripe"></div>
+
+  <div class="cards">
+    <!-- 1 Formula -->
+    <div class="card">
+      <div class="k">Card 1 · The stack</div>
+      <h4>Clearance you need below the deck</h4>
+      <div class="f">RC = L + DD + HS + H − A + SM</div>
+      <div class="row"><span><b>L</b> lanyard 6 ft</span><span><b>DD</b> decel 3.5 ft</span><span><b>HS</b> stretch 1 ft</span></div>
+      <div class="row"><span><b>H</b> D-ring to boots 5 ft</span><span><b>SM</b> margin 2 ft</span></div>
+      <div><b>A</b> = anchor height above your boots (feet 0 · D-ring 5 · overhead 7)</div>
+      <div><b>Free fall</b> = L + H − A. Must be ≤ 6 ft. <cite>1926.502(d)(16)</cite></div>
+    </div>
+
+    <!-- 2 Dee worked example -->
+    <div class="card">
+      <div class="k">Card 2 · Worked example</div>
+      <h4>Dee, Level 3 deck edge</h4>
+      <div>6 ft lanyard · anchor at her boots (A = 0) · <b>14 ft</b> to the slab</div>
+      <div class="f">6 + 3.5 + 1 + 5 − 0 + 2 = 17.5 ft</div>
+      <div>Free fall 11 ft (over 6) · needs 17.5, has 14 → <span class="hit">SHE HITS</span></div>
+      <div>Fix 1: beam clamp 7 ft up → 10.5 ft <span class="ok">CLEAR</span></div>
+      <div>Fix 2: overhead SRL → 8.5 ft <span class="ok">CLEAR</span></div>
+    </div>
+
+    <!-- 3 Quick table -->
+    <div class="card">
+      <div class="k">Card 3 · Quick numbers</div>
+      <h4>6 ft shock-absorbing lanyard</h4>
+      <table>
+        <tr><th>Anchor</th><th>Free fall</th><th>Need below deck</th></tr>
+        <tr><td>At your feet (0)</td><td class="hit">11 ft ✗</td><td>17.5 ft</td></tr>
+        <tr><td>At D-ring (5 ft)</td><td>6 ft</td><td>12.5 ft</td></tr>
+        <tr><td>Overhead (7 ft)</td><td>4 ft</td><td>10.5 ft</td></tr>
+        <tr><td>Overhead SRL</td><td>≈ 2 ft</td><td>8.5 ft</td></tr>
+      </table>
+    </div>
+
+    <!-- 4 SRL rules -->
+    <div class="card">
+      <div class="k">Card 4 · SRLs</div>
+      <h4>Self-retracting lifelines</h4>
+      <div class="f">Overhead SRL: 2 + 3.5 + 1 + 2 = 8.5 ft</div>
+      <ul>
+        <li>Mount overhead, close to plumb over the work.</li>
+        <li>Anchor at your feet near an edge? <b>SRL-LE only</b>, with the maker's setback and clearance chart.</li>
+        <li>Pre-use: line retracts fully; a hard pull locks it; impact indicator intact.</li>
+      </ul>
+      <div><cite>ANSI/ASSP Z359.14</cite></div>
+    </div>
+
+    <!-- 5 Swing -->
+    <div class="card">
+      <div class="k">Card 5 · Swing fall</div>
+      <h4>Off to the side = extra drop + a swing</h4>
+      <div class="f">Extra drop = R − √(R² − d²)</div>
+      <div>R = line length · d = how far you are off to the side</div>
+      <table>
+        <tr><th>R = 12 ft line</th><th>d = 6 ft</th><th>d = 8 ft</th><th>d = 10 ft</th></tr>
+        <tr><td>Extra drop</td><td>1.6 ft</td><td>3.1 ft</td><td>5.4 ft</td></tr>
+      </table>
+      <div>Fix: move the anchor over the work. Clear columns and stock from the swing path.</div>
+    </div>
+
+    <!-- 6 Anchor check -->
+    <div class="card">
+      <div class="k">Card 6 · Anchor or not</div>
+      <h4>5,000 lb per worker, or engineered</h4>
+      <div>Either it holds <b>5,000 lb</b> per worker attached, or a <b>qualified person</b> designed it with a safety factor of 2. <cite>1926.502(d)(15)</cite></div>
+      <div><span class="hit">NEVER:</span> guardrail <cite>(d)(23)</cite>, conduit, sprinkler pipe, ductwork, rebar dowels, ladders, hoists.</div>
+      <div><b>Ask a qualified person:</b> bar joists, horizontal lifelines <cite>(d)(8)</cite>, anything without a tag or a design.</div>
+    </div>
+
+    <!-- 7 Connectors -->
+    <div class="card">
+      <div class="k">Card 7 · Connectors</div>
+      <h4>Hooks and carabiners</h4>
+      <ul>
+        <li><b>Locking</b> (self-closing, self-locking) only. <cite>1926.502(d)(5)</cite></li>
+        <li>Compatible with the D-ring or anchor: no roll-out.</li>
+        <li>Never to webbing, to each other, to a loaded D-ring, or to a horizontal lifeline, unless designed for it. <cite>(d)(6)</cite></li>
+        <li>No knots to shorten a lanyard. Get the right one.</li>
+        <li>Body belts are not fall arrest.</li>
+      </ul>
+    </div>
+
+    <!-- 8 Before anyone clips in -->
+    <div class="card" style="background:#10161C;color:#fff;border-color:#10161C">
+      <div class="k" style="color:#FFC629">Card 8 · Before anyone clips in</div>
+      <h4 style="color:#fff">Three questions</h4>
+      <div><b>1. What is it rated?</b> 5,000 lb or engineered.</div>
+      <div><b>2. Where is it?</b> Overhead beats D-ring. Feet = special gear.</div>
+      <div><b>3. How far down is the next thing?</b> Do the stack.</div>
+      <div style="margin-top:3px;color:#C9D6E3">System limits: free fall ≤ 6 ft · decel ≤ 3.5 ft · ≤ 1,800 lb on the body · no contact with the level below.</div>
+    </div>
+  </div>
+
+  <div class="ja-foot">
+    <span>Values per course standard: DD 3.5 ft, HS 1 ft, H 5 ft, SM 2 ft. Use the manufacturer's clearance chart when it says more.</span>
+    <span>FPCP-2026 · M5</span>
+  </div>
+</div>
+</body>
+</html>

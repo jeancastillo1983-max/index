@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Interior view of a Level 2 exterior wall with low-sill window openings, each closed off by a wood guardrail with top rail, midrail and toeboard">
+  <defs>
+    <pattern id="block" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="#C9CED3"/>
+      <path d="M0 0 H80 M0 20 H80 M40 0 V20 M0 20 V40 M80 20 V40" stroke="#AEB6BD" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <!-- wall -->
+  <rect width="1600" height="900" fill="url(#block)"/>
+  <!-- floor slab -->
+  <polygon points="0,700 1600,700 1600,900 0,900" fill="#B9C0C6"/>
+  <line x1="0" y1="700" x2="1600" y2="700" stroke="#22303C" stroke-width="5"/>
+  <!-- window openings (low sill) with sky/city outside -->
+  <g stroke="#22303C" stroke-width="5">
+    <rect x="120" y="190" width="380" height="460" fill="#DCE8F2"/>
+    <rect x="610" y="190" width="380" height="460" fill="#DCE8F2"/>
+    <rect x="1100" y="190" width="380" height="460" fill="#DCE8F2"/>
+  </g>
+  <g fill="#C3D1DE">
+    <rect x="150" y="420" width="90" height="230"/><rect x="260" y="470" width="120" height="180"/><rect x="640" y="440" width="70" height="210"/><rect x="820" y="400" width="130" height="250"/><rect x="1130" y="460" width="110" height="190"/><rect x="1300" y="430" width="90" height="220"/>
+  </g>
+  <!-- sill (12 in) -->
+  <g fill="#8C959D" stroke="#22303C" stroke-width="4">
+    <rect x="110" y="650" width="400" height="50"/><rect x="600" y="650" width="400" height="50"/><rect x="1090" y="650" width="400" height="50"/>
+  </g>
+  <!-- wood guardrails across each opening -->
+  <g stroke="#22303C" stroke-width="4" stroke-linejoin="round">
+    <!-- posts -->
+    <g fill="#B0844A">
+      <rect x="96" y="356" width="26" height="344"/><rect x="498" y="356" width="26" height="344"/>
+      <rect x="586" y="356" width="26" height="344"/><rect x="988" y="356" width="26" height="344"/>
+      <rect x="1076" y="356" width="26" height="344"/><rect x="1478" y="356" width="26" height="344"/>
+    </g>
+    <!-- top rails -->
+    <g fill="#C89B5C">
+      <rect x="80" y="352" width="460" height="30"/><rect x="570" y="352" width="460" height="30"/><rect x="1060" y="352" width="460" height="30"/>
+    </g>
+    <!-- midrails -->
+    <g fill="#C89B5C">
+      <rect x="90" y="520" width="440" height="26"/><rect x="580" y="520" width="440" height="26"/><rect x="1070" y="520" width="440" height="26"/>
+    </g>
+    <!-- toeboards -->
+    <g fill="#B0844A">
+      <rect x="90" y="610" width="440" height="40"/><rect x="580" y="610" width="440" height="40"/><rect x="1070" y="610" width="440" height="40"/>
+    </g>
+  </g>
+  <!-- nails -->
+  <g fill="#4A5B6C"><circle cx="109" cy="367" r="5"/><circle cx="511" cy="367" r="5"/><circle cx="599" cy="367" r="5"/><circle cx="1001" cy="367" r="5"/><circle cx="1089" cy="367" r="5"/><circle cx="1491" cy="367" r="5"/>
+    <circle cx="109" cy="533" r="5"/><circle cx="511" cy="533" r="5"/><circle cx="599" cy="533" r="5"/><circle cx="1001" cy="533" r="5"/><circle cx="1089" cy="533" r="5"/><circle cx="1491" cy="533" r="5"/></g>
+  <!-- 42 in dimension on the right-hand rail -->
+  <g stroke="#1F5FAE" stroke-width="4" fill="#1F5FAE">
+    <line x1="1550" y1="352" x2="1550" y2="700" stroke-dasharray="10 8"/>
+    <polygon points="1538,364 1562,364 1550,344"/><polygon points="1538,688 1562,688 1550,708"/>
+    <line x1="1520" y1="352" x2="1580" y2="352"/><line x1="1520" y1="700" x2="1580" y2="700"/>
+  </g>
+  <!-- electrician working inside, protected -->
+  <g stroke="#22303C" stroke-width="3" stroke-linejoin="round" transform="translate(760 560)">
+    <rect x="-22" y="-6" width="44" height="70" rx="8" fill="#C6E23A"/>
+    <rect x="-21" y="30" width="42" height="6" fill="#E9EEF0" stroke-width="1.5"/><rect x="-21" y="44" width="42" height="6" fill="#E9EEF0" stroke-width="1.5"/>
+    <circle cx="0" cy="-26" r="20" fill="#D9A27A"/><path d="M-22 -30 q22 -30 44 0 z" fill="#FFFFFF"/>
+    <rect x="-27" y="-34" width="54" height="6" rx="3" fill="#FFFFFF"/>
+    <path d="M-19 -22 L-14.5 -22 M14.5 -22 L19 -22" stroke-width="3" stroke-linecap="round"/><rect x="-14.5" y="-26" width="29" height="8.5" rx="3" fill="#CDEFFC" stroke-width="2.5"/><path d="M0 -25.5 v5" stroke-width="2"/>
+    <rect x="-18" y="62" width="16" height="64" fill="#2E4A6B"/><rect x="2" y="62" width="16" height="64" fill="#2E4A6B"/>
+    <rect x="-22" y="122" width="21" height="18" rx="4" fill="#2B3540"/><rect x="1" y="122" width="21" height="18" rx="4" fill="#2B3540"/>
+    <path d="M22 10 l40 -30" stroke="#C6E23A" stroke-width="12"/><circle cx="64" cy="-21.5" r="7" fill="#E9B949"/>
+  </g>
+</svg>

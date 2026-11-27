@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="A plywood hole cover on a concrete deck, screwed down at the corners and stenciled HOLE, with a cutaway showing the opening and cleats underneath">
+  <defs>
+    <pattern id="grain" width="60" height="14" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)">
+      <path d="M0 7 Q15 3 30 7 T60 7" fill="none" stroke="#B0844A" stroke-width="2" opacity=".55"/>
+    </pattern>
+    <pattern id="slabtex" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="10" r="1.6" fill="#A9B1B8"/><circle cx="28" cy="26" r="1.2" fill="#A9B1B8"/><circle cx="18" cy="34" r="1" fill="#9EA7AF"/>
+    </pattern>
+  </defs>
+  <!-- sky + building beyond -->
+  <rect width="1600" height="900" fill="#DCE8F2"/>
+  <rect x="0" y="250" width="1600" height="40" fill="#C9D6E2"/>
+  <g fill="#4A5B6C" stroke="#22303C" stroke-width="3">
+    <rect x="140" y="60" width="34" height="230"/><rect x="560" y="60" width="34" height="230"/><rect x="980" y="60" width="34" height="230"/><rect x="1400" y="60" width="34" height="230"/>
+    <rect x="100" y="60" width="1400" height="26"/>
+  </g>
+  <!-- perimeter cable rail -->
+  <g stroke="#22303C" stroke-width="3">
+    <line x1="60" y1="215" x2="1540" y2="215" stroke="#6E7C88" stroke-width="4"/>
+    <line x1="60" y1="245" x2="1540" y2="245" stroke="#6E7C88" stroke-width="4"/>
+    <g fill="#F26B1D"><circle cx="300" cy="215" r="5"/><circle cx="700" cy="215" r="5"/><circle cx="1100" cy="215" r="5"/></g>
+    <rect x="236" y="190" width="10" height="100" fill="#4A5B6C"/><rect x="796" y="190" width="10" height="100" fill="#4A5B6C"/><rect x="1356" y="190" width="10" height="100" fill="#4A5B6C"/>
+  </g>
+  <!-- slab -->
+  <polygon points="0,290 1600,290 1600,900 0,900" fill="#B9C0C6"/>
+  <polygon points="0,290 1600,290 1600,900 0,900" fill="url(#slabtex)"/>
+  <g stroke="#9AA3AB" stroke-width="2" opacity=".7"><line x1="0" y1="520" x2="1600" y2="520"/><line x1="420" y1="290" x2="250" y2="900"/><line x1="1180" y1="290" x2="1350" y2="900"/></g>
+  <!-- small secondary cover in the distance -->
+  <g stroke="#22303C" stroke-width="3">
+    <polygon points="1210,360 1370,360 1395,420 1230,420" fill="#C89B5C"/>
+    <text x="1300" y="400" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#F26B1D" text-anchor="middle" stroke="none" transform="skewX(-12)">COVER</text>
+  </g>
+  <!-- main opening (cutaway) -->
+  <polygon points="470,560 1030,560 1110,800 410,800" fill="#22303C"/>
+  <polygon points="470,560 1030,560 1050,620 455,620" fill="#3A4856"/>
+  <!-- cleats underneath (visible in the cutaway) -->
+  <g fill="#B0844A" stroke="#22303C" stroke-width="3">
+    <polygon points="520,600 560,600 600,780 552,780"/>
+    <polygon points="940,600 980,600 1040,780 992,780"/>
+  </g>
+  <!-- cover lifted at the near corner to show the cutaway: main plywood sheet -->
+  <g stroke="#22303C" stroke-width="4" stroke-linejoin="round">
+    <polygon points="430,470 1080,470 1170,760 930,760 880,700 470,700" fill="#C89B5C"/>
+    <polygon points="430,470 1080,470 1170,760 930,760 880,700 470,700" fill="url(#grain)"/>
+    <!-- thickness edge -->
+    <polygon points="470,700 880,700 930,760 930,772 878,712 470,712" fill="#9C7240"/>
+    <polygon points="1170,760 1170,772 930,772 930,760" fill="#9C7240"/>
+  </g>
+  <!-- stencil -->
+  <g transform="translate(790 620) skewX(-14)">
+    <rect x="-210" y="-70" width="420" height="120" rx="6" fill="none" stroke="#F26B1D" stroke-width="8" stroke-dasharray="26 12"/>
+    <text x="0" y="30" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="104" fill="#F26B1D" text-anchor="middle" letter-spacing="10">HOLE</text>
+  </g>
+  <!-- screws at corners and mid-edges -->
+  <g fill="#4A5B6C" stroke="#22303C" stroke-width="2">
+    <circle cx="470" cy="495" r="9"/><circle cx="1050" cy="495" r="9"/><circle cx="760" cy="492" r="9"/>
+    <circle cx="500" cy="680" r="9"/><circle cx="1120" cy="735" r="9"/><circle cx="860" cy="684" r="9"/>
+  </g>
+  <!-- load arrows -->
+  <g fill="#1D7F52" stroke="#1D7F52" stroke-width="6">
+    <line x1="660" y1="380" x2="660" y2="450"/><polygon points="642,446 678,446 660,470" stroke="none"/>
+    <line x1="900" y1="380" x2="900" y2="450"/><polygon points="882,446 918,446 900,470" stroke="none"/>
+    <line x1="780" y1="380" x2="780" y2="450"/><polygon points="762,446 798,446 780,470" stroke="none"/>
+  </g>
+</svg>

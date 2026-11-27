@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interaction harness (dev)</title>
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/interactions.css">
+<style>
+  body { margin: 0; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px; }
+  .wrap { max-width: 900px; margin: 0 auto; display: grid; gap: 40px; min-width: 0; }
+  .wrap > * { min-width: 0; }
+  .bar { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+  .bar h1 { font: 800 28px/1 var(--font-display); margin: 0; }
+  .log { font: 12px/1.4 var(--font-mono); color: var(--fg-muted); white-space: pre-wrap; word-break: break-all; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar"><h1>Interaction harness</h1><button type="button" id="theme" class="ix-btn is-small">Toggle theme</button></div>
+  <div id="out" class="wrap"></div>
+  <pre id="log" class="log"></pre>
+</div>
+<script src="../js/config.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/art-diagrams.js"></script>
+<script src="../js/blocks-interactions.js"></script>
+<script src="../content/course.js"></script>
+<script>
+  // harness: scenes registered by sample file resolve paths relative to the course root
+  var base = '../';
+</script>
+<script src="interactions-sample.js"></script>
+<script>
+  (function () {
+    Object.keys(COURSE.scenes).forEach(function (k) { var s = COURSE.scenes[k]; if (!/^\.\.\//.test(s.src)) s.src = base + s.src; });
+    window.DEV_DONE = {};
+    var out = document.getElementById('out'), log = document.getElementById('log');
+    DEV_BLOCKS.forEach(function (b) {
+      ['src'].forEach(function (k) { if (b[k] && !/^\.\.\//.test(b[k])) b[k] = base + b[k]; });
+      (b.items || []).forEach(function (it) { if (it && it.art && !/^\.\.\//.test(it.art)) it.art = base + it.art; });
+      var done = false;
+      var ctx = { module: { id: 'dev' }, lesson: { id: 'dev-l1' }, block: b,
+        complete: function (r) { done = true; DEV_DONE[b.id] = r; log.textContent += b.id + ' complete ' + JSON.stringify(r).slice(0, 140) + '\n'; },
+        isComplete: function () { return done; }, save: function () {}, load: function () { return null; } };
+      var r = FP.renderer(b.type);
+      out.appendChild(r ? r(b, ctx) : document.createTextNode('missing renderer ' + b.type));
+    });
+    document.getElementById('theme').addEventListener('click', function () {
+      var d = document.documentElement; d.setAttribute('data-theme', d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+</body>
+</html>

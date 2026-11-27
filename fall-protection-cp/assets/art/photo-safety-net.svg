@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="A personnel safety net hung just below a steel deck edge on outrigger arms, with ironworkers working on the deck above it">
+  <defs>
+    <pattern id="mesh" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="34" height="34" fill="none"/>
+      <path d="M0 0 H34 M0 0 V34" stroke="#2B3A4A" stroke-width="2.6" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#DCE8F2"/>
+  <!-- distant city / ground -->
+  <g fill="#C3D1DE"><rect x="60" y="640" width="120" height="180"/><rect x="200" y="600" width="90" height="220"/><rect x="1330" y="620" width="110" height="200"/><rect x="1460" y="660" width="100" height="160"/></g>
+  <rect x="0" y="820" width="1600" height="80" fill="#9FB08A"/>
+  <!-- building frame -->
+  <g stroke="#22303C" stroke-width="4">
+    <rect x="0" y="120" width="1060" height="40" fill="#8C959D"/>
+    <rect x="0" y="160" width="1060" height="18" fill="#4A5B6C"/>
+    <rect x="0" y="420" width="1060" height="36" fill="#8C959D"/>
+    <rect x="0" y="456" width="1060" height="16" fill="#4A5B6C"/>
+    <rect x="120" y="178" width="34" height="242" fill="#4A5B6C"/><rect x="560" y="178" width="34" height="242" fill="#4A5B6C"/><rect x="1000" y="178" width="34" height="242" fill="#4A5B6C"/>
+    <rect x="120" y="472" width="34" height="348" fill="#4A5B6C"/><rect x="560" y="472" width="34" height="348" fill="#4A5B6C"/><rect x="1000" y="472" width="34" height="348" fill="#4A5B6C"/>
+  </g>
+  <!-- deck edge being worked (top level) -->
+  <rect x="1060" y="120" width="260" height="40" fill="#B9C0C6" stroke="#22303C" stroke-width="4"/>
+  <rect x="1060" y="160" width="260" height="18" fill="#4A5B6C" stroke="#22303C" stroke-width="4"/>
+  <!-- outrigger arms -->
+  <g stroke="#22303C" stroke-width="4" fill="#F26B1D">
+    <polygon points="1000,200 1440,236 1440,250 1000,222"/>
+    <polygon points="1000,300 1440,250 1440,262 1000,318"/>
+  </g>
+  <!-- net: border rope + sagging mesh, hung just under the deck -->
+  <path d="M980 230 L1450 250 Q1430 370 1220 384 Q1040 372 980 300 Z" fill="url(#mesh)" stroke="#22303C" stroke-width="7"/>
+  <path d="M980 230 L1450 250" stroke="#FFC629" stroke-width="5"/>
+  <!-- ironworkers on deck -->
+  <g stroke="#22303C" stroke-width="3" stroke-linejoin="round">
+    <g transform="translate(1110 40)">
+      <rect x="-14" y="22" width="28" height="44" rx="6" fill="#C6E23A"/>
+      <rect x="-13" y="42" width="26" height="3.5" fill="#E9EEF0" stroke="none"/><rect x="-13" y="50" width="26" height="3.5" fill="#E9EEF0" stroke="none"/>
+      <path d="M-10 24 L10 62 M10 24 L-10 62 M-13 61 L13 61" stroke="#F26B1D" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="0" cy="10" r="13" fill="#D9A27A"/><path d="M-15 6 q15 -20 30 0 z" fill="#FFFFFF"/>
+      <rect x="-18" y="4" width="36" height="4" rx="2" fill="#FFFFFF" stroke-width="2"/>
+      <path d="M-12 11.5 L-9 11.5 M9 11.5 L12 11.5" stroke-width="2"/><rect x="-9" y="9" width="18" height="5.5" rx="2" fill="#CDEFFC" stroke-width="1.8"/><path d="M0 9.5 v3.5" stroke-width="1.3"/>
+      <rect x="-12" y="64" width="10" height="9" fill="#2E4A6B"/><rect x="2" y="64" width="10" height="9" fill="#2E4A6B"/>
+      <rect x="-14" y="71" width="13" height="9" rx="2.5" fill="#2B3540" stroke-width="2"/><rect x="1" y="71" width="13" height="9" rx="2.5" fill="#2B3540" stroke-width="2"/>
+      <path d="M14 30 l26 -10" stroke-width="6" stroke="#C6E23A"/><circle cx="41" cy="19.5" r="4.3" fill="#E9B949" stroke-width="2"/>
+    </g>
+    <g transform="translate(1250 46)">
+      <rect x="-14" y="18" width="28" height="40" rx="6" fill="#C6E23A"/>
+      <rect x="-13" y="36" width="26" height="3.5" fill="#E9EEF0" stroke="none"/><rect x="-13" y="44" width="26" height="3.5" fill="#E9EEF0" stroke="none"/>
+      <path d="M-10 20 L10 55 M10 20 L-10 55 M-13 54 L13 54" stroke="#F26B1D" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="0" cy="6" r="12" fill="#8E5C3C"/><path d="M-14 2 q14 -18 28 0 z" fill="#FFFFFF"/>
+      <rect x="-17" y="0" width="34" height="4" rx="2" fill="#FFFFFF" stroke-width="2"/>
+      <path d="M-11 7.5 L-8 7.5 M8 7.5 L11 7.5" stroke-width="2"/><rect x="-8" y="5" width="16" height="5.5" rx="2" fill="#CDEFFC" stroke-width="1.8"/><path d="M0 5.5 v3.5" stroke-width="1.3"/>
+      <rect x="-12" y="56" width="10" height="11" fill="#2E4A6B"/><rect x="2" y="56" width="10" height="11" fill="#2E4A6B"/>
+      <rect x="-14" y="65" width="13" height="9" rx="2.5" fill="#2B3540" stroke-width="2"/><rect x="1" y="65" width="13" height="9" rx="2.5" fill="#2B3540" stroke-width="2"/>
+    </g>
+  </g>
+  <!-- decking bundle -->
+  <rect x="1160" y="96" width="120" height="24" fill="#8FA3B5" stroke="#22303C" stroke-width="3"/>
+  <!-- clearance dimension below the net to the level beneath (no text: caption states the 30 ft rule) -->
+  <g stroke="#1F5FAE" stroke-width="4" fill="#1F5FAE">
+    <line x1="1500" y1="140" x2="1500" y2="372" stroke-dasharray="10 8"/>
+    <polygon points="1488,150 1512,150 1500,130"/><polygon points="1488,362 1512,362 1500,382"/>
+  </g>
+</svg>

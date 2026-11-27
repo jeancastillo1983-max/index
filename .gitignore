@@ -1,0 +1,4 @@
+dist/
+tools/node_modules/
+tools/scene-gen/out/
+__pycache__/
